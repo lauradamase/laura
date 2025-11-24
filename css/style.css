@@ -1,0 +1,685 @@
+/* ==========================================================================
+   Laura Damase Portfolio - Modern White Theme
+   Réalisatrice & Cheffe OPV
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Variables)
+   -------------------------------------------------------------------------- */
+:root {
+    /* Colors */
+    --color-background: #F5F5F5;
+    --color-background-alt: #FAFAFA;
+    --color-text-primary: #1A1A1A;
+    --color-text-secondary: #4A4A4A;
+    --color-accent: #800020; /* Deep Burgundy */
+    --color-accent-hover: #5a0016;
+    --color-white: #FFFFFF;
+    --color-border: rgba(26, 26, 26, 0.1);
+    --color-overlay: rgba(26, 26, 26, 0.4);
+
+    /* Typography */
+    --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-logo: 'Great Vibes', cursive;
+
+    /* Spacing */
+    --sidebar-width: 280px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+    --transition-slow: 0.5s ease-in-out;
+
+    /* Shadows */
+    --shadow-subtle: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-strong: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Base Styles
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar Navigation
+   -------------------------------------------------------------------------- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--color-white);
+    border-right: 1px solid var(--color-border);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+/* Logo Container */
+.logo-container {
+    margin-bottom: var(--spacing-xl);
+}
+
+.logo {
+    font-family: var(--font-logo);
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    display: block;
+    transition: opacity var(--transition-fast);
+}
+
+.logo:hover {
+    opacity: 0.8;
+    color: var(--color-accent);
+}
+
+.subtitle {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-xs);
+    text-transform: uppercase;
+}
+
+/* Navigation Links */
+.nav-links {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.nav-link {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--color-text-primary);
+    padding: var(--spacing-xs) 0;
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+    transition: width var(--transition-normal);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 30px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--color-accent);
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: auto;
+    padding-top: var(--spacing-lg);
+}
+
+.social-link {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.social-link:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    width: 30px;
+    height: 24px;
+    z-index: 1001;
+}
+
+.hamburger {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-text-primary);
+    transition: all var(--transition-fast);
+}
+
+.hamburger::before {
+    top: -8px;
+}
+
+.hamburger::after {
+    bottom: -8px;
+}
+
+/* Hamburger Active State */
+.menu-toggle.active .hamburger {
+    background-color: transparent;
+}
+
+.menu-toggle.active .hamburger::before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.menu-toggle.active .hamburger::after {
+    transform: rotate(-45deg);
+    bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Main Content Area
+   -------------------------------------------------------------------------- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   Portfolio Grid
+   -------------------------------------------------------------------------- */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    flex: 1;
+}
+
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background-color: var(--color-background-alt);
+}
+
+.portfolio-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.thumbnail-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.project-title {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-white);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all var(--transition-normal);
+    z-index: 2;
+}
+
+.project-category {
+    position: absolute;
+    bottom: calc(var(--spacing-lg) + 1.5rem);
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all var(--transition-normal);
+    transition-delay: 0.05s;
+    z-index: 2;
+}
+
+/* Portfolio Item Hover Effects */
+.portfolio-item:hover .thumbnail {
+    transform: scale(1.08);
+}
+
+.portfolio-item:hover .overlay {
+    opacity: 1;
+}
+
+.portfolio-item:hover .project-title,
+.portfolio-item:hover .project-category {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Accent Border on Hover */
+.portfolio-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3px solid var(--color-accent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.portfolio-item:hover::after {
+    opacity: 1;
+}
+
+/* Portfolio Item Hidden State (for filtering) */
+.portfolio-item.hidden {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.footer {
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.copyright {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+}
+
+.copyright .accent {
+    color: var(--color-accent);
+}
+
+.contact-info {
+    margin-top: var(--spacing-sm);
+}
+
+.contact-link {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+    transition: color var(--transition-fast);
+}
+
+.contact-link:hover {
+    color: var(--color-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Design
+   -------------------------------------------------------------------------- */
+
+/* Tablet Landscape */
+@media (max-width: 1200px) {
+    :root {
+        --sidebar-width: 240px;
+    }
+
+    .logo {
+        font-size: 2rem;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablet Portrait */
+@media (max-width: 992px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.6rem;
+    }
+
+    .nav-link {
+        font-size: 0.7rem;
+    }
+}
+
+/* Mobile Landscape / Small Tablet */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        z-index: 1000;
+    }
+
+    .sidebar-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-sm) var(--spacing-md);
+        flex-wrap: wrap;
+    }
+
+    .logo-container {
+        margin-bottom: 0;
+    }
+
+    .logo {
+        font-size: 1.6rem;
+    }
+
+    .subtitle {
+        font-size: 0.55rem;
+        margin-top: 0.2rem;
+    }
+
+    .menu-toggle {
+        display: block;
+        position: static;
+        order: 2;
+    }
+
+    .nav-links {
+        display: none;
+        width: 100%;
+        order: 3;
+        padding-top: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .social-icons {
+        display: none;
+        width: 100%;
+        order: 4;
+        justify-content: center;
+        padding-top: var(--spacing-sm);
+        margin-top: 0;
+    }
+
+    .nav-links.active + .social-icons,
+    .social-icons.active {
+        display: flex;
+    }
+
+    .main-content {
+        margin-left: 0;
+        margin-top: 80px;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .project-title {
+        font-size: 0.75rem;
+    }
+
+    .project-category {
+        font-size: 0.6rem;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 576px) {
+    .main-content {
+        margin-top: 70px;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .portfolio-item {
+        aspect-ratio: 16 / 10;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+    }
+
+    .subtitle {
+        font-size: 0.5rem;
+    }
+
+    .project-title {
+        font-size: 0.8rem;
+        bottom: var(--spacing-md);
+        left: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+
+    .project-category {
+        font-size: 0.6rem;
+        bottom: calc(var(--spacing-md) + 1.3rem);
+        left: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+
+    .footer {
+        padding: var(--spacing-md);
+    }
+
+    .copyright {
+        font-size: 0.65rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility & Print
+   -------------------------------------------------------------------------- */
+
+/* Focus States */
+a:focus,
+button:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .portfolio-item::after,
+    .overlay {
+        display: none;
+    }
+
+    .project-title,
+    .project-category {
+        opacity: 1;
+        transform: none;
+        color: var(--color-text-primary);
+        position: static;
+        margin-top: var(--spacing-xs);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Loading Animation
+   -------------------------------------------------------------------------- */
+.portfolio-item {
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.portfolio-item:nth-child(1) { animation-delay: 0.1s; }
+.portfolio-item:nth-child(2) { animation-delay: 0.15s; }
+.portfolio-item:nth-child(3) { animation-delay: 0.2s; }
+.portfolio-item:nth-child(4) { animation-delay: 0.25s; }
+.portfolio-item:nth-child(5) { animation-delay: 0.3s; }
+.portfolio-item:nth-child(6) { animation-delay: 0.35s; }
+.portfolio-item:nth-child(7) { animation-delay: 0.4s; }
+.portfolio-item:nth-child(8) { animation-delay: 0.45s; }
+.portfolio-item:nth-child(9) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
