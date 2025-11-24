@@ -449,6 +449,25 @@ button {
     display: none;
 }
 
+/* Instagram Thumbnail Styling */
+.instagram-thumbnail {
+    background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.instagram-icon {
+    font-size: 4rem;
+    color: var(--color-white);
+    transition: transform var(--transition-normal);
+    z-index: 1;
+}
+
+.portfolio-item:hover .instagram-icon {
+    transform: scale(1.15);
+}
+
 /* --------------------------------------------------------------------------
    Footer
    -------------------------------------------------------------------------- */
