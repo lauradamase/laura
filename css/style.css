@@ -397,7 +397,7 @@ button {
 .footer {
     background-color: var(--color-white);
     border-top: 1px solid var(--color-border);
-    padding: var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-xl) var(--spacing-xl);
     text-align: center;
 }
 
@@ -406,28 +406,66 @@ button {
     margin: 0 auto;
 }
 
+.contact-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.contact-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.contact-description {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+}
+
+.contact-link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background-color: rgba(128, 0, 32, 0.05);
+}
+
+.contact-link i {
+    font-size: 1rem;
+}
+
 .copyright {
     font-size: 0.75rem;
     color: var(--color-text-secondary);
     letter-spacing: 0.02em;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
 }
 
 .copyright .accent {
-    color: var(--color-accent);
-}
-
-.contact-info {
-    margin-top: var(--spacing-sm);
-}
-
-.contact-link {
-    font-size: 0.8rem;
-    color: var(--color-text-secondary);
-    letter-spacing: 0.02em;
-    transition: color var(--transition-fast);
-}
-
-.contact-link:hover {
     color: var(--color-accent);
 }
 
