@@ -11,18 +11,69 @@
     const navLinks = document.getElementById('navLinks');
     const sidebar = document.getElementById('sidebar');
     const portfolioGrid = document.getElementById('portfolioGrid');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
     const navLinkElements = document.querySelectorAll('.nav-link[data-filter]');
     const socialIcons = document.querySelector('.social-icons');
+
+    // Store portfolio items for filtering
+    let portfolioItems = [];
 
     /**
      * Initialize the application
      */
     function init() {
+        loadContent();
         setupMobileMenu();
         setupPortfolioFiltering();
         setupSmoothScroll();
-        setupLazyLoading();
+    }
+
+    /**
+     * Load content from content.json
+     */
+    function loadContent() {
+        fetch('./content.json')
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Could not load content.json');
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                renderPortfolio(data.portfolio);
+                setupLazyLoading();
+                preloadImages();
+            })
+            .catch(function(error) {
+                console.error('Error loading content:', error);
+                portfolioGrid.innerHTML = '<p style="color: red; padding: 2rem;">Erreur: Impossible de charger le contenu. Vérifiez que content.json est valide.</p>';
+            });
+    }
+
+    /**
+     * Render portfolio items from data
+     * @param {Array} items - Portfolio items from content.json
+     */
+    function renderPortfolio(items) {
+        if (!portfolioGrid || !items || !items.length) return;
+
+        portfolioGrid.innerHTML = items.map(function(item) {
+            return '<article class="portfolio-item" data-category="' + item.category + '">' +
+                '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="portfolio-link">' +
+                    '<div class="thumbnail-container">' +
+                        '<img src="' + item.image + '" ' +
+                             'alt="' + item.title + '" ' +
+                             'class="thumbnail" ' +
+                             'loading="lazy">' +
+                        '<div class="overlay"></div>' +
+                    '</div>' +
+                    '<h3 class="project-title">' + item.title + '</h3>' +
+                    '<p class="project-category">' + item.description + '</p>' +
+                '</a>' +
+            '</article>';
+        }).join('');
+
+        // Update portfolioItems reference after rendering
+        portfolioItems = document.querySelectorAll('.portfolio-item');
     }
 
     /**
@@ -84,7 +135,7 @@
      * Portfolio Filtering
      */
     function setupPortfolioFiltering() {
-        if (!navLinkElements.length || !portfolioItems.length) return;
+        if (!navLinkElements.length) return;
 
         navLinkElements.forEach(function(link) {
             link.addEventListener('click', function(e) {
@@ -119,7 +170,10 @@
      * @param {string} category - The category to filter by ('all' for no filter)
      */
     function filterPortfolioItems(category) {
-        portfolioItems.forEach(function(item, index) {
+        // Re-query portfolio items in case they were dynamically loaded
+        const items = document.querySelectorAll('.portfolio-item');
+
+        items.forEach(function(item, index) {
             const itemCategory = item.getAttribute('data-category');
             const shouldShow = category === 'all' || itemCategory === category;
 
@@ -226,11 +280,9 @@
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             init();
-            preloadImages();
         });
     } else {
         init();
-        preloadImages();
     }
 
 })();
