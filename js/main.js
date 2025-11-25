@@ -11,11 +11,10 @@
     const navLinks = document.getElementById('navLinks');
     const sidebar = document.getElementById('sidebar');
     const portfolioGrid = document.getElementById('portfolioGrid');
-    const navLinkElements = document.querySelectorAll('.nav-link[data-filter]');
     const socialIcons = document.querySelector('.social-icons');
-
-    // Store portfolio items for filtering
-    let portfolioItems = [];
+    const logoFirst = document.querySelector('.logo-first');
+    const logoLast = document.querySelector('.logo-last');
+    const subtitle = document.querySelector('.subtitle');
 
     /**
      * Initialize the application
@@ -23,7 +22,6 @@
     function init() {
         loadContent();
         setupMobileMenu();
-        setupPortfolioFiltering();
         setupSmoothScroll();
     }
 
@@ -39,7 +37,14 @@
                 return response.json();
             })
             .then(function(data) {
+                // Render all dynamic content
+                renderSiteInfo(data.site);
+                renderSocialLinks(data.social);
+                renderCategories(data.categories);
                 renderPortfolio(data.portfolio);
+
+                // Setup features after content is loaded
+                setupPortfolioFiltering();
                 setupLazyLoading();
                 preloadImages();
             })
@@ -47,6 +52,68 @@
                 console.error('Error loading content:', error);
                 portfolioGrid.innerHTML = '<p style="color: red; padding: 2rem;">Erreur: Impossible de charger le contenu. Vérifiez que content.json est valide.</p>';
             });
+    }
+
+    /**
+     * Render site info (name, subtitle)
+     */
+    function renderSiteInfo(site) {
+        if (!site) return;
+
+        if (logoFirst && site.firstName) {
+            logoFirst.textContent = site.firstName;
+        }
+        if (logoLast && site.lastName) {
+            logoLast.textContent = site.lastName;
+        }
+        if (subtitle && site.subtitle) {
+            subtitle.textContent = site.subtitle;
+        }
+
+        // Update page title
+        if (site.firstName && site.lastName && site.subtitle) {
+            document.title = site.firstName + ' ' + site.lastName + ' | ' + site.subtitle;
+        }
+    }
+
+    /**
+     * Render social media links
+     */
+    function renderSocialLinks(social) {
+        if (!socialIcons || !social || !social.length) return;
+
+        // Map platform names to Font Awesome icons
+        var iconMap = {
+            'instagram': 'fab fa-instagram',
+            'linkedin': 'fab fa-linkedin-in',
+            'x-twitter': 'fab fa-x-twitter',
+            'twitter': 'fab fa-twitter',
+            'facebook': 'fab fa-facebook-f',
+            'youtube': 'fab fa-youtube',
+            'tiktok': 'fab fa-tiktok',
+            'vimeo': 'fab fa-vimeo-v'
+        };
+
+        socialIcons.innerHTML = social.map(function(item) {
+            var iconClass = iconMap[item.platform] || 'fas fa-link';
+            var label = item.platform.charAt(0).toUpperCase() + item.platform.slice(1);
+
+            return '<a href="' + item.url + '" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="' + label + '">' +
+                '<i class="' + iconClass + '"></i>' +
+            '</a>';
+        }).join('');
+    }
+
+    /**
+     * Render navigation categories
+     */
+    function renderCategories(categories) {
+        if (!navLinks || !categories || !categories.length) return;
+
+        navLinks.innerHTML = categories.map(function(cat, index) {
+            var activeClass = index === 0 ? ' active' : '';
+            return '<li><a href="#" class="nav-link' + activeClass + '" data-filter="' + cat.id + '">' + cat.label + '</a></li>';
+        }).join('');
     }
 
     /**
@@ -71,9 +138,6 @@
                 '</a>' +
             '</article>';
         }).join('');
-
-        // Update portfolioItems reference after rendering
-        portfolioItems = document.querySelectorAll('.portfolio-item');
     }
 
     /**
@@ -92,7 +156,7 @@
             }
 
             // Update ARIA attributes
-            const isExpanded = navLinks.classList.contains('active');
+            var isExpanded = navLinks.classList.contains('active');
             this.setAttribute('aria-expanded', isExpanded);
         });
 
@@ -135,6 +199,7 @@
      * Portfolio Filtering
      */
     function setupPortfolioFiltering() {
+        var navLinkElements = document.querySelectorAll('.nav-link[data-filter]');
         if (!navLinkElements.length) return;
 
         navLinkElements.forEach(function(link) {
@@ -148,7 +213,7 @@
                 this.classList.add('active');
 
                 // Get filter category
-                const filter = this.getAttribute('data-filter');
+                var filter = this.getAttribute('data-filter');
 
                 // Filter items with animation
                 filterPortfolioItems(filter);
@@ -170,12 +235,11 @@
      * @param {string} category - The category to filter by ('all' for no filter)
      */
     function filterPortfolioItems(category) {
-        // Re-query portfolio items in case they were dynamically loaded
-        const items = document.querySelectorAll('.portfolio-item');
+        var items = document.querySelectorAll('.portfolio-item');
 
         items.forEach(function(item, index) {
-            const itemCategory = item.getAttribute('data-category');
-            const shouldShow = category === 'all' || itemCategory === category;
+            var itemCategory = item.getAttribute('data-category');
+            var shouldShow = category === 'all' || itemCategory === category;
 
             if (shouldShow) {
                 item.classList.remove('hidden');
@@ -196,13 +260,13 @@
     function setupSmoothScroll() {
         document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
             anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
+                var href = this.getAttribute('href');
 
                 // Skip if it's just "#" or if it has a data-filter attribute
                 if (href === '#' || this.hasAttribute('data-filter')) return;
 
                 e.preventDefault();
-                const target = document.querySelector(href);
+                var target = document.querySelector(href);
 
                 if (target) {
                     target.scrollIntoView({
@@ -218,15 +282,13 @@
      * Lazy loading enhancement using Intersection Observer
      */
     function setupLazyLoading() {
-        // Check if Intersection Observer is supported
         if (!('IntersectionObserver' in window)) return;
 
-        const imageObserver = new IntersectionObserver(function(entries, observer) {
+        var imageObserver = new IntersectionObserver(function(entries, observer) {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
-                    const img = entry.target;
+                    var img = entry.target;
 
-                    // If using data-src for lazy loading
                     if (img.dataset.src) {
                         img.src = img.dataset.src;
                         img.removeAttribute('data-src');
@@ -241,7 +303,6 @@
             threshold: 0.01
         });
 
-        // Observe all thumbnail images
         document.querySelectorAll('.thumbnail').forEach(function(img) {
             imageObserver.observe(img);
         });
@@ -249,15 +310,12 @@
 
     /**
      * Debounce utility function
-     * @param {Function} func - Function to debounce
-     * @param {number} wait - Wait time in milliseconds
-     * @returns {Function} Debounced function
      */
     function debounce(func, wait) {
-        let timeout;
+        var timeout;
         return function executedFunction() {
-            const context = this;
-            const args = arguments;
+            var context = this;
+            var args = arguments;
             clearTimeout(timeout);
             timeout = setTimeout(function() {
                 func.apply(context, args);
@@ -269,7 +327,7 @@
      * Preload critical images
      */
     function preloadImages() {
-        const criticalImages = document.querySelectorAll('.portfolio-item:nth-child(-n+6) .thumbnail');
+        var criticalImages = document.querySelectorAll('.portfolio-item:nth-child(-n+6) .thumbnail');
         criticalImages.forEach(function(img) {
             if (img.complete) return;
             img.loading = 'eager';

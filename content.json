@@ -1,4 +1,23 @@
 {
+  "site": {
+    "firstName": "Laura",
+    "lastName": "Damase",
+    "subtitle": "RÉALISATRICE & FILMMAKER"
+  },
+
+  "social": [
+    { "platform": "instagram", "url": "https://www.instagram.com/lauradamase/" },
+    { "platform": "linkedin", "url": "https://www.linkedin.com/in/laura-damase-89477b84/" },
+    { "platform": "x-twitter", "url": "https://x.com/arualesamad" }
+  ],
+
+  "categories": [
+    { "id": "all", "label": "SÉLECTION" },
+    { "id": "documentaires", "label": "DOCUMENTAIRES" },
+    { "id": "reportages", "label": "REPORTAGES" },
+    { "id": "films", "label": "FILMS" }
+  ],
+
   "portfolio": [
     {
       "title": "VOIR SUR YOUTUBE",
