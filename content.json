@@ -61,6 +61,13 @@
       "description": "Film · Caméra · 2017",
       "image": "https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?w=600&h=400&fit=crop",
       "link": "https://www.imdb.com/title/tt7222116/"
+    },
+    {
+      "title": "FRIEDA",
+      "category": "scènes",
+      "description": "Boule Noire",
+      "image": "https://drive.google.com/file/d/1NATawtWoLdYzVNY84USLFaiB2jOJVxAs/view?usp=drive_link",
+      "link": "https://www.france.tv/france-2/successions/"
     }
   ]
 }
