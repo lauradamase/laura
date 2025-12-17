@@ -1,7 +1,7 @@
 {
   "site": {
     "firstName": "Laura",
-    "lastName": "vida loca",
+    "lastName": "Damase",
     "subtitle": "RÉALISATRICE & FILMMAKER"
   },
 
@@ -15,7 +15,8 @@
     { "id": "all", "label": "SÉLECTION" },
     { "id": "documentaires", "label": "DOCUMENTAIRES" },
     { "id": "reportages", "label": "REPORTAGES" },
-    { "id": "films", "label": "FILMS" }
+    { "id": "films", "label": "FILMS" },
+    { "id": "films", "label": "SCÈNES" }
   ],
 
   "portfolio": [
