@@ -16,7 +16,7 @@
     { "id": "documentaires", "label": "DOCUMENTAIRES" },
     { "id": "reportages", "label": "REPORTAGES" },
     { "id": "films", "label": "FILMS" },
-    { "id": "films", "label": "SCÈNES" }
+    { "id": "scenes", "label": "SCÈNES" }
   ],
 
   "portfolio": [
@@ -64,9 +64,9 @@
     },
     {
       "title": "FRIEDA",
-      "category": "SCÈNES",
+      "category": "scenes",
       "description": "Boule Noire",
-      "image": "https://drive.google.com/uc?export=view&id=1NATawtWoLdYzVNY84USLFaiB2jOJVxAs",
+      "image": "images/frieda.jpg",
       "link": "https://www.france.tv/france-2/successions/"
     }
   ]
