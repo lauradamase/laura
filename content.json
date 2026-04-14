@@ -12,11 +12,13 @@
   ],
 
   "categories": [
-    { "id": "all", "label": "SÉLECTION" },
-    { "id": "documentaires", "label": "DOCUMENTAIRES" },
-    { "id": "reportages", "label": "REPORTAGES" },
-    { "id": "films", "label": "FILMS" },
-    { "id": "scenes", "label": "SCÈNES" }
+    { "id": "all", "label": "DOCUMENTAIRES" },
+    { "id": "documentaires", "label": "PORTRAITS" },
+    { "id": "reportages", "label": "MAGAZINE" },
+    { "id": "films", "label": "REPORTAGES" },
+    { "id": "scenes", "label": "CLIPS" },
+    { "id": "scenes", "label": "CAPTATIONS" },
+    { "id": "all", "label": "À PROPOS" }
   ],
 
   "portfolio": [
