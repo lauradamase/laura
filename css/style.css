@@ -450,8 +450,79 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   Footer
-   -------------------------------------------------------------------------- */
+    About Page
+    -------------------------------------------------------------------------- */
+.about-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    background-color: var(--color-background);
+}
+
+.about-container {
+    display: flex;
+    gap: var(--spacing-xl);
+    max-width: 1000px;
+    background-color: var(--color-white);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-medium);
+}
+
+.about-image {
+    flex: 0 0 300px;
+}
+
+.portrait-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.about-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.about-title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-md);
+}
+
+.about-text {
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+    .about-section {
+        padding: var(--spacing-md);
+    }
+
+    .about-container {
+        flex-direction: column;
+        padding: var(--spacing-lg);
+    }
+
+    .about-image {
+        flex: none;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+}
+
+/* --------------------------------------------------------------------------
+    Footer
+    -------------------------------------------------------------------------- */
 .footer {
     background-color: var(--color-white);
     border-top: 1px solid var(--color-border);

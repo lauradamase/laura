@@ -21,6 +21,11 @@
     { "id": "apropos", "label": "À PROPOS" }
   ],
 
+  "apropos": {
+    "image": "images/laura.jpg",
+    "bio": "Laura Damase est une réalisatrice et filmmaker passionnée, spécialisée dans les documentaires et reportages. Avec une expérience riche auprès de grandes chaînes françaises comme France 2 et 13h15, elle raconte des histoires qui mattered, avec authenticité et sensibilité. Son travail explore les réalités sociales contemporaines et donne une voix à ceux qui en ont besoin."
+  },
+
   "portfolio": [
     {
       "title": "VOIR SUR YOUTUBE",

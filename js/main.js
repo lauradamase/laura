@@ -37,13 +37,12 @@
                 return response.json();
             })
             .then(function(data) {
-                // Render all dynamic content
                 renderSiteInfo(data.site);
                 renderSocialLinks(data.social);
                 renderCategories(data.categories);
+                renderApropos(data.apropos);
                 renderPortfolio(data.portfolio);
 
-                // Setup features after content is loaded
                 setupPortfolioFiltering();
                 setupLazyLoading();
                 preloadImages();
@@ -52,6 +51,24 @@
                 console.error('Error loading content:', error);
                 portfolioGrid.innerHTML = '<p style="color: red; padding: 2rem;">Erreur: Impossible de charger le contenu. Vérifiez que content.json est valide.</p>';
             });
+    }
+
+    /**
+     * Render about/apropos content
+     */
+    function renderApropos(apropos) {
+        var aboutText = document.getElementById('aboutText');
+        var aboutImage = document.querySelector('.portrait-image');
+        if (!aboutText) return;
+
+        if (apropos) {
+            if (aboutText && apropos.bio) {
+                aboutText.innerHTML = '<p>' + apropos.bio + '</p>';
+            }
+            if (aboutImage && apropos.image) {
+                aboutImage.src = apropos.image;
+            }
+        }
     }
 
     /**
@@ -112,7 +129,8 @@
 
         navLinks.innerHTML = categories.map(function(cat, index) {
             var activeClass = index === 0 ? ' active' : '';
-            return '<li><a href="#" class="nav-link' + activeClass + '" data-filter="' + cat.id + '">' + cat.label + '</a></li>';
+            var href = cat.id === 'apropos' ? './apropos.html' : '#';
+            return '<li><a href="' + href + '" class="nav-link' + activeClass + '" data-filter="' + cat.id + '">' + cat.label + '</a></li>';
         }).join('');
     }
 
