@@ -101,11 +101,19 @@
                 if (startTime === null) {
                     startTime = Date.now();
                 }
-                if (Date.now() - startTime >= 10000) {
+                if (Date.now() - startTime >= 30000) {
                     stopVideo();
                     clearInterval(checkInterval);
                 }
             }, 100);
+
+            var videoBg = document.getElementById('videoBg');
+            var navLinks = document.querySelectorAll('.nav-link[data-filter]');
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    videoBg.style.display = 'none';
+                });
+            });
         })();
     </script>
 

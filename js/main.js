@@ -43,6 +43,7 @@
                 renderApropos(data.apropos);
                 renderPortfolio(data.portfolio);
 
+                checkUrlFilter();
                 setupPortfolioFiltering();
                 setupLazyLoading();
                 preloadImages();
@@ -131,7 +132,12 @@
 
         navLinks.innerHTML = categories.map(function(cat, index) {
             var activeClass = index === 0 ? ' active' : '';
-            var href = cat.id === 'apropos' ? './apropos.html' : '#';
+            var href;
+            if (cat.id === 'apropos') {
+                href = './apropos.html';
+            } else {
+                href = './?filter=' + cat.id;
+            }
             return '<li><a href="' + href + '" class="nav-link' + activeClass + '" data-filter="' + cat.id + '">' + cat.label + '</a></li>';
         }).join('');
     }
@@ -227,37 +233,46 @@
         navLinkElements.forEach(function(link) {
             link.addEventListener('click', function(e) {
                 var href = this.getAttribute('href');
-                if (href !== '#' && href !== './') {
-                    return;
-                }
-
-                e.preventDefault();
-
-                navLinkElements.forEach(function(l) {
-                    l.classList.remove('active');
-                });
-                this.classList.add('active');
-
-                var filter = this.getAttribute('data-filter');
-
-                var landingLogo = document.getElementById('landingLogo');
-                var portfolioGrid = document.getElementById('portfolioGrid');
-                if (landingLogo && portfolioGrid) {
-                    landingLogo.style.display = 'none';
-                    portfolioGrid.style.display = '';
-                }
-
-                filterPortfolioItems(filter);
-
-                if (window.innerWidth <= 768) {
-                    menuToggle.classList.remove('active');
-                    navLinks.classList.remove('active');
-                    if (socialIcons) {
-                        socialIcons.classList.remove('active');
-                    }
+                if (href && href.startsWith('./?filter=')) {
+                    e.preventDefault();
+                    var filter = this.getAttribute('data-filter');
+                    showPortfolio(filter);
+                    setActiveState(navLinkElements, this);
                 }
             });
         });
+    }
+
+    function checkUrlFilter() {
+        var params = new URLSearchParams(window.location.search);
+        var filter = params.get('filter');
+        if (filter) {
+            showPortfolio(filter);
+            var navLinkElements = document.querySelectorAll('.nav-link[data-filter]');
+            navLinkElements.forEach(function(l) {
+                l.classList.remove('active');
+                if (l.getAttribute('data-filter') === filter) {
+                    l.classList.add('active');
+                }
+            });
+        }
+    }
+
+    function showPortfolio(filter) {
+        var landingLogo = document.getElementById('landingLogo');
+        var portfolioGrid = document.getElementById('portfolioGrid');
+        var videoBg = document.getElementById('videoBg');
+        if (landingLogo) landingLogo.style.display = 'none';
+        if (portfolioGrid) portfolioGrid.style.display = '';
+        if (videoBg) videoBg.style.display = 'none';
+        filterPortfolioItems(filter);
+    }
+
+    function setActiveState(navLinkElements, activeLink) {
+        navLinkElements.forEach(function(l) {
+            l.classList.remove('active');
+        });
+        if (activeLink) activeLink.classList.add('active');
     }
 
     /**
