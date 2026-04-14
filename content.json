@@ -12,71 +12,29 @@
   ],
 
   "categories": [
-    { "id": "all", "label": "DOCUMENTAIRES" },
-    { "id": "documentaires", "label": "PORTRAITS" },
-    { "id": "reportages", "label": "MAGAZINE" },
-    { "id": "films", "label": "REPORTAGES" },
-    { "id": "scenes", "label": "CLIPS" },
-    { "id": "scenes", "label": "CAPTATIONS" },
-    { "id": "all", "label": "À PROPOS" }
+    { "id": "documentaires", "label": "DOCUMENTAIRES" },
+    { "id": "portraits", "label": "PORTRAITS" },
+    { "id": "magazine", "label": "MAGAZINES" },
+    { "id": "reportages", "label": "REPORTAGES" },
+    { "id": "clips", "label": "CLIPS" },
+    { "id": "captations", "label": "CAPTATIONS" },
+    { "id": "apropos", "label": "À PROPOS" }
   ],
 
   "portfolio": [
     {
       "title": "VOIR SUR YOUTUBE",
-      "category": "reportages",
-      "description": "Vidéo · 2025",
+      "category": "documentaires",
+      "description": "Détecteurs de mythos, à l'attaque des fake news",
       "image": "https://img.youtube.com/vi/OrXnviLXPdI/maxresdefault.jpg",
-      "link": "https://youtu.be/OrXnviLXPdI"
-    },
-    {
-      "title": "L'HOMME ET LA VALLÉE",
-      "category": "reportages",
-      "description": "France 2 · 13h15 · 2025",
-      "image": "https://www.franceinfo.fr/pictures/QXgAkLvjQvqING_r3yHVfdhCtp0/1200x675/2025/07/17/13h15-250803-l-homme-et-la-vallee-6879031710fa6738414081.png",
-      "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-le-dimanche-l-homme-et-la-vallee_7379737.html"
-    },
-    {
-      "title": "L'ASSIETTE FRANÇAISE",
-      "category": "documentaires",
-      "description": "France 2 · Documentaire · 2024",
-      "image": "https://www.coulisses-tv.fr/media/k2/items/cache/f775d0bde3dd22704fd7b64065c56f4d_L.jpg",
-      "link": "https://www.france.tv/france-2/13h15-le-dimanche/"
-    },
-    {
-      "title": "BONDY, CAPITALE DU FOOT",
-      "category": "reportages",
-      "description": "France 2 · 13h15 · 2022",
-      "image": "https://www.franceinfo.fr/pictures/BnimNpuMatAo5Iapj7anYOJO0SM/1200x675/2022/12/09/php8o15PN.png",
-      "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-du-samedi-10-decembre-2022_5495055.html"
-    },
-    {
-      "title": "SUCCESSIONS",
-      "category": "documentaires",
-      "description": "France 2 · Documentaire · 2023-2024",
-      "image": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&h=400&fit=crop",
-      "link": "https://www.france.tv/france-2/successions/"
-    },
-    {
-      "title": "RAÍZES",
-      "category": "films",
-      "description": "Film · Caméra · 2017",
-      "image": "https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?w=600&h=400&fit=crop",
-      "link": "https://www.imdb.com/title/tt7222116/"
-    },
-    {
-      "title": "Laura",
-      "category": "scenes",
-      "description": "Boule Noire",
-      "image": "images/laura.jpg",
-      "link": "https://www.france.tv/france-2/successions/"
+      "link": "https://www.france.tv/france-2/infrarouge/8266617-detecteurs-de-mythos-a-l-attaque-des-fake-news.html"
     },
     {
       "title": "XXXXXXXX",
-      "category": "CAPTATIONS",
-      "description": "Video  Dahora da Laura",
+      "category": "captations",
+      "description": "MALADIE - Frieda",
       "image": "images/RAMOS_samuel.jpg",
-      "link": "https://www.france.tv/france-2/successions/"
+      "link": "https://youtu.be/5A8VI76fNbI?si=WqFoCdM8hioctCKb"
     }
   ]
 }
