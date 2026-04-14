@@ -62,14 +62,18 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content landing-content">
-        <div class="logo-container">
+    <main class="main-content landing-content" id="mainContent">
+        <div class="logo-container" id="landingLogo">
             <a href="./" class="logo">
                 <span class="logo-first">Laura</span>
                 <span class="logo-last">Damase</span>
             </a>
             <p class="subtitle">RÉALISATRICE & FILMMAKER</p>
         </div>
+
+        <!-- Portfolio Grid - Hidden until category is selected -->
+        <section class="portfolio-grid" id="portfolioGrid" style="display: none;">
+        </section>
     </main>
 
     <!-- JavaScript -->
@@ -77,30 +81,31 @@
     <script>
         (function() {
             var iframe = document.getElementById('vimeoIframe');
-            var videoBg = document.getElementById('videoBg');
-            var player;
+            var startTime = null;
+            var videoStopped = false;
 
-            function initVideo() {
-                player = Vimeo.Player(iframe);
-                player.on('timeupdate', function(data) {
-                    if (data.seconds >= 10) {
-                        player.setCurrentTime(0).then(function() {
-                            player.play();
-                        });
-                    }
-                });
+            function stopVideo() {
+                var url = iframe.src;
+                url = url.replace('&autoplay=1', '&autoplay=0');
+                iframe.src = url;
+                videoStopped = true;
             }
 
             iframe.src = 'https://player.vimeo.com/video/688364895?background=1&autopause=0&autoplay=1&muted=1&loop=1#t=16m20s';
 
-            if (window.Vimeo) {
-                initVideo();
-            } else {
-                var script = document.createElement('script');
-                script.src = 'https://player.vimeo.com/api/player.js';
-                script.onload = initVideo;
-                document.head.appendChild(script);
-            }
+            var checkInterval = setInterval(function() {
+                if (videoStopped) {
+                    clearInterval(checkInterval);
+                    return;
+                }
+                if (startTime === null) {
+                    startTime = Date.now();
+                }
+                if (Date.now() - startTime >= 10000) {
+                    stopVideo();
+                    clearInterval(checkInterval);
+                }
+            }, 100);
         })();
     </script>
 

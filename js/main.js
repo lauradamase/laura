@@ -143,21 +143,23 @@
     function renderPortfolio(items) {
         if (!portfolioGrid || !items || !items.length) return;
 
-        portfolioGrid.innerHTML = items.map(function(item) {
-            return '<article class="portfolio-item" data-category="' + item.category + '">' +
-                '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="portfolio-link">' +
-                    '<div class="thumbnail-container">' +
-                        '<img src="' + item.image + '" ' +
-                             'alt="' + item.title + '" ' +
-                             'class="thumbnail" ' +
-                             'loading="lazy">' +
-                        '<div class="overlay"></div>' +
-                    '</div>' +
-                    '<h3 class="project-title">' + item.title + '</h3>' +
-                    '<p class="project-category">' + item.description + '</p>' +
-                '</a>' +
-            '</article>';
-        }).join('');
+        if (portfolioGrid.style.display === 'none') {
+            portfolioGrid.innerHTML = items.map(function(item) {
+                return '<article class="portfolio-item" data-category="' + item.category + '">' +
+                    '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="portfolio-link">' +
+                        '<div class="thumbnail-container">' +
+                            '<img src="' + item.image + '" ' +
+                                 'alt="' + item.title + '" ' +
+                                 'class="thumbnail" ' +
+                                 'loading="lazy">' +
+                            '<div class="overlay"></div>' +
+                        '</div>' +
+                        '<h3 class="project-title">' + item.title + '</h3>' +
+                        '<p class="project-category">' + item.description + '</p>' +
+                    '</a>' +
+                '</article>';
+            }).join('');
+        }
     }
 
     /**
@@ -224,21 +226,29 @@
 
         navLinkElements.forEach(function(link) {
             link.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
+                if (href !== '#' && href !== './') {
+                    return;
+                }
+
                 e.preventDefault();
 
-                // Update active state
                 navLinkElements.forEach(function(l) {
                     l.classList.remove('active');
                 });
                 this.classList.add('active');
 
-                // Get filter category
                 var filter = this.getAttribute('data-filter');
 
-                // Filter items with animation
+                var landingLogo = document.getElementById('landingLogo');
+                var portfolioGrid = document.getElementById('portfolioGrid');
+                if (landingLogo && portfolioGrid) {
+                    landingLogo.style.display = 'none';
+                    portfolioGrid.style.display = '';
+                }
+
                 filterPortfolioItems(filter);
 
-                // Close mobile menu after selection
                 if (window.innerWidth <= 768) {
                     menuToggle.classList.remove('active');
                     navLinks.classList.remove('active');
