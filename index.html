@@ -35,7 +35,7 @@
 <body>
     <!-- Vimeo Background Video -->
     <div class="video-background" id="videoBg">
-        <iframe id="vimeoIframe" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+        <iframe id="vimeoIframe" src="https://player.vimeo.com/video/688364895?background=1&autopause=0&autoplay=1&muted=1&loop=1#t=16m20s" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
     </div>
 
     <!-- Navigation Sidebar -->
@@ -93,7 +93,7 @@
     <script>
         (function() {
             var iframe = document.getElementById('vimeoIframe');
-            var startTime = null;
+            var startTime = Date.now();
             var videoStopped = false;
 
             function stopVideo() {
@@ -103,15 +103,10 @@
                 videoStopped = true;
             }
 
-            iframe.src = 'https://player.vimeo.com/video/688364895?background=1&autopause=0&autoplay=1&muted=1&loop=1#t=16m20s';
-
             var checkInterval = setInterval(function() {
                 if (videoStopped) {
                     clearInterval(checkInterval);
                     return;
-                }
-                if (startTime === null) {
-                    startTime = Date.now();
                 }
                 if (Date.now() - startTime >= 30000) {
                     stopVideo();
