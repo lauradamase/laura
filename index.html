@@ -34,12 +34,35 @@
 </head>
 <body>
     <!-- Vimeo Background Video -->
-    <div class="video-background">
-        <iframe src="https://player.vimeo.com/video/688364895?background=1&autopause=0&autoplay=1&muted=1&loop=1#t=16m20s" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+    <div class="video-background" id="videoBg">
+        <iframe id="vimeoIframe" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
     </div>
 
-    <!-- Centered Content -->
-    <main class="landing-content">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="logo-container">
+                <a href="./" class="logo">
+                    <span class="logo-first">Laura</span>
+                    <span class="logo-last">Damase</span>
+                </a>
+                <p class="subtitle">RÉALISATRICE & FILMMAKER</p>
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+                <span class="hamburger"></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+            </ul>
+
+            <div class="social-icons">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content landing-content">
         <div class="logo-container">
             <a href="./" class="logo">
                 <span class="logo-first">Laura</span>
@@ -51,6 +74,35 @@
 
     <!-- JavaScript -->
     <script src="./js/main.js"></script>
+    <script>
+        (function() {
+            var iframe = document.getElementById('vimeoIframe');
+            var videoBg = document.getElementById('videoBg');
+            var player;
+
+            function initVideo() {
+                player = Vimeo.Player(iframe);
+                player.on('timeupdate', function(data) {
+                    if (data.seconds >= 10) {
+                        player.setCurrentTime(0).then(function() {
+                            player.play();
+                        });
+                    }
+                });
+            }
+
+            iframe.src = 'https://player.vimeo.com/video/688364895?background=1&autopause=0&autoplay=1&muted=1&loop=1#t=16m20s';
+
+            if (window.Vimeo) {
+                initVideo();
+            } else {
+                var script = document.createElement('script');
+                script.src = 'https://player.vimeo.com/api/player.js';
+                script.onload = initVideo;
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
 
 </body>
 </html>
