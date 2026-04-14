@@ -21,7 +21,6 @@
      */
     function init() {
         loadContent();
-        setupMobileMenu();
         setupSmoothScroll();
     }
 
@@ -49,7 +48,6 @@
             })
             .catch(function(error) {
                 console.error('Error loading content:', error);
-                portfolioGrid.innerHTML = '<p style="color: red; padding: 2rem;">Erreur: Impossible de charger le contenu. Vérifiez que content.json est valide.</p>';
             });
     }
 
