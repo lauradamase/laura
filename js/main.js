@@ -132,12 +132,7 @@
 
         navLinks.innerHTML = categories.map(function(cat, index) {
             var activeClass = index === 0 ? ' active' : '';
-            var href;
-            if (cat.id === 'apropos') {
-                href = './apropos.html';
-            } else {
-                href = './?filter=' + cat.id;
-            }
+            var href = './?filter=' + cat.id;
             return '<li><a href="' + href + '" class="nav-link' + activeClass + '" data-filter="' + cat.id + '">' + cat.label + '</a></li>';
         }).join('');
     }
@@ -247,7 +242,7 @@
         var params = new URLSearchParams(window.location.search);
         var filter = params.get('filter');
         if (filter) {
-            showPortfolio(filter);
+            showContent(filter);
             var navLinkElements = document.querySelectorAll('.nav-link[data-filter]');
             navLinkElements.forEach(function(l) {
                 l.classList.remove('active');
@@ -258,14 +253,26 @@
         }
     }
 
-    function showPortfolio(filter) {
+    function showContent(filter) {
         var landingLogo = document.getElementById('landingLogo');
         var portfolioGrid = document.getElementById('portfolioGrid');
+        var aboutSection = document.getElementById('aboutSection');
         var videoBg = document.getElementById('videoBg');
         if (landingLogo) landingLogo.style.display = 'none';
-        if (portfolioGrid) portfolioGrid.style.display = '';
         if (videoBg) videoBg.style.display = 'none';
-        filterPortfolioItems(filter);
+
+        if (filter === 'apropos') {
+            if (portfolioGrid) portfolioGrid.style.display = 'none';
+            if (aboutSection) aboutSection.style.display = '';
+        } else {
+            if (aboutSection) aboutSection.style.display = 'none';
+            if (portfolioGrid) portfolioGrid.style.display = '';
+            filterPortfolioItems(filter);
+        }
+    }
+
+    function showPortfolio(filter) {
+        showContent(filter);
     }
 
     function setActiveState(navLinkElements, activeLink) {

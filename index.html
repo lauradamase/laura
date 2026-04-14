@@ -71,8 +71,20 @@
             <p class="subtitle">RÉALISATRICE & FILMMAKER</p>
         </div>
 
-        <!-- Portfolio Grid - Hidden until category is selected -->
         <section class="portfolio-grid" id="portfolioGrid" style="display: none;">
+        </section>
+
+        <section class="about-section" id="aboutSection" style="display: none;">
+            <div class="about-container">
+                <div class="about-image">
+                    <img src="./images/laura.jpg" alt="Laura Damase" class="portrait-image">
+                </div>
+                <div class="about-content">
+                    <h1 class="about-title">À Propos</h1>
+                    <div class="about-text" id="aboutText">
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -107,13 +119,14 @@
                 }
             }, 100);
 
-            var videoBg = document.getElementById('videoBg');
-            var navLinks = document.querySelectorAll('.nav-link[data-filter]');
             navLinks.forEach(function(link) {
                 link.addEventListener('click', function() {
                     videoBg.style.display = 'none';
                 });
             });
+
+            var videoBg = document.getElementById('videoBg');
+            var navLinks = document.querySelectorAll('.nav-link[data-filter]');
         })();
     </script>
 
