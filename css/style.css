@@ -772,6 +772,29 @@ button {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
+.landing-content .logo-first,
+.landing-content .logo-last,
+.landing-content .subtitle {
+    color: var(--color-white);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.landing-content .logo-last::after {
+    background-color: var(--color-accent);
+}
+
+.landing-content .subtitle::before {
+    background-color: var(--color-accent);
+}
+
+.landing-content .logo-first {
+    color: var(--color-accent);
+}
+
+.landing-content .logo-last {
+    color: var(--color-accent);
+}
+
 .video-background {
     position: fixed;
     top: 0;
