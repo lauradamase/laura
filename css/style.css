@@ -759,6 +759,12 @@ button {
     min-width: 177.77vh;
     transform: translate(-50%, -50%);
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.video-background iframe:first-child {
+    opacity: 1;
 }
 
 .landing-content {
