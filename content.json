@@ -30,9 +30,16 @@
     {
       "title": "VOIR SUR YOUTUBE",
       "category": "documentaires",
-      "description": "Détecteurs de mythos, à l'attaque des fake news",
-      "image": "https://img.youtube.com/vi/OrXnviLXPdI/maxresdefault.jpg",
+      "description": "France 2 INFRAROUGE\nDétecteurs de mythos, à l'attaque des fake news",
+      "image": "detecteurs.jpg",
       "link": "https://www.france.tv/france-2/infrarouge/8266617-detecteurs-de-mythos-a-l-attaque-des-fake-news.html"
+    },
+    {
+      "title": "VOIR SUR YOUTUBE",
+      "category": "portraits",
+      "description": "France 2 20h30 le vendredi\nJean-François, monsieur Hollywood",
+      "image": "jflemaire.jpg",
+      "link": "https://www.france.tv/france-2/20h30-le-vendredi/8299455-jean-francois-monsieur-hollywood.html"
     },
     {
       "title": "XXXXXXXX",
