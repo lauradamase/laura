@@ -148,6 +148,14 @@
                 } catch (e) {}
             }
 
+            function pauseVimeo(iframe) {
+                try {
+                    iframe.contentWindow.postMessage({
+                        method: 'pause'
+                    }, '*');
+                } catch (e) {}
+            }
+
             function loadVideo(index, iframe) {
                 var startTime = playlist[index][1];
                 var isVimeo = !playlist[index][3];
@@ -155,9 +163,7 @@
                 iframe.src = buildSrc(index);
 
                 if (isVimeo) {
-                    // Vimeo: try seek after load as main approach
                     iframe.onload = function() {
-                        // Delay to let player initialize
                         setTimeout(function() { seekVimeo(iframe, startTime); }, 800);
                         iframe.onload = null;
                     };
@@ -174,11 +180,18 @@
 
             function advance() {
                 var nextIndex = (currentIndex + 1) % playlist.length;
-                var iframe = getActiveIframe();
-                loadVideo(nextIndex, iframe);
+                var activeIframe = getActiveIframe();
+
+                // FIRST: pause the current video
+                pauseVimeo(activeIframe);
+
+                // SECOND: swap the iframe visibility
+                switchVideo();
+
+                // THIRD: load next video into the now-active iframe (which was previously inactive)
+                loadVideo(nextIndex, getActiveIframe());
 
                 currentIndex = nextIndex;
-                switchVideo();
 
                 if (timer) clearTimeout(timer);
                 timer = setTimeout(advance, playlist[currentIndex][2]);
