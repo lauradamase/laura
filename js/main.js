@@ -45,6 +45,7 @@
 
                 checkUrlFilter();
                 setupPortfolioFiltering();
+                setupVideoModal();
                 setupLazyLoading();
                 preloadImages();
             })
@@ -146,8 +147,8 @@
 
         if (portfolioGrid.style.display === 'none') {
             portfolioGrid.innerHTML = items.map(function(item) {
-                return '<article class="portfolio-item" data-category="' + item.category + '">' +
-                    '<a href="' + item.link + '" target="_blank" rel="noopener noreferrer" class="portfolio-link">' +
+                return '<article class="portfolio-item" data-category="' + item.category + '" data-link="' + item.link + '">' +
+                    '<div class="portfolio-link portfolio-video-trigger">' +
                         '<div class="thumbnail-container">' +
                             '<img src="' + item.image + '" ' +
                                  'alt="' + item.title + '" ' +
@@ -157,10 +158,90 @@
                         '</div>' +
                         '<h3 class="project-title">' + item.title + '</h3>' +
                         '<p class="project-category">' + item.description + '</p>' +
-                    '</a>' +
+                    '</div>' +
                 '</article>';
             }).join('');
         }
+    }
+
+    /**
+     * Extract YouTube video ID from various URL formats
+     * @param {string} url - YouTube URL
+     * @returns {string|null} - Video ID or null if not YouTube
+     */
+    function getYouTubeVideoId(url) {
+        if (!url) return null;
+        var patterns = [
+            /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/,
+            /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+            /([a-zA-Z0-9_-]{11})/
+        ];
+        for (var i = 0; i < patterns.length; i++) {
+            var match = url.match(patterns[i]);
+            if (match) return match[1];
+        }
+        return null;
+    }
+
+    /**
+     * Setup video modal functionality
+     */
+    function setupVideoModal() {
+        var modal = document.getElementById('videoModal');
+        var modalPlayer = document.getElementById('videoModalPlayer');
+        var closeBtn = document.querySelector('.video-modal-close');
+
+        if (!modal || !modalPlayer) return;
+
+        function openModal(videoId) {
+            modalPlayer.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            modalPlayer.innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        // Close on button click
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+
+        // Close on background click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Handle portfolio item clicks
+        portfolioGrid.addEventListener('click', function(e) {
+            var trigger = e.target.closest('.portfolio-video-trigger');
+            if (!trigger) return;
+
+            var item = trigger.closest('.portfolio-item');
+            if (!item) return;
+
+            var link = item.getAttribute('data-link');
+            if (!link) return;
+
+            var videoId = getYouTubeVideoId(link);
+            if (videoId) {
+                e.preventDefault();
+                openModal(videoId);
+            }
+            // Non-YouTube links will follow naturally (no preventDefault)
+        });
     }
 
     /**
