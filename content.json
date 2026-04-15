@@ -2,7 +2,7 @@
   "site": {
     "firstName": "Laura",
     "lastName": "Damase",
-    "subtitle": "RÉALISATRICE & FILMMAKER"
+    "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRCIE"
   },
 
   "social": [
@@ -31,15 +31,22 @@
       "title": "VOIR SUR YOUTUBE",
       "category": "documentaires",
       "description": "France 2 INFRAROUGE\nDétecteurs de mythos, à l'attaque des fake news",
-      "image": "detecteurs.jpg",
+      "image": "detecteurs",
       "link": "https://www.france.tv/france-2/infrarouge/8266617-detecteurs-de-mythos-a-l-attaque-des-fake-news.html"
     },
     {
       "title": "VOIR SUR YOUTUBE",
       "category": "portraits",
-      "description": "France 2 20h30 le vendredi\nJean-François, monsieur Hollywood",
-      "image": "jflemaire.jpg",
+      "description": "France 2 20h30 le vendredi\nYazid Ichemrahen, l'étoile des pâtissiers",
+      "image": "jflemaire",
       "link": "https://www.france.tv/france-2/20h30-le-vendredi/8299455-jean-francois-monsieur-hollywood.html"
+    },
+    {
+      "title": "VOIR SUR YOUTUBE",
+      "category": "portraits",
+      "description": "France 2 20h30 en fêtes\nJean-François, monsieur Hollywood",
+      "image": "yazid.jpg",
+      "link": "https://vimeo.com/manage/videos/1015174528"
     },
     {
       "title": "XXXXXXXX",
