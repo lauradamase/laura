@@ -137,36 +137,24 @@
                 return activeSlot === 1 ? bgVideo2 : bgVideo1;
             }
 
-            function preloadNext(afterMs) {
-                if (preloadTimer) clearTimeout(preloadTimer);
-                preloadTimer = setTimeout(function() {
-                    var nextIndex = (currentIndex + 1) % playlist.length;
-                    var inactive = getInactiveIframe();
-                    inactive.src = buildSrc(nextIndex);
-                }, afterMs - 800); // preload 800ms before transition
-            }
-
             function switchVideo() {
                 var active = getActiveIframe();
                 var inactive = getInactiveIframe();
-
-                // Crossfade
                 inactive.style.opacity = '1';
                 active.style.opacity = '0';
-
-                // Swap active slot
                 activeSlot = activeSlot === 1 ? 2 : 1;
-
-                // Preload the one that's now invisible
-                var nextIndex = (currentIndex + 1) % playlist.length;
-                getInactiveIframe().src = buildSrc(nextIndex);
             }
 
             function advance() {
-                currentIndex = (currentIndex + 1) % playlist.length;
+                // Preload next video into the iframe that will become inactive after switch
+                var nextIndex = (currentIndex + 1) % playlist.length;
+                getActiveIframe().src = buildSrc(nextIndex);
+
+                // Advance to next
+                currentIndex = nextIndex;
                 switchVideo();
+
                 if (timer) clearTimeout(timer);
-                preloadNext(playlist[currentIndex][2]);
                 timer = setTimeout(advance, playlist[currentIndex][2]);
             }
 
@@ -176,25 +164,22 @@
                 link.addEventListener('click', function() {
                     videoBg.style.display = 'none';
                     if (timer) clearTimeout(timer);
-                    if (preloadTimer) clearTimeout(preloadTimer);
                 });
             });
 
             // Keyboard navigation
             document.addEventListener('keydown', function(e) {
                 if (videoBg.style.display === 'none') return;
-                if (e.key === 'ArrowRight') {
-                    currentIndex = (currentIndex + 1) % playlist.length;
-                    switchVideo();
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
                     if (timer) clearTimeout(timer);
-                    preloadNext(playlist[currentIndex][2]);
-                    timer = setTimeout(advance, playlist[currentIndex][2]);
-                }
-                if (e.key === 'ArrowLeft') {
-                    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+                    if (e.key === 'ArrowRight') {
+                        currentIndex = (currentIndex + 1) % playlist.length;
+                    } else {
+                        currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+                    }
+                    // Load the current video into the newly active iframe
+                    getActiveIframe().src = buildSrc(currentIndex);
                     switchVideo();
-                    if (timer) clearTimeout(timer);
-                    preloadNext(playlist[currentIndex][2]);
                     timer = setTimeout(advance, playlist[currentIndex][2]);
                 }
             });
@@ -207,7 +192,6 @@
                 bgVideo2.style.opacity = '0';
                 activeSlot = 1;
                 currentIndex = 1;
-                preloadNext(playlist[1][2]);
                 timer = setTimeout(advance, playlist[1][2]);
             }
         })();
