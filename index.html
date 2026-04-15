@@ -33,35 +33,9 @@
     <meta name="theme-color" content="#800020">
 </head>
 <body>
-    <!-- Video Background Carousel -->
-    <div class="video-carousel" id="videoCarousel">
-        <div class="video-carousel-track" id="videoTrack">
-            <!-- Video 1: YouTube -->
-            <div class="video-carousel-item active" data-index="0">
-                <iframe id="video1" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" data-src="https://www.youtube-nocookie.com/embed/uSwd2NAgF-E?start=86&end=91&autoplay=1&mute=1&loop=0&playsinline=1"></iframe>
-            </div>
-            <!-- Video 2: Vimeo -->
-            <div class="video-carousel-item" data-index="1">
-                <iframe id="video2" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" data-src="https://player.vimeo.com/video/1015174528?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=120,124"></iframe>
-            </div>
-            <!-- Video 3: Vimeo (existing) -->
-            <div class="video-carousel-item" data-index="2">
-                <iframe id="video3" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" data-src="https://player.vimeo.com/video/688364895?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=980,985"></iframe>
-            </div>
-            <!-- Video 4a: Vimeo segment 1 (14'06-14'10) -->
-            <div class="video-carousel-item" data-index="3">
-                <iframe id="video4a" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" data-src="https://player.vimeo.com/video/689078465?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=846,850"></iframe>
-            </div>
-            <!-- Video 4b: Vimeo segment 2 (17'03-17'12) -->
-            <div class="video-carousel-item" data-index="4">
-                <iframe id="video4b" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" data-src="https://player.vimeo.com/video/689078465?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=1023,1032"></iframe>
-            </div>
-        </div>
-        <!-- Navigation dots -->
-        <div class="video-carousel-dots" id="carouselDots"></div>
-        <!-- Navigation arrows -->
-        <button class="video-carousel-arrow prev" id="carouselPrev" aria-label="Vidéo précédente">‹</button>
-        <button class="video-carousel-arrow next" id="carouselNext" aria-label="Vidéo suivante">›</button>
+    <!-- Video Background -->
+    <div class="video-background" id="videoBg">
+        <iframe id="bgVideo" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
     </div>
 
     <!-- Navigation Sidebar -->
@@ -126,168 +100,82 @@
     <script src="./js/main.js"></script>
     <script>
         (function() {
-            var carousel = document.getElementById('videoCarousel');
-            var track = document.getElementById('videoTrack');
-            var dotsContainer = document.getElementById('carouselDots');
-            var prevBtn = document.getElementById('carouselPrev');
-            var nextBtn = document.getElementById('carouselNext');
-            var items = track ? track.querySelectorAll('.video-carousel-item') : [];
-            var dots = dotsContainer ? dotsContainer.querySelectorAll('.dot') : [];
+            var bgVideo = document.getElementById('bgVideo');
+            var videoBg = document.getElementById('videoBg');
 
-            var videoDurations = [5000, 4000, 5000, 4000, 9000]; // ms for each video
+            // Video playlist: [src, startMs, endMs, durationMs]
+            var playlist = [
+                ['https://www.youtube-nocookie.com/embed/uSwd2NAgF-E', 86000, 91000, 5000],
+                ['https://player.vimeo.com/video/1015174528', 120000, 124000, 4000],
+                ['https://player.vimeo.com/video/688364895', 980000, 985000, 5000],
+                ['https://player.vimeo.com/video/689078465', 846000, 850000, 4000],
+                ['https://player.vimeo.com/video/689078465', 1023000, 1032000, 9000]
+            ];
+
             var currentIndex = 0;
-            var isTransitioning = false;
-            var autoPlayTimer = null;
-            var isHovered = false;
+            var timer = null;
 
-            // Video names/labels for accessibility
-            var videoLabels = ['Vidéo 1', 'Vidéo 2', 'Vidéo 3', 'Vidéo 4a', 'Vidéo 4b'];
-
-            function initCarousel() {
-                if (!carousel || items.length === 0) return;
-
-                // Create dots
-                createDots();
-
-                // Load first video
-                loadVideo(0);
-
-                // Start autoplay
-                scheduleNext();
-
-                // Event listeners
-                if (prevBtn) prevBtn.addEventListener('click', prevVideo);
-                if (nextBtn) nextBtn.addEventListener('click', nextVideo);
-
-                carousel.addEventListener('mouseenter', function() { isHovered = true; });
-                carousel.addEventListener('mouseleave', function() { isHovered = false; scheduleNext(); });
-
-                // Touch/swipe support
-                setupTouchEvents();
-
-                // Hide carousel when navigating to portfolio
-                var navLinks = document.querySelectorAll('.nav-link[data-filter]');
-                navLinks.forEach(function(link) {
-                    link.addEventListener('click', function() {
-                        carousel.style.display = 'none';
-                    });
-                });
-            }
-
-            function createDots() {
-                if (!dotsContainer) return;
-                dotsContainer.innerHTML = '';
-                for (var i = 0; i < items.length; i++) {
-                    var dot = document.createElement('button');
-                    dot.className = 'dot' + (i === 0 ? ' active' : '');
-                    dot.setAttribute('aria-label', 'Aller à ' + videoLabels[i]);
-                    dot.setAttribute('data-index', i);
-                    dot.addEventListener('click', function() {
-                        goToVideo(parseInt(this.getAttribute('data-index')));
-                    });
-                    dotsContainer.appendChild(dot);
+            function buildSrc(index) {
+                var v = playlist[index];
+                if (v[0].indexOf('youtube') > -1) {
+                    return v[0] + '?start=' + Math.floor(v[1]/1000) + '&end=' + Math.floor(v[2]/1000) + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0';
+                } else {
+                    return v[0] + '?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=' + (v[1]/1000) + ',' + (v[2]/1000);
                 }
             }
 
             function loadVideo(index) {
-                var item = items[index];
-                if (!item) return;
-
-                var iframe = item.querySelector('iframe');
-                if (!iframe) return;
-
-                var src = iframe.getAttribute('data-src');
-                if (src && iframe.src !== src) {
-                    iframe.src = src;
-                }
-            }
-
-            function goToVideo(index) {
-                if (isTransitioning || index === currentIndex) return;
-                if (index < 0) index = items.length - 1;
-                if (index >= items.length) index = 0;
-
-                isTransitioning = true;
-
-                // Update items
-                items.forEach(function(item, i) {
-                    item.classList.remove('active');
-                });
-                items[index].classList.add('active');
-
-                // Load video
-                loadVideo(index);
-
-                // Update dots
-                if (dotsContainer) {
-                    var dotsAll = dotsContainer.querySelectorAll('.dot');
-                    dotsAll.forEach(function(d, i) {
-                        d.classList.toggle('active', i === index);
-                    });
-                }
-
-                currentIndex = index;
-
-                // Reset transition lock
-                setTimeout(function() {
-                    isTransitioning = false;
-                }, 600);
-
-                // Reset timer
-                scheduleNext();
+                bgVideo.src = buildSrc(index);
             }
 
             function nextVideo() {
-                goToVideo(currentIndex + 1);
-            }
-
-            function prevVideo() {
-                goToVideo(currentIndex - 1);
-            }
-
-            function scheduleNext() {
-                if (autoPlayTimer) clearTimeout(autoPlayTimer);
-                if (isHovered) return;
-                autoPlayTimer = setTimeout(function() {
+                loadVideo(currentIndex);
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(function() {
+                    currentIndex = (currentIndex + 1) % playlist.length;
                     nextVideo();
-                }, videoDurations[currentIndex]);
+                }, playlist[currentIndex][3]);
             }
 
-            function setupTouchEvents() {
-                var startX = 0;
-                var startY = 0;
-
-                carousel.addEventListener('touchstart', function(e) {
-                    startX = e.touches[0].clientX;
-                    startY = e.touches[0].clientY;
-                }, { passive: true });
-
-                carousel.addEventListener('touchend', function(e) {
-                    var endX = e.changedTouches[0].clientX;
-                    var endY = e.changedTouches[0].clientY;
-                    var diffX = endX - startX;
-                    var diffY = endY - startY;
-
-                    // Only swipe if horizontal movement is greater
-                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                        if (diffX > 0) prevVideo();
-                        else nextVideo();
-                    }
-                }, { passive: true });
-            }
-
-            // Keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                if (carousel.style.display === 'none') return;
-                if (e.key === 'ArrowRight') nextVideo();
-                if (e.key === 'ArrowLeft') prevVideo();
+            // Hide video when navigating away
+            var navLinks = document.querySelectorAll('.nav-link[data-filter]');
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    videoBg.style.display = 'none';
+                    if (timer) clearTimeout(timer);
+                });
             });
 
-            // Initialize when DOM is ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initCarousel);
-            } else {
-                initCarousel();
+            // Keyboard arrows
+            document.addEventListener('keydown', function(e) {
+                if (videoBg.style.display === 'none') return;
+                if (e.key === 'ArrowRight') {
+                    currentIndex = (currentIndex + 1) % playlist.length;
+                    loadVideo(currentIndex);
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(function() {
+                        currentIndex = (currentIndex + 1) % playlist.length;
+                        nextVideo();
+                    }, playlist[currentIndex][3]);
+                }
+                if (e.key === 'ArrowLeft') {
+                    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+                    loadVideo(currentIndex);
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(function() {
+                        currentIndex = (currentIndex + 1) % playlist.length;
+                        nextVideo();
+                    }, playlist[currentIndex][3]);
+                }
+            });
+
+            // Start
+            if (bgVideo) {
+                loadVideo(0);
+                currentIndex = 1;
+                timer = setTimeout(function() {
+                    nextVideo();
+                }, playlist[0][3]);
             }
         })();
     </script>
