@@ -173,8 +173,8 @@
             function switchVideo() {
                 var active = getActiveIframe();
                 var inactive = getInactiveIframe();
-                inactive.style.opacity = '1';
-                active.style.opacity = '0';
+                inactive.classList.add('active');
+                active.classList.remove('active');
                 activeSlot = activeSlot === 1 ? 2 : 1;
             }
 
@@ -227,8 +227,8 @@
             if (bgVideo1 && bgVideo2) {
                 loadVideo(0, bgVideo1);
                 loadVideo(1, bgVideo2);
-                bgVideo1.style.opacity = '1';
-                bgVideo2.style.opacity = '0';
+                bgVideo1.classList.add('active');
+                bgVideo2.classList.remove('active');
                 activeSlot = 1;
                 currentIndex = 1;
                 timer = setTimeout(advance, playlist[1][2]);
