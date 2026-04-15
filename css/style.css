@@ -789,7 +789,7 @@ button {
 }
 
 .landing-content .subtitle {
-    color: var(--color-accent);
+    color: #ffffff;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     font-size: 0.7rem;
 }
