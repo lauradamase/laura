@@ -964,3 +964,135 @@ button:focus {
         width: 95%;
     }
 }
+
+/* --------------------------------------------------------------------------
+   Video Carousel (Landing Page)
+   -------------------------------------------------------------------------- */
+.video-carousel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.video-carousel-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.video-carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+.video-carousel-item.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.video-carousel-item iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw;
+    min-height: 100vh;
+    min-width: 177.77vh;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* Navigation dots */
+.video-carousel-dots {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.video-carousel-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.video-carousel-dots .dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.2);
+}
+
+.video-carousel-dots .dot.active {
+    background: #fff;
+    transform: scale(1.3);
+}
+
+/* Navigation arrows */
+.video-carousel-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 1rem 1.2rem;
+    z-index: 10;
+    transition: background 0.3s ease;
+    line-height: 1;
+}
+
+.video-carousel-arrow:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.video-carousel-arrow.prev {
+    left: 20px;
+}
+
+.video-carousel-arrow.next {
+    right: 20px;
+}
+
+/* Hide default video background */
+.video-background {
+    display: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .video-carousel-dots {
+        bottom: 20px;
+    }
+
+    .video-carousel-arrow {
+        font-size: 1.8rem;
+        padding: 0.8rem 1rem;
+    }
+
+    .video-carousel-arrow.prev {
+        left: 10px;
+    }
+
+    .video-carousel-arrow.next {
+        right: 10px;
+    }
+}
