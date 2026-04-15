@@ -149,13 +149,24 @@
             }
 
             function loadVideo(index, iframe) {
-                iframe.src = buildSrc(index);
-                // For Vimeo, seek to correct start time after load
-                if (!playlist[index][3]) {
-                    iframe.onload = function() {
-                        seekVimeo(iframe, playlist[index][1]);
-                        iframe.onload = null;
+                var startTime = playlist[index][1];
+                var isVimeo = !playlist[index][3];
+
+                if (isVimeo) {
+                    // For Vimeo: listen for ready event, then seek
+                    var onMessage = function(e) {
+                        if (!e.data || typeof e.data !== 'object') return;
+                        if (e.data.method === 'ready') {
+                            seekVimeo(iframe, startTime);
+                            // Also set duration via addEventListener('timeupdate', ...) workaround
+                            // We rely on our timer for duration instead
+                            window.removeEventListener('message', onMessage);
+                        }
                     };
+                    window.addEventListener('message', onMessage);
+                    iframe.src = buildSrc(index);
+                } else {
+                    iframe.src = buildSrc(index);
                 }
             }
 
