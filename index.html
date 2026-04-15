@@ -126,7 +126,7 @@
                     var endSec = v[1] + Math.round(v[2] / 1000);
                     return v[0] + '?start=' + v[1] + '&end=' + endSec + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0&rel=0&modestbranding=1';
                 } else {
-                    // Vimeo: use player API for precise seeking
+                    // Vimeo: api=1 for seek, no background=1 (may interfere with postMessage)
                     return v[0] + '?autopause=0&autoplay=1&muted=1&loop=0&api=1';
                 }
             }
@@ -152,21 +152,15 @@
                 var startTime = playlist[index][1];
                 var isVimeo = !playlist[index][3];
 
+                iframe.src = buildSrc(index);
+
                 if (isVimeo) {
-                    // For Vimeo: listen for ready event, then seek
-                    var onMessage = function(e) {
-                        if (!e.data || typeof e.data !== 'object') return;
-                        if (e.data.method === 'ready') {
-                            seekVimeo(iframe, startTime);
-                            // Also set duration via addEventListener('timeupdate', ...) workaround
-                            // We rely on our timer for duration instead
-                            window.removeEventListener('message', onMessage);
-                        }
+                    // Vimeo: try seek after load as main approach
+                    iframe.onload = function() {
+                        // Delay to let player initialize
+                        setTimeout(function() { seekVimeo(iframe, startTime); }, 800);
+                        iframe.onload = null;
                     };
-                    window.addEventListener('message', onMessage);
-                    iframe.src = buildSrc(index);
-                } else {
-                    iframe.src = buildSrc(index);
                 }
             }
 
