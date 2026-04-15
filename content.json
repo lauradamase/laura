@@ -14,7 +14,7 @@
   "categories": [
     { "id": "documentaires", "label": "DOCUMENTAIRES" },
     { "id": "portraits", "label": "PORTRAITS" },
-    { "id": "magazine", "label": "MAGAZINES" },
+    { "id": "magazines", "label": "MAGAZINES" },
     { "id": "reportages", "label": "REPORTAGES" },
     { "id": "clips", "label": "CLIPS" },
     { "id": "captations", "label": "CAPTATIONS" },
@@ -49,11 +49,32 @@
       "link": "https://vimeo.com/manage/videos/1015174528"
     },
     {
+      "title": "VOIR SUR YOUTUBE",
+      "category": "clips",
+      "description": "Kayode - Meu Lugar",
+      "image": "kayodemeulugar.jpg,
+      "link": "https://www.youtube.com/watch?v=rDhFoPIUCEQ"
+    },
+    {
+      "title": "VOIR SUR YOUTUBE",
+      "category": "clips",
+      "description": "Kayode - Meu Lugar",
+      "image": "kayodemeulugar.jpg,
+      "link": "https://www.youtube.com/watch?v=rDhFoPIUCEQ"
+    },
+    {
+      "title": "VOIR SUR YOUTUBE",
+      "category": "captations",
+      "description": "MALADIE - Frieda (Live à la Boule Noire)",
+      "image": "MaladieFrieda.jpeg",
+      "link": "https://youtu.be/5A8VI76fNbI?si=WqFoCdM8hioctCKb"
+    },
+    {
       "title": "XXXXXXXX",
       "category": "captations",
-      "description": "MALADIE - Frieda",
-      "image": "images/RAMOS_samuel.jpg",
-      "link": "https://youtu.be/5A8VI76fNbI?si=WqFoCdM8hioctCKb"
+      "description": "Potentialité - Frieda (Live à la Boule Noire)",
+      "image": "potencialitefrieda.jpg",
+      "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
     }
   ]
 }
