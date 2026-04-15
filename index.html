@@ -126,13 +126,9 @@
                     var endSec = v[1] + Math.round(v[2] / 1000);
                     return v[0] + '?start=' + v[1] + '&end=' + endSec + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0&rel=0&modestbranding=1';
                 } else {
-                    // Vimeo: background=1 required, timer controls duration
-                    return v[0] + '?background=1&autopause=0&autoplay=1&muted=1&loop=0';
+                    // Vimeo: use player API for precise seeking
+                    return v[0] + '?autopause=0&autoplay=1&muted=1&loop=0&api=1';
                 }
-            }
-
-            function getStartTime(index) {
-                return playlist[index][1]; // seconds
             }
 
             function getActiveIframe() {
@@ -141,6 +137,26 @@
 
             function getInactiveIframe() {
                 return activeSlot === 1 ? bgVideo2 : bgVideo1;
+            }
+
+            function seekVimeo(iframe, seconds) {
+                try {
+                    iframe.contentWindow.postMessage({
+                        method: 'setCurrentTime',
+                        value: seconds
+                    }, '*');
+                } catch (e) {}
+            }
+
+            function loadVideo(index, iframe) {
+                iframe.src = buildSrc(index);
+                // For Vimeo, seek to correct start time after load
+                if (!playlist[index][3]) {
+                    iframe.onload = function() {
+                        seekVimeo(iframe, playlist[index][1]);
+                        iframe.onload = null;
+                    };
+                }
             }
 
             function switchVideo() {
@@ -152,11 +168,10 @@
             }
 
             function advance() {
-                // Preload next video into the iframe that will become inactive after switch
                 var nextIndex = (currentIndex + 1) % playlist.length;
-                getActiveIframe().src = buildSrc(nextIndex);
+                var iframe = getActiveIframe();
+                loadVideo(nextIndex, iframe);
 
-                // Advance to next
                 currentIndex = nextIndex;
                 switchVideo();
 
@@ -184,7 +199,7 @@
                         currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
                     }
                     // Load the current video into the newly active iframe
-                    getActiveIframe().src = buildSrc(currentIndex);
+                    loadVideo(currentIndex, getActiveIframe());
                     switchVideo();
                     timer = setTimeout(advance, playlist[currentIndex][2]);
                 }
@@ -192,8 +207,8 @@
 
             // Initialize with first two videos preloaded
             if (bgVideo1 && bgVideo2) {
-                bgVideo1.src = buildSrc(0);
-                bgVideo2.src = buildSrc(1);
+                loadVideo(0, bgVideo1);
+                loadVideo(1, bgVideo2);
                 bgVideo1.style.opacity = '1';
                 bgVideo2.style.opacity = '0';
                 activeSlot = 1;
