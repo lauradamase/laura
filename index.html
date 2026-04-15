@@ -103,38 +103,48 @@
             var bgVideo = document.getElementById('bgVideo');
             var videoBg = document.getElementById('videoBg');
 
-            // Video playlist: [src, startMs, endMs, durationMs]
+            // Video playlist: [embedUrl, startSec, durationMs, isYouTube]
             var playlist = [
-                ['https://www.youtube-nocookie.com/embed/uSwd2NAgF-E', 86000, 91000, 5000],
-                ['https://player.vimeo.com/video/1015174528', 120000, 124000, 4000],
-                ['https://player.vimeo.com/video/688364895', 980000, 985000, 5000],
-                ['https://player.vimeo.com/video/689078465', 846000, 850000, 4000],
-                ['https://player.vimeo.com/video/689078465', 1023000, 1032000, 9000]
+                ['https://www.youtube-nocookie.com/embed/uSwd2NAgF-E', 86, 5000, true],
+                ['https://player.vimeo.com/video/1015174528', 120, 4000, false],
+                ['https://player.vimeo.com/video/688364895', 980, 5000, false],
+                ['https://player.vimeo.com/video/689078465', 846, 4000, false],
+                ['https://player.vimeo.com/video/689078465', 1023, 9000, false]
             ];
 
             var currentIndex = 0;
             var timer = null;
+            var isTransitioning = false;
 
             function buildSrc(index) {
                 var v = playlist[index];
-                if (v[0].indexOf('youtube') > -1) {
-                    return v[0] + '?start=' + Math.floor(v[1]/1000) + '&end=' + Math.floor(v[2]/1000) + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0';
+                if (v[3]) {
+                    // YouTube: use end param to stop at exact second
+                    var endSec = v[1] + Math.round(v[2] / 1000);
+                    return v[0] + '?start=' + v[1] + '&end=' + endSec + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0&rel=0&modestbranding=1';
                 } else {
-                    return v[0] + '?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=' + (v[1]/1000) + ',' + (v[2]/1000);
+                    // Vimeo: seek to start, timer handles duration
+                    return v[0] + '?background=1&autopause=0&autoplay=1&muted=1&loop=0#t=' + v[1] + 's';
                 }
             }
 
             function loadVideo(index) {
-                bgVideo.src = buildSrc(index);
+                isTransitioning = true;
+                bgVideo.src = '';
+                var src = buildSrc(index);
+                bgVideo.src = src;
+                // Short delay to ensure iframe reloads properly
+                setTimeout(function() { isTransitioning = false; }, 300);
             }
 
-            function nextVideo() {
+            function advance() {
+                if (isTransitioning) return;
                 loadVideo(currentIndex);
                 if (timer) clearTimeout(timer);
                 timer = setTimeout(function() {
                     currentIndex = (currentIndex + 1) % playlist.length;
-                    nextVideo();
-                }, playlist[currentIndex][3]);
+                    advance();
+                }, playlist[currentIndex][2]);
             }
 
             // Hide video when navigating away
@@ -146,26 +156,18 @@
                 });
             });
 
-            // Keyboard arrows
+            // Keyboard navigation
             document.addEventListener('keydown', function(e) {
                 if (videoBg.style.display === 'none') return;
-                if (e.key === 'ArrowRight') {
-                    currentIndex = (currentIndex + 1) % playlist.length;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    if (e.key === 'ArrowRight') {
+                        currentIndex = (currentIndex + 1) % playlist.length;
+                    } else {
+                        currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+                    }
                     loadVideo(currentIndex);
                     if (timer) clearTimeout(timer);
-                    timer = setTimeout(function() {
-                        currentIndex = (currentIndex + 1) % playlist.length;
-                        nextVideo();
-                    }, playlist[currentIndex][3]);
-                }
-                if (e.key === 'ArrowLeft') {
-                    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-                    loadVideo(currentIndex);
-                    if (timer) clearTimeout(timer);
-                    timer = setTimeout(function() {
-                        currentIndex = (currentIndex + 1) % playlist.length;
-                        nextVideo();
-                    }, playlist[currentIndex][3]);
+                    timer = setTimeout(advance, playlist[currentIndex][2]);
                 }
             });
 
@@ -173,9 +175,7 @@
             if (bgVideo) {
                 loadVideo(0);
                 currentIndex = 1;
-                timer = setTimeout(function() {
-                    nextVideo();
-                }, playlist[0][3]);
+                timer = setTimeout(advance, playlist[0][2]);
             }
         })();
     </script>
