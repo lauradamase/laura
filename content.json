@@ -21,7 +21,10 @@
     { "id": "apropos", "label": "À PROPOS" }
   ],
 
-  "bio": "Je suis réalisatrice et cheffe opératrice.\nMa double formation en audiovisuel et en journalisme nourrit une pratique ancrée dans le réel.\n\nJ’ai d’abord travaillé six années au Brésil..."
+"apropos": {
+"image": "images/Portrait Laura.jpg",
+"bio": "Je suis réalisatrice et cheffe opératrice.\nMa double formation en audiovisuel et en journalisme nourrit une pratique ancrée dans le réel.\n\nJ’ai d’abord travaillé six années au Brésil..."
+},
 
   "portfolio": [
     {
