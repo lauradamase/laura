@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin — Laura Damase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent: #800020;
+            --accent-hover: #5a0016;
+            --text: #1a1a1a;
+            --text-light: #666;
+            --bg: #f5f5f5;
+            --white: #fff;
+            --border: rgba(0,0,0,0.1);
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --radius: 8px;
+            --font: 'Montserrat', sans-serif;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── LOGIN ── */
+        #loginScreen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .login-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 440px;
+            width: 100%;
+        }
+        .login-logo { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.25em; color: var(--text-light); text-transform: uppercase; margin-bottom: 0.4rem; }
+        .login-title { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+        .login-title span { color: var(--accent); }
+        .login-sub { font-size: 0.75rem; color: var(--text-light); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+        .login-label { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.5rem; }
+        .login-input {
+            width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border);
+            border-radius: var(--radius); font-family: var(--font); font-size: 0.9rem;
+            outline: none; transition: border-color 0.2s;
+        }
+        .login-input:focus { border-color: var(--accent); }
+        .login-btn {
+            margin-top: 1rem; width: 100%; padding: 0.85rem; background: var(--accent);
+            color: white; border: none; border-radius: var(--radius); font-family: var(--font);
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .login-btn:hover { background: var(--accent-hover); }
+        .login-help { margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-light); line-height: 1.7; }
+        .login-help a { color: var(--accent); text-decoration: none; }
+        .login-help a:hover { text-decoration: underline; }
+        .login-error { margin-top: 0.75rem; color: #c0392b; font-size: 0.8rem; font-weight: 500; display: none; }
+
+        /* ── ADMIN SHELL ── */
+        #adminScreen { display: none; }
+        .topbar {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--white); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 60px;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+        .topbar-brand { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+        .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+        .btn-sm {
+            padding: 0.45rem 1rem; border-radius: var(--radius); font-family: var(--font);
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+            cursor: pointer; border: 1.5px solid var(--border); background: var(--white);
+            color: var(--text); text-decoration: none; transition: all 0.2s;
+        }
+        .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-publish {
+            background: var(--accent); color: white; border-color: var(--accent);
+            padding: 0.45rem 1.25rem;
+        }
+        .btn-publish:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: white; }
+        .btn-publish:disabled { opacity: 0.4; cursor: not-allowed; }
+        .status-dot {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.75rem; color: var(--text-light); font-weight: 500;
+        }
+        .status-dot.changed { color: #e67e22; }
+        .status-dot.saved { color: #27ae60; }
+        .status-dot.error { color: #c0392b; }
+        .status-dot::before {
+            content: ''; width: 7px; height: 7px; border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* ── TABS ── */
+        .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; background: var(--white); }
+        .tab-btn {
+            padding: 1rem 1.25rem; font-family: var(--font); font-size: 0.75rem;
+            font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-light); background: none; border: none; border-bottom: 2px solid transparent;
+            cursor: pointer; margin-bottom: -1px; transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .tab-content { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+
+        /* ── SECTION TITLES ── */
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .section-title { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); }
+        .btn-add {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.55rem 1.1rem; background: var(--accent); color: white;
+            border: none; border-radius: var(--radius); font-family: var(--font);
+            font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-add:hover { background: var(--accent-hover); }
+
+        /* ── PORTFOLIO ITEMS ── */
+        #portfolioList { display: flex; flex-direction: column; gap: 1rem; }
+        .item-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow); overflow: hidden;
+            border: 1.5px solid transparent; transition: border-color 0.2s;
+        }
+        .item-card.open { border-color: var(--accent); }
+        .item-card-header {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.25rem; cursor: pointer; user-select: none;
+        }
+        .item-thumb {
+            width: 72px; height: 48px; object-fit: cover; border-radius: 4px;
+            background: var(--bg); flex-shrink: 0;
+        }
+        .item-info { flex: 1; min-width: 0; }
+        .item-info-cat { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.2rem; }
+        .item-info-desc { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-card-actions { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+        .btn-icon {
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 6px; border: 1.5px solid var(--border); background: var(--white);
+            color: var(--text-light); cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
+        }
+        .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-icon:disabled { opacity: 0.3; cursor: default; }
+        .btn-icon.danger:hover { border-color: #c0392b; color: #c0392b; }
+        .item-form { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); display: none; }
+        .item-card.open .item-form { display: block; }
+
+        /* ── FORM FIELDS ── */
+        .field-group { margin-top: 1rem; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        .field { display: flex; flex-direction: column; gap: 0.4rem; }
+        .field label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); }
+        .field input, .field select, .field textarea {
+            padding: 0.65rem 0.85rem; border: 1.5px solid var(--border);
+            border-radius: 6px; font-family: var(--font); font-size: 0.88rem;
+            outline: none; transition: border-color 0.2s; background: var(--white);
+        }
+        .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+        .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+        .field-hint { font-size: 0.7rem; color: var(--text-light); margin-top: 0.2rem; }
+
+        /* ── IMAGE UPLOAD ── */
+        .image-uploader { display: flex; align-items: center; gap: 1rem; margin-top: 0.4rem; }
+        .image-preview {
+            width: 120px; height: 80px; object-fit: cover; border-radius: 6px;
+            background: var(--bg); border: 1.5px solid var(--border); flex-shrink: 0;
+        }
+        .image-upload-area {
+            flex: 1; border: 2px dashed var(--border); border-radius: 6px;
+            padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s;
+            font-size: 0.78rem; color: var(--text-light); line-height: 1.6;
+        }
+        .image-upload-area:hover { border-color: var(--accent); color: var(--accent); }
+        .image-upload-area.uploading { border-color: var(--accent); color: var(--accent); }
+        .image-file-input { display: none; }
+        .upload-spinner { display: none; font-size: 0.75rem; color: var(--accent); margin-top: 0.3rem; }
+
+        /* ── ABOUT / SIMPLE FORMS ── */
+        .card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow); padding: 1.75rem;
+        }
+        .card + .card { margin-top: 1.25rem; }
+        .about-image-row { display: flex; align-items: flex-start; gap: 1.5rem; }
+        .portrait-preview {
+            width: 120px; height: 160px; object-fit: cover; border-radius: 6px;
+            background: var(--bg); border: 1.5px solid var(--border); flex-shrink: 0;
+        }
+
+        /* ── SOCIAL LINKS ── */
+        .social-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+        .social-item:last-child { border-bottom: none; }
+        .social-platform { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); width: 100px; flex-shrink: 0; }
+        .social-url { flex: 1; padding: 0.55rem 0.85rem; border: 1.5px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
+        .social-url:focus { border-color: var(--accent); }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; padding: 2rem; opacity: 0; visibility: hidden;
+            transition: opacity 0.25s, visibility 0.25s;
+        }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal {
+            background: var(--white); border-radius: var(--radius); padding: 2rem;
+            max-width: 480px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transform: translateY(10px); transition: transform 0.25s;
+        }
+        .modal-overlay.open .modal { transform: translateY(0); }
+        .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .modal-body { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; margin-bottom: 1.5rem; }
+        .modal-footer { display: flex; gap: 0.75rem; justify-content: flex-end; }
+        .btn-modal { padding: 0.6rem 1.25rem; border-radius: 6px; font-family: var(--font); font-size: 0.82rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); transition: all 0.2s; }
+        .btn-modal.danger { background: #c0392b; color: white; border-color: #c0392b; }
+        .btn-modal.danger:hover { background: #a93226; }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 9998;
+            background: var(--text); color: white; padding: 0.85rem 1.5rem;
+            border-radius: var(--radius); font-size: 0.85rem; font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            transform: translateY(80px); transition: transform 0.3s;
+        }
+        .toast.show { transform: translateY(0); }
+        .toast.success { background: #27ae60; }
+        .toast.error { background: #c0392b; }
+
+        /* ── LOADING OVERLAY ── */
+        .loading-overlay {
+            position: fixed; inset: 0; background: rgba(255,255,255,0.85);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9997; display: none;
+        }
+        .spinner {
+            width: 36px; height: 36px; border: 3px solid var(--border);
+            border-top-color: var(--accent); border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="loginScreen">
+    <div class="login-card">
+        <p class="login-logo">Laura Damase</p>
+        <h1 class="login-title">Admin <span>·</span></h1>
+        <p class="login-sub">Espace de gestion du site</p>
+
+        <label class="login-label" for="tokenInput">Clé d'accès GitHub</label>
+        <input class="login-input" type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+               onkeydown="if(event.key==='Enter') doLogin()">
+        <p id="loginError" class="login-error"></p>
+        <button class="login-btn" onclick="doLogin()">Accéder au tableau de bord</button>
+
+        <p class="login-help">
+            Première connexion ?
+            <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Admin+Laura+Damase" target="_blank">
+                Créer une clé d'accès ici
+            </a>
+            (cocher <strong>public_repo</strong>), puis copier-coller la clé ci-dessus.
+            Elle sera mémorisée dans ce navigateur.
+        </p>
+    </div>
+</div>
+
+<!-- ── ADMIN ── -->
+<div id="adminScreen">
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-brand">Admin — Laura Damase</span>
+            <span class="status-dot" id="statusDot">Chargement…</span>
+        </div>
+        <div class="topbar-right">
+            <a href="./" target="_blank" class="btn-sm">Voir le site ↗</a>
+            <button class="btn-sm" onclick="doLogout()">Déconnexion</button>
+            <button class="btn-sm btn-publish" id="publishBtn" onclick="doPublish()" disabled>Publier</button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
+        <button class="tab-btn" data-tab="apropos">À Propos</button>
+        <button class="tab-btn" data-tab="site">Informations du site</button>
+        <button class="tab-btn" data-tab="social">Réseaux sociaux</button>
+    </div>
+
+    <!-- PORTFOLIO -->
+    <div class="tab-content active" id="tab-portfolio">
+        <div class="section-header">
+            <span class="section-title">Projets du portfolio</span>
+            <button class="btn-add" onclick="addItem()">+ Ajouter un projet</button>
+        </div>
+        <div id="portfolioList"></div>
+    </div>
+
+    <!-- À PROPOS -->
+    <div class="tab-content" id="tab-apropos">
+        <div class="section-header"><span class="section-title">Page À Propos</span></div>
+        <div class="card">
+            <div class="about-image-row">
+                <img id="portraitPreview" src="" alt="Portrait" class="portrait-preview" onerror="this.style.visibility='hidden'">
+                <div style="flex:1">
+                    <div class="field">
+                        <label>Photo de profil</label>
+                        <div class="image-upload-area" onclick="document.getElementById('portraitFile').click()">
+                            Cliquer pour changer la photo<br>
+                            <small>JPG ou PNG, max 5 Mo</small>
+                        </div>
+                        <input type="file" id="portraitFile" class="image-file-input" accept="image/*" onchange="uploadPortrait(this)">
+                    </div>
+                </div>
+            </div>
+            <div class="field" style="margin-top:1.5rem">
+                <label>Biographie</label>
+                <textarea id="bioText" rows="8" oninput="onDataChange()" placeholder="Votre biographie…"></textarea>
+                <span class="field-hint">Sauter une ligne vide pour créer un nouveau paragraphe.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SITE INFO -->
+    <div class="tab-content" id="tab-site">
+        <div class="section-header"><span class="section-title">Informations générales</span></div>
+        <div class="card">
+            <div class="field-row">
+                <div class="field">
+                    <label>Prénom</label>
+                    <input type="text" id="siteFirstName" oninput="onDataChange()">
+                </div>
+                <div class="field">
+                    <label>Nom</label>
+                    <input type="text" id="siteLastName" oninput="onDataChange()">
+                </div>
+            </div>
+            <div class="field" style="margin-top:1rem">
+                <label>Sous-titre (affiché sous le nom)</label>
+                <input type="text" id="siteSubtitle" oninput="onDataChange()">
+            </div>
+        </div>
+    </div>
+
+    <!-- SOCIAL -->
+    <div class="tab-content" id="tab-social">
+        <div class="section-header"><span class="section-title">Liens réseaux sociaux</span></div>
+        <div class="card" id="socialList"></div>
+    </div>
+</div>
+
+<!-- Modal de confirmation suppression -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+        <p class="modal-title">Supprimer ce projet ?</p>
+        <p class="modal-body">Cette action est irréversible. Le projet sera supprimé du portfolio lors de la prochaine publication.</p>
+        <div class="modal-footer">
+            <button class="btn-modal" onclick="closeModal()">Annuler</button>
+            <button class="btn-modal danger" id="confirmDeleteBtn">Supprimer</button>
+        </div>
+    </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ── CONFIG ── */
+const REPO_OWNER = 'lauradamase';
+const REPO_NAME  = 'laura';
+const BRANCH     = 'main';
+const API        = 'https://api.github.com';
+
+const CATEGORIES = [
+    { id: 'documentaires', label: 'Documentaires' },
+    { id: 'portraits',     label: 'Portraits' },
+    { id: 'magazines',     label: 'Magazines' },
+    { id: 'reportages',    label: 'Reportages' },
+    { id: 'clips',         label: 'Clips' },
+    { id: 'captations',    label: 'Captations' },
+];
+
+const PLATFORM_TITLES = {
+    'youtube.com': 'VOIR SUR YOUTUBE',
+    'youtu.be':    'VOIR SUR YOUTUBE',
+    'france.tv':   'VOIR SUR FRANCE.TV',
+    'vimeo.com':   'VOIR SUR VIMEO',
+};
+
+/* ── STATE ── */
+let token     = localStorage.getItem('gh_token') || '';
+let data      = null;
+let fileSHA   = null;
+let dirty     = false;
+
+/* ── BOOT ── */
+if (token) {
+    showAdmin();
+    loadData();
+} else {
+    document.getElementById('loginScreen').style.display = 'flex';
+}
+
+/* ── AUTH ── */
+async function doLogin() {
+    const t = document.getElementById('tokenInput').value.trim();
+    const err = document.getElementById('loginError');
+    err.style.display = 'none';
+    if (!t) return;
+
+    setLoading(true);
+    try {
+        const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}`, { token: t });
+        if (!res.ok) throw new Error('Token invalide ou dépôt inaccessible.');
+        localStorage.setItem('gh_token', t);
+        token = t;
+        showAdmin();
+        loadData();
+    } catch (e) {
+        err.textContent = e.message;
+        err.style.display = 'block';
+        setLoading(false);
+    }
+}
+
+function doLogout() {
+    localStorage.removeItem('gh_token');
+    token = '';
+    location.reload();
+}
+
+/* ── DATA ── */
+async function loadData() {
+    setStatus('Chargement…', '');
+    setLoading(true);
+    try {
+        const file = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json`);
+        const json = await file.json();
+        fileSHA = json.sha;
+        data = JSON.parse(b64DecodeUtf8(json.content.replace(/\n/g, '')));
+        renderAll();
+        setStatus('Sauvegardé', 'saved');
+    } catch (e) {
+        setStatus('Erreur de chargement', 'error');
+        showToast('Impossible de charger les données : ' + e.message, 'error');
+    } finally {
+        setLoading(false);
+    }
+}
+
+async function doPublish() {
+    if (!dirty) return;
+    setLoading(true);
+    setStatus('Publication…', '');
+    try {
+        collectAll();
+        const json = JSON.stringify(data, null, 2);
+        const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                message: 'Mise à jour du contenu via admin',
+                content: b64EncodeUtf8(json),
+                sha: fileSHA,
+                branch: BRANCH,
+            }),
+        });
+        if (!res.ok) {
+            const e = await res.json();
+            throw new Error(e.message || 'Erreur inconnue');
+        }
+        const updated = await res.json();
+        fileSHA = updated.content.sha;
+        dirty = false;
+        document.getElementById('publishBtn').disabled = true;
+        setStatus('Publié ✓', 'saved');
+        showToast('Modifications publiées avec succès !', 'success');
+    } catch (e) {
+        setStatus('Erreur', 'error');
+        showToast('Erreur lors de la publication : ' + e.message, 'error');
+    } finally {
+        setLoading(false);
+    }
+}
+
+/* ── RENDER ALL ── */
+function renderAll() {
+    renderPortfolio();
+    renderApropos();
+    renderSite();
+    renderSocial();
+}
+
+/* ── COLLECT ALL (before publish) ── */
+function collectAll() {
+    collectApropos();
+    collectSite();
+    collectSocial();
+    // portfolio is updated live via item controls
+}
+
+/* ── PORTFOLIO ── */
+function renderPortfolio() {
+    const list = document.getElementById('portfolioList');
+    list.innerHTML = '';
+    (data.portfolio || []).forEach((item, i) => {
+        list.appendChild(buildItemCard(item, i));
+    });
+}
+
+function buildItemCard(item, index) {
+    const total = data.portfolio.length;
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.id = `item-${index}`;
+
+    const catLabel = CATEGORIES.find(c => c.id === item.category)?.label || item.category;
+    const descPreview = (item.description || '').replace(/\n/g, ' — ');
+
+    div.innerHTML = `
+        <div class="item-card-header" onclick="toggleCard(${index})">
+            <img class="item-thumb" src="${item.image || ''}" alt="" onerror="this.style.opacity=0.3">
+            <div class="item-info">
+                <div class="item-info-cat">${catLabel}</div>
+                <div class="item-info-desc">${descPreview || '(sans titre)'}</div>
+            </div>
+            <div class="item-card-actions" onclick="event.stopPropagation()">
+                <button class="btn-icon" title="Monter" onclick="moveItem(${index},-1)" ${index===0?'disabled':''}>↑</button>
+                <button class="btn-icon" title="Descendre" onclick="moveItem(${index},1)" ${index===total-1?'disabled':''}>↓</button>
+                <button class="btn-icon danger" title="Supprimer" onclick="confirmDelete(${index})">✕</button>
+            </div>
+        </div>
+        <div class="item-form">
+            <div class="field-row" style="margin-top:1rem">
+                <div class="field">
+                    <label>Catégorie</label>
+                    <select id="cat-${index}" onchange="updateItem(${index})">
+                        ${CATEGORIES.map(c => `<option value="${c.id}" ${c.id===item.category?'selected':''}>${c.label}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Lien de la vidéo</label>
+                    <input type="url" id="link-${index}" value="${item.link||''}" placeholder="https://…" oninput="updateItem(${index})">
+                </div>
+            </div>
+            <div class="field" style="margin-top:1rem">
+                <label>Description (affichée au survol)</label>
+                <textarea id="desc-${index}" rows="3" oninput="updateItem(${index})">${item.description||''}</textarea>
+                <span class="field-hint">Ex : France 2 INFRAROUGE\nTitre du reportage</span>
+            </div>
+            <div class="field" style="margin-top:1rem">
+                <label>Image de couverture</label>
+                <div class="image-uploader">
+                    <img id="thumb-${index}" src="${item.image||''}" alt="" class="image-preview" onerror="this.style.opacity=0.2">
+                    <div>
+                        <div class="image-upload-area" onclick="document.getElementById('file-${index}').click()">
+                            Cliquer pour changer l'image<br><small>JPG / PNG / JPEG</small>
+                        </div>
+                        <input type="file" id="file-${index}" class="image-file-input" accept="image/*"
+                               onchange="uploadItemImage(this, ${index})">
+                        <div class="upload-spinner" id="spin-${index}">⏳ Upload en cours…</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    return div;
+}
+
+function toggleCard(index) {
+    const card = document.getElementById(`item-${index}`);
+    card.classList.toggle('open');
+}
+
+function updateItem(index) {
+    const item = data.portfolio[index];
+    item.category    = document.getElementById(`cat-${index}`).value;
+    item.description = document.getElementById(`desc-${index}`).value;
+    item.link        = document.getElementById(`link-${index}`).value;
+    item.title       = getTitleFromLink(item.link);
+    // Update header preview
+    const card = document.getElementById(`item-${index}`);
+    card.querySelector('.item-info-cat').textContent = CATEGORIES.find(c=>c.id===item.category)?.label || item.category;
+    card.querySelector('.item-info-desc').textContent = item.description.replace(/\n/g,' — ');
+    onDataChange();
+}
+
+function addItem() {
+    data.portfolio.push({ title: 'VOIR', category: 'documentaires', description: '', image: '', link: '' });
+    renderPortfolio();
+    const newIndex = data.portfolio.length - 1;
+    const card = document.getElementById(`item-${newIndex}`);
+    card.classList.add('open');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    onDataChange();
+}
+
+function moveItem(index, dir) {
+    const arr = data.portfolio;
+    const newIndex = index + dir;
+    if (newIndex < 0 || newIndex >= arr.length) return;
+    [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+    renderPortfolio();
+    onDataChange();
+}
+
+let pendingDeleteIndex = null;
+function confirmDelete(index) {
+    pendingDeleteIndex = index;
+    document.getElementById('confirmModal').classList.add('open');
+    document.getElementById('confirmDeleteBtn').onclick = () => {
+        data.portfolio.splice(pendingDeleteIndex, 1);
+        renderPortfolio();
+        onDataChange();
+        closeModal();
+    };
+}
+function closeModal() { document.getElementById('confirmModal').classList.remove('open'); }
+
+/* ── IMAGE UPLOAD ── */
+async function uploadItemImage(input, index) {
+    const file = input.files[0];
+    if (!file) return;
+    const spin = document.getElementById(`spin-${index}`);
+    spin.style.display = 'block';
+    try {
+        const path = `images/${file.name}`;
+        await uploadFileToGitHub(path, file);
+        data.portfolio[index].image = path;
+        document.getElementById(`thumb-${index}`).src = path;
+        document.getElementById(`thumb-${index}`).style.opacity = 1;
+        document.getElementById(`item-${index}`).querySelector('.item-thumb').src = path;
+        onDataChange();
+        showToast('Image uploadée !', 'success');
+    } catch (e) {
+        showToast('Erreur upload : ' + e.message, 'error');
+    } finally {
+        spin.style.display = 'none';
+    }
+}
+
+async function uploadPortrait(input) {
+    const file = input.files[0];
+    if (!file) return;
+    setLoading(true);
+    try {
+        const path = `images/${file.name}`;
+        await uploadFileToGitHub(path, file);
+        data.apropos.image = path;
+        document.getElementById('portraitPreview').src = path;
+        document.getElementById('portraitPreview').style.visibility = 'visible';
+        onDataChange();
+        showToast('Photo uploadée !', 'success');
+    } catch (e) {
+        showToast('Erreur upload : ' + e.message, 'error');
+    } finally {
+        setLoading(false);
+    }
+}
+
+async function uploadFileToGitHub(path, file) {
+    const base64 = await readFileAsBase64(file);
+    // Check if file exists (need SHA to overwrite)
+    let sha;
+    try {
+        const existing = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`);
+        if (existing.ok) { const j = await existing.json(); sha = j.sha; }
+    } catch (_) {}
+
+    const body = { message: `Upload image: ${path}`, content: base64, branch: BRANCH };
+    if (sha) body.sha = sha;
+
+    const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
+        method: 'PUT',
+        body: JSON.stringify(body),
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.message); }
+}
+
+/* ── À PROPOS ── */
+function renderApropos() {
+    const ap = data.apropos || {};
+    document.getElementById('portraitPreview').src = ap.image || '';
+    document.getElementById('bioText').value = ap.bio || '';
+}
+function collectApropos() {
+    data.apropos = data.apropos || {};
+    data.apropos.bio = document.getElementById('bioText').value;
+}
+
+/* ── SITE INFO ── */
+function renderSite() {
+    const s = data.site || {};
+    document.getElementById('siteFirstName').value = s.firstName || '';
+    document.getElementById('siteLastName').value  = s.lastName  || '';
+    document.getElementById('siteSubtitle').value  = s.subtitle  || '';
+}
+function collectSite() {
+    data.site = {
+        firstName: document.getElementById('siteFirstName').value.trim(),
+        lastName:  document.getElementById('siteLastName').value.trim(),
+        subtitle:  document.getElementById('siteSubtitle').value.trim(),
+    };
+}
+
+/* ── SOCIAL ── */
+function renderSocial() {
+    const list = document.getElementById('socialList');
+    list.innerHTML = (data.social || []).map((s, i) => `
+        <div class="social-item">
+            <span class="social-platform">${s.platform}</span>
+            <input class="social-url" type="url" value="${s.url||''}" placeholder="https://…"
+                   oninput="data.social[${i}].url=this.value; onDataChange()">
+        </div>
+    `).join('');
+}
+function collectSocial() {
+    /* already updated live via oninput above */
+}
+
+/* ── HELPERS ── */
+function onDataChange() {
+    dirty = true;
+    document.getElementById('publishBtn').disabled = false;
+    setStatus('Modifications non publiées', 'changed');
+}
+
+function getTitleFromLink(url) {
+    if (!url) return 'VOIR LE PROJET';
+    for (const [domain, title] of Object.entries(PLATFORM_TITLES)) {
+        if (url.includes(domain)) return title;
+    }
+    return 'VOIR LE PROJET';
+}
+
+function showAdmin() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminScreen').style.display = 'block';
+}
+
+function setStatus(text, type) {
+    const dot = document.getElementById('statusDot');
+    dot.textContent = text;
+    dot.className = 'status-dot' + (type ? ' ' + type : '');
+}
+
+function setLoading(on) {
+    document.getElementById('loadingOverlay').style.display = on ? 'flex' : 'none';
+}
+
+function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (type ? ' ' + type : '');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* ── GITHUB API ── */
+function ghFetch(path, opts = {}) {
+    const t = opts.token || token;
+    return fetch(API + path, {
+        method:  opts.method || 'GET',
+        headers: {
+            'Authorization': `token ${t}`,
+            'Accept':        'application/vnd.github.v3+json',
+            'Content-Type':  'application/json',
+        },
+        body: opts.body,
+    });
+}
+
+/* ── BASE64 UTF-8 SAFE ── */
+function b64DecodeUtf8(str) {
+    return decodeURIComponent(escape(atob(str)));
+}
+function b64EncodeUtf8(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+/* ── TABS ── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+
+/* ── WARN BEFORE LEAVING WITH UNSAVED CHANGES ── */
+window.addEventListener('beforeunload', e => {
+    if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+</script>
+</body>
+</html>
