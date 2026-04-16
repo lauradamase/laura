@@ -132,17 +132,24 @@
     },
     {
       "title": "VOIR SUR VIMEO",
+      "category": "magazines",
+      "description": "FRANCE 2 20h30 l'été - La Corse à la voile",
+      "image": "images/voilier.png",
+      "link": "https://vimeo.com/manage/videos/1014898125"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
       "category": "documentaires",
       "description": "Spicee Investigation - Gangs of Manaus",
       "image": "images/gangsofmanaus.jpg",
       "link": "https://vimeo.com/manage/videos/691425052"
     },
     {
-      "title": "VOIR SUR VIMEO",
-      "category": "magazines",
-      "description": "FRANCE 2 20h30 l'été - La Corse à la voile",
-      "image": "images/voilier.png",
-      "link": "https://vimeo.com/manage/videos/1014898125"
+      "title": "VOIR SUR YOUTUBE",
+      "category": "reportages",
+      "description": "FRANCE 24 Reporters - Dans la forêt amazonienne, les Indiens Yanomami victimes de la ruée vers l’or",
+      "image": "",
+      "link": "https://www.youtube.com/watch?v=tJVgdHhbs2Q&t=3s"
     }
   ]
 }
