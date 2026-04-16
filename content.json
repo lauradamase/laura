@@ -118,7 +118,7 @@
     },
     {
       "title": "VOIR SUR VIMEO",
-      "category": "documentaires",
+      "category": "reportages",
       "description": "Spicee Investigation - Gangs of Manaus",
       "image": "images/gangsofmanaus.jpg",
       "link": "https://vimeo.com/manage/videos/691425052"
@@ -145,18 +145,18 @@
       "link": "https://vimeo.com/manage/videos/689097062"
     },
     {
-      "title": "VOIR SUR VIMEO",
-      "category": "documentaires",
-      "description": "REVOLUTION ROLLER GIRLS Teaser I DOC 52' FRANCE 3",
-      "image": "images/rollergirls.png",
-      "link": "https://vimeo.com/manage/videos/1014807794"
-    },
-    {
       "title": "VOIR SUR YOUTUBE",
       "category": "reportages",
       "description": "FRANCE 24 Reporters - Dans la forêt amazonienne, les Indiens Yanomami victimes de la ruée vers l’or",
       "image": "images/yanomami.png",
       "link": "https://www.youtube.com/watch?v=tJVgdHhbs2Q&t=3s"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
+      "category": "documentaires",
+      "description": "REVOLUTION ROLLER GIRLS Teaser I DOC 52' FRANCE 3",
+      "image": "images/rollergirls.png",
+      "link": "https://vimeo.com/manage/videos/1014807794"
     }
   ]
 }
