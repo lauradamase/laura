@@ -760,10 +760,9 @@ button {
     transform: translate(-50%, -50%);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
 }
 
-.video-background iframe:first-child {
+.video-background iframe.active {
     opacity: 1;
 }
 

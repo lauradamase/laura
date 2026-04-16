@@ -122,9 +122,9 @@
             function buildSrc(index) {
                 var v = playlist[index];
                 if (v[3]) {
-                    // YouTube: start/end params work perfectly
+                    // YouTube: start/end params + enablejsapi for pause control
                     var endSec = v[1] + Math.round(v[2] / 1000);
-                    return v[0] + '?start=' + v[1] + '&end=' + endSec + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0&rel=0&modestbranding=1';
+                    return v[0] + '?start=' + v[1] + '&end=' + endSec + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1';
                 } else {
                     // Vimeo: api=1 for seek, no background=1 (may interfere with postMessage)
                     return v[0] + '?autopause=0&autoplay=1&muted=1&loop=0&api=1';
@@ -148,12 +148,23 @@
                 } catch (e) {}
             }
 
-            function pauseVimeo(iframe) {
-                try {
-                    iframe.contentWindow.postMessage({
-                        method: 'pause'
-                    }, '*');
-                } catch (e) {}
+            function pauseVideo(iframe, isYouTube) {
+                if (isYouTube) {
+                    // YouTube IFrame API: pauseVideo command
+                    try {
+                        iframe.contentWindow.postMessage({
+                            event: 'command',
+                            func: 'pauseVideo'
+                        }, '*');
+                    } catch (e) {}
+                } else {
+                    // Vimeo: use postMessage pause
+                    try {
+                        iframe.contentWindow.postMessage({
+                            method: 'pause'
+                        }, '*');
+                    } catch (e) {}
+                }
             }
 
             function loadVideo(index, iframe) {
@@ -173,19 +184,20 @@
             function switchVideo() {
                 var active = getActiveIframe();
                 var inactive = getInactiveIframe();
-                inactive.style.opacity = '1';
-                active.style.opacity = '0';
+                inactive.classList.add('active');
+                active.classList.remove('active');
                 activeSlot = activeSlot === 1 ? 2 : 1;
             }
 
             function advance() {
                 var nextIndex = (currentIndex + 1) % playlist.length;
                 var activeIframe = getActiveIframe();
+                var currentIsYouTube = playlist[currentIndex][3];
 
-                // FIRST: pause the current video
-                pauseVimeo(activeIframe);
+                // FIRST: pause the current video (correct API per platform)
+                pauseVideo(activeIframe, currentIsYouTube);
 
-                // SECOND: swap the iframe visibility
+                // SECOND: swap the iframe visibility (instant - no CSS transition)
                 switchVideo();
 
                 // THIRD: load next video into the now-active iframe (which was previously inactive)
@@ -227,8 +239,8 @@
             if (bgVideo1 && bgVideo2) {
                 loadVideo(0, bgVideo1);
                 loadVideo(1, bgVideo2);
-                bgVideo1.style.opacity = '1';
-                bgVideo2.style.opacity = '0';
+                bgVideo1.classList.add('active');
+                bgVideo2.classList.remove('active');
                 activeSlot = 1;
                 currentIndex = 1;
                 timer = setTimeout(advance, playlist[1][2]);
