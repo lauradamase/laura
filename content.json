@@ -108,6 +108,13 @@
       "description": "Cabeça de Gelo",
       "image": "images/Capture d’écran du 2026-04-16 15-11-01.png",
       "link": "https://www.youtube.com/watch?v=AlA0A6OT1NA&list=RDAlA0A6OT1NA&start_radio=1"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
+      "category": "documentaires",
+      "description": "Spicee Investigation - Gangs of Manaus",
+      "image": "images/gangsofmanaus.jpg",
+      "link": "https://vimeo.com/manage/videos/691425052"
     }
   ]
 }
