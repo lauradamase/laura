@@ -747,6 +747,7 @@ button {
     height: 100%;
     z-index: 0;
     overflow: hidden;
+    transition: opacity 0.6s ease-in-out;
 }
 
 .video-background video {
@@ -759,6 +760,7 @@ button {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    will-change: opacity;
 }
 
 .video-background video.active {
@@ -885,7 +887,7 @@ button:focus {
    Video Modal
    -------------------------------------------------------------------------- */
 .video-modal {
-    display: none;
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -896,12 +898,15 @@ button:focus {
     justify-content: center;
     align-items: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .video-modal.active {
-    display: flex;
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .video-modal-content {

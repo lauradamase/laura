@@ -181,9 +181,10 @@
                 scheduleNext(newVid);
             }
 
-            // Stop timer when video section is hidden (main.js calls this on nav)
+            // Stop timer when video section starts fading out (opacity set to 0 or display none)
             var observer = new MutationObserver(function() {
-                if (videoBg.style.display === 'none' && timer) {
+                var hiding = videoBg.style.display === 'none' || videoBg.style.opacity === '0';
+                if (hiding && timer) {
                     clearTimeout(timer);
                     timer = null;
                 }

@@ -2,7 +2,7 @@
   "site": {
     "firstName": "Laura",
     "lastName": "Damase",
-    "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRCIE"
+    "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRICE"
   },
 
   "social": [
@@ -13,67 +13,60 @@
 
   "categories": [
     { "id": "documentaires", "label": "DOCUMENTAIRES" },
-    { "id": "portraits", "label": "PORTRAITS" },
-    { "id": "magazines", "label": "MAGAZINES" },
-    { "id": "reportages", "label": "REPORTAGES" },
-    { "id": "clips", "label": "CLIPS" },
-    { "id": "captations", "label": "CAPTATIONS" },
-    { "id": "apropos", "label": "À PROPOS" }
+    { "id": "portraits",     "label": "PORTRAITS" },
+    { "id": "magazines",     "label": "MAGAZINES" },
+    { "id": "reportages",    "label": "REPORTAGES" },
+    { "id": "clips",         "label": "CLIPS" },
+    { "id": "captations",    "label": "CAPTATIONS" },
+    { "id": "apropos",       "label": "À PROPOS" }
   ],
 
-"apropos": {
-"image": "images/Portrait Laura.jpg",
-"bio": "Je suis réalisatrice et cheffe opératrice.\nMa double formation en audiovisuel et en journalisme nourrit une pratique ancrée dans le réel.\n\nJ’ai d’abord travaillé six années au Brésil..."
-},
+  "apropos": {
+    "image": "images/Portrait Laura.jpg",
+    "bio": "Je suis réalisatrice et cheffe opératrice.\nMa double formation en audiovisuel et en journalisme nourrit une pratique ancrée dans le réel.\n\nJ'ai d'abord travaillé six années au Brésil..."
+  },
 
   "portfolio": [
     {
-      "title": "VOIR SUR YOUTUBE",
+      "title": "VOIR SUR FRANCE.TV",
       "category": "documentaires",
       "description": "France 2 INFRAROUGE\nDétecteurs de mythos, à l'attaque des fake news",
-      "image": "detecteurs",
+      "image": "images/detecteurs.jpeg",
       "link": "https://www.france.tv/france-2/infrarouge/8266617-detecteurs-de-mythos-a-l-attaque-des-fake-news.html"
     },
     {
-      "title": "VOIR SUR YOUTUBE",
+      "title": "VOIR SUR FRANCE.TV",
       "category": "portraits",
-      "description": "France 2 20h30 le vendredi\nYazid Ichemrahen, l'étoile des pâtissiers",
-      "image": "jflemaire",
+      "description": "France 2 20h30 le vendredi\nYazid Ichemrahen, l'étoile des pâtissiers",
+      "image": "images/yazid.jpg",
       "link": "https://www.france.tv/france-2/20h30-le-vendredi/8299455-jean-francois-monsieur-hollywood.html"
     },
     {
-      "title": "VOIR SUR YOUTUBE",
+      "title": "VOIR SUR FRANCE.TV",
       "category": "portraits",
       "description": "France 2 20h30 en fêtes\nJean-François, monsieur Hollywood",
-      "image": "yazid.jpg",
-      "link": "https://vimeo.com/manage/videos/1015174528"
+      "image": "images/jflemaire.jpg",
+      "link": "https://vimeo.com/1015174528"
     },
     {
       "title": "VOIR SUR YOUTUBE",
       "category": "clips",
       "description": "Kayode - Meu Lugar",
-      "image": "kayodemeulugar.jpg,
-      "link": "https://www.youtube.com/watch?v=rDhFoPIUCEQ"
-    },
-    {
-      "title": "VOIR SUR YOUTUBE",
-      "category": "clips",
-      "description": "Kayode - Meu Lugar",
-      "image": "kayodemeulugar,
+      "image": "images/kayodemeulugar.jpg",
       "link": "https://www.youtube.com/watch?v=rDhFoPIUCEQ"
     },
     {
       "title": "VOIR SUR YOUTUBE",
       "category": "captations",
       "description": "MALADIE - Frieda (Live à la Boule Noire)",
-      "image": "MaladieFrieda",
+      "image": "images/MaladieFrieda.jpeg",
       "link": "https://youtu.be/5A8VI76fNbI?si=WqFoCdM8hioctCKb"
     },
     {
-      "title": "XXXXXXXX",
+      "title": "VOIR SUR YOUTUBE",
       "category": "captations",
       "description": "Potentialité - Frieda (Live à la Boule Noire)",
-      "image": "potencialitefrieda",
+      "image": "images/potencialitefrieda.jpg",
       "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
     }
   ]

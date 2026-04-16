@@ -67,7 +67,12 @@
 
         if (apropos) {
             if (aboutText && apropos.bio) {
-                aboutText.innerHTML = '<p>' + apropos.bio + '</p>';
+                // Convert \n\n to paragraphs, \n to line breaks
+                var html = apropos.bio
+                    .split('\n\n')
+                    .map(function(p) { return '<p>' + p.replace(/\n/g, '<br>') + '</p>'; })
+                    .join('');
+                aboutText.innerHTML = html;
             }
             if (aboutImage && apropos.image) {
                 aboutImage.src = apropos.image;
@@ -145,23 +150,22 @@
     function renderPortfolio(items) {
         if (!portfolioGrid || !items || !items.length) return;
 
-        if (portfolioGrid.style.display === 'none') {
-            portfolioGrid.innerHTML = items.map(function(item) {
-                return '<article class="portfolio-item" data-category="' + item.category + '" data-link="' + item.link + '">' +
-                    '<div class="portfolio-link portfolio-video-trigger">' +
-                        '<div class="thumbnail-container">' +
-                            '<img src="' + item.image + '" ' +
-                                 'alt="' + item.title + '" ' +
-                                 'class="thumbnail" ' +
-                                 'loading="lazy">' +
-                            '<div class="overlay"></div>' +
-                        '</div>' +
-                        '<h3 class="project-title">' + item.title + '</h3>' +
-                        '<p class="project-category">' + item.description + '</p>' +
+        portfolioGrid.innerHTML = items.map(function(item) {
+            var descHtml = item.description.replace(/\n/g, '<br>');
+            return '<article class="portfolio-item" data-category="' + item.category + '" data-link="' + item.link + '">' +
+                '<div class="portfolio-link portfolio-video-trigger">' +
+                    '<div class="thumbnail-container">' +
+                        '<img src="' + item.image + '" ' +
+                             'alt="' + item.title + '" ' +
+                             'class="thumbnail" ' +
+                             'loading="lazy">' +
+                        '<div class="overlay"></div>' +
                     '</div>' +
-                '</article>';
-            }).join('');
-        }
+                    '<h3 class="project-title">' + item.title + '</h3>' +
+                    '<p class="project-category">' + descHtml + '</p>' +
+                '</div>' +
+            '</article>';
+        }).join('');
     }
 
     /**
@@ -346,7 +350,10 @@
         var mainContent = document.getElementById('mainContent');
 
         if (landingLogo) landingLogo.style.display = 'none';
-        if (videoBg) videoBg.style.display = 'none';
+        if (videoBg) {
+            videoBg.style.opacity = '0';
+            setTimeout(function() { videoBg.style.display = 'none'; }, 600);
+        }
 
         if (filter === 'apropos') {
             if (portfolioGrid) portfolioGrid.style.display = 'none';
