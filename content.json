@@ -150,6 +150,13 @@
       "description": "FRANCE 24 Reporters - Dans la forêt amazonienne, les Indiens Yanomami victimes de la ruée vers l’or",
       "image": "",
       "link": "https://www.youtube.com/watch?v=tJVgdHhbs2Q&t=3s"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
+      "category": "documentaires",
+      "description": "FRANCE Ô Grand format I Aux portes de la Colombie",
+      "image": "images/colombie.png",
+      "link": "https://vimeo.com/manage/videos/689097062"
     }
   ]
 }
