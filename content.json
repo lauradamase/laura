@@ -4,28 +4,54 @@
     "lastName": "Damase",
     "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRICE"
   },
-
   "social": [
-    { "platform": "instagram", "url": "https://www.instagram.com/lauradamase/" },
-    { "platform": "linkedin", "url": "https://www.linkedin.com/in/laura-damase-89477b84/" },
-    { "platform": "x-twitter", "url": "https://x.com/arualesamad" }
+    {
+      "platform": "instagram",
+      "url": "https://www.instagram.com/lauradamase/"
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://www.linkedin.com/in/laura-damase-89477b84/"
+    },
+    {
+      "platform": "x-twitter",
+      "url": "https://x.com/arualesamad"
+    }
   ],
-
   "categories": [
-    { "id": "documentaires", "label": "DOCUMENTAIRES" },
-    { "id": "portraits",     "label": "PORTRAITS" },
-    { "id": "magazines",     "label": "MAGAZINES" },
-    { "id": "reportages",    "label": "REPORTAGES" },
-    { "id": "clips",         "label": "CLIPS" },
-    { "id": "captations",    "label": "CAPTATIONS" },
-    { "id": "apropos",       "label": "À PROPOS" }
+    {
+      "id": "documentaires",
+      "label": "DOCUMENTAIRES"
+    },
+    {
+      "id": "portraits",
+      "label": "PORTRAITS"
+    },
+    {
+      "id": "magazines",
+      "label": "MAGAZINES"
+    },
+    {
+      "id": "reportages",
+      "label": "REPORTAGES"
+    },
+    {
+      "id": "clips",
+      "label": "CLIPS"
+    },
+    {
+      "id": "captations",
+      "label": "CAPTATIONS"
+    },
+    {
+      "id": "apropos",
+      "label": "À PROPOS"
+    }
   ],
-
   "apropos": {
     "image": "images/Portrait Laura.jpg",
     "bio": "Je suis réalisatrice et cheffe opératrice.\nMa double formation en audiovisuel et en journalisme nourrit une pratique ancrée dans le réel.\n\nJ'ai d'abord travaillé six années au Brésil..."
   },
-
   "portfolio": [
     {
       "title": "VOIR SUR FRANCE.TV",
@@ -68,6 +94,13 @@
       "description": "Potentialité - Frieda (Live à la Boule Noire)",
       "image": "images/potencialitefrieda.jpg",
       "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
+    },
+    {
+      "title": "VOIR SUR YOUTUBE",
+      "category": "clips",
+      "description": "Clip Teste do Solomon",
+      "image": "images/Screenshot 2026-04-16 150051.png",
+      "link": "https://www.youtube.com/watch?v=yPLio9hCnAo&list=RDyPLio9hCnAo&start_radio=1&pp=ygUQZ29kc3BlZWQgc29sb21vbqAHAdIHCQnTCgGHKiGM7w%3D%3D"
     }
   ]
 }
