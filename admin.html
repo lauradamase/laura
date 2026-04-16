@@ -211,6 +211,15 @@
         .social-url { flex: 1; padding: 0.55rem 0.85rem; border: 1.5px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
         .social-url:focus { border-color: var(--accent); }
 
+        /* ── MENUS ── */
+        .menu-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-label-input { flex: 1; padding: 0.55rem 0.85rem; border: 1.5px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 0.88rem; font-weight: 500; outline: none; transition: border-color 0.2s; }
+        .menu-label-input:focus { border-color: var(--accent); }
+        .menu-label-input:disabled { background: var(--bg); color: var(--text-light); cursor: not-allowed; }
+        .menu-lock { font-size: 0.7rem; color: var(--text-light); background: var(--bg); padding: 0.3rem 0.6rem; border-radius: 4px; white-space: nowrap; }
+        .menu-count { font-size: 0.72rem; color: var(--text-light); min-width: 80px; text-align: right; }
+
         /* ── MODAL ── */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.6);
@@ -303,6 +312,7 @@
         <button class="tab-btn" data-tab="apropos">À Propos</button>
         <button class="tab-btn" data-tab="site">Informations du site</button>
         <button class="tab-btn" data-tab="social">Réseaux sociaux</button>
+        <button class="tab-btn" data-tab="menus">Menus</button>
     </div>
 
     <!-- PORTFOLIO -->
@@ -364,6 +374,19 @@
     <div class="tab-content" id="tab-social">
         <div class="section-header"><span class="section-title">Liens réseaux sociaux</span></div>
         <div class="card" id="socialList"></div>
+    </div>
+
+    <!-- MENUS -->
+    <div class="tab-content" id="tab-menus">
+        <div class="section-header">
+            <span class="section-title">Entrées du menu de navigation</span>
+            <button class="btn-add" onclick="addMenu()">+ Ajouter un menu</button>
+        </div>
+        <div class="card" id="menuList"></div>
+        <p style="margin-top:1rem;font-size:0.75rem;color:var(--text-light);line-height:1.7">
+            💡 <strong>À Propos</strong> est verrouillé — c'est la page de présentation.<br>
+            Supprimer un menu ne supprime pas les projets associés, mais ils n'apparaîtront plus dans la navigation.
+        </p>
     </div>
 </div>
 
@@ -508,6 +531,7 @@ function renderAll() {
     renderApropos();
     renderSite();
     renderSocial();
+    renderMenus();
 }
 
 /* ── COLLECT ALL (before publish) ── */
@@ -533,7 +557,7 @@ function buildItemCard(item, index) {
     div.className = 'item-card';
     div.id = `item-${index}`;
 
-    const catLabel = CATEGORIES.find(c => c.id === item.category)?.label || item.category;
+    const catLabel = (data.categories || []).find(c => c.id === item.category)?.label || item.category;
     const descPreview = (item.description || '').replace(/\n/g, ' — ');
 
     div.innerHTML = `
@@ -554,7 +578,7 @@ function buildItemCard(item, index) {
                 <div class="field">
                     <label>Catégorie</label>
                     <select id="cat-${index}" onchange="updateItem(${index})">
-                        ${CATEGORIES.map(c => `<option value="${c.id}" ${c.id===item.category?'selected':''}>${c.label}</option>`).join('')}
+                        ${getCategoryOptions(item.category)}
                     </select>
                 </div>
                 <div class="field">
@@ -599,7 +623,7 @@ function updateItem(index) {
     item.title       = getTitleFromLink(item.link);
     // Update header preview
     const card = document.getElementById(`item-${index}`);
-    card.querySelector('.item-info-cat').textContent = CATEGORIES.find(c=>c.id===item.category)?.label || item.category;
+    card.querySelector('.item-info-cat').textContent = (data.categories||[]).find(c=>c.id===item.category)?.label || item.category;
     card.querySelector('.item-info-desc').textContent = item.description.replace(/\n/g,' — ');
     onDataChange();
 }
@@ -735,6 +759,108 @@ function renderSocial() {
 }
 function collectSocial() {
     /* already updated live via oninput above */
+}
+
+/* ── MENUS ── */
+function renderMenus() {
+    const list = document.getElementById('menuList');
+    list.innerHTML = '';
+    (data.categories || []).forEach((cat, i) => {
+        list.appendChild(buildMenuRow(cat, i));
+    });
+}
+
+function buildMenuRow(cat, index) {
+    const total    = data.categories.length;
+    const locked   = cat.id === 'apropos';
+    const usedBy   = (data.portfolio || []).filter(p => p.category === cat.id).length;
+    const row      = document.createElement('div');
+    row.className  = 'menu-item';
+    row.id         = `menu-row-${index}`;
+
+    row.innerHTML = `
+        <button class="btn-icon" title="Monter"    onclick="moveMenu(${index},-1)" ${index===0||locked?'disabled':''}>↑</button>
+        <button class="btn-icon" title="Descendre" onclick="moveMenu(${index},1)"  ${index===total-1||locked?'disabled':''}>↓</button>
+        <input  class="menu-label-input" type="text"
+                id="menu-label-${index}"
+                value="${cat.label}"
+                ${locked ? 'disabled' : ''}
+                oninput="updateMenuLabel(${index})">
+        <span class="menu-count">${usedBy > 0 ? usedBy + ' projet' + (usedBy>1?'s':'') : ''}</span>
+        ${locked
+            ? `<span class="menu-lock">🔒 verrouillé</span>`
+            : `<button class="btn-icon danger" title="Supprimer" onclick="confirmDeleteMenu(${index})">✕</button>`
+        }
+    `;
+    return row;
+}
+
+function updateMenuLabel(index) {
+    const raw = document.getElementById(`menu-label-${index}`).value;
+    data.categories[index].label = raw.toUpperCase();
+    // Sync the label display back (upper) without moving cursor
+    onDataChange();
+}
+
+function addMenu() {
+    // Insert before "apropos" (always last)
+    const insertAt = data.categories.findLastIndex(c => c.id !== 'apropos') + 1;
+    const newCat = { id: 'menu_' + Date.now(), label: 'NOUVEAU MENU' };
+    data.categories.splice(insertAt, 0, newCat);
+    renderMenus();
+    refreshPortfolioCategories();
+    onDataChange();
+    // Focus the new label field
+    const newIndex = data.categories.indexOf(newCat);
+    const input = document.getElementById(`menu-label-${newIndex}`);
+    if (input) { input.focus(); input.select(); }
+}
+
+function moveMenu(index, dir) {
+    const arr = data.categories;
+    const newIndex = index + dir;
+    if (newIndex < 0 || newIndex >= arr.length) return;
+    if (arr[newIndex].id === 'apropos') return; // never swap past apropos
+    [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+    renderMenus();
+    onDataChange();
+}
+
+let pendingDeleteMenuIndex = null;
+function confirmDeleteMenu(index) {
+    const cat    = data.categories[index];
+    const usedBy = (data.portfolio || []).filter(p => p.category === cat.id).length;
+    const modal  = document.getElementById('confirmModal');
+    modal.querySelector('.modal-title').textContent = `Supprimer « ${cat.label} » ?`;
+    modal.querySelector('.modal-body').textContent  = usedBy > 0
+        ? `${usedBy} projet(s) utilisent ce menu. Ils resteront dans le portfolio mais ne seront plus accessibles via la navigation.`
+        : `Ce menu sera supprimé de la navigation.`;
+    pendingDeleteMenuIndex = index;
+    document.getElementById('confirmDeleteBtn').onclick = () => {
+        data.categories.splice(pendingDeleteMenuIndex, 1);
+        renderMenus();
+        refreshPortfolioCategories();
+        onDataChange();
+        closeModal();
+    };
+    modal.classList.add('open');
+}
+
+// After adding or removing a category, refresh the dropdowns in open portfolio cards
+function refreshPortfolioCategories() {
+    data.portfolio.forEach((item, i) => {
+        const sel = document.getElementById(`cat-${i}`);
+        if (!sel) return;
+        const current = sel.value;
+        sel.innerHTML = getCategoryOptions(current);
+    });
+}
+
+function getCategoryOptions(selected) {
+    return (data.categories || [])
+        .filter(c => c.id !== 'apropos')
+        .map(c => `<option value="${c.id}" ${c.id===selected?'selected':''}>${c.label}</option>`)
+        .join('');
 }
 
 /* ── HELPERS ── */
