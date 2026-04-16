@@ -33,10 +33,10 @@
     <meta name="theme-color" content="#800020">
 </head>
 <body>
-    <!-- Video Background (dual iframe for seamless transitions) -->
+    <!-- Video Background (dual video for seamless crossfade) -->
     <div class="video-background" id="videoBg">
-        <iframe id="bgVideo1" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
-        <iframe id="bgVideo2" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+        <video id="bgVideo1" muted playsinline preload="auto"></video>
+        <video id="bgVideo2" muted playsinline preload="auto"></video>
     </div>
 
     <!-- Navigation Sidebar -->
@@ -102,149 +102,117 @@
     <script>
         (function() {
             var videoBg = document.getElementById('videoBg');
-            var bgVideo1 = document.getElementById('bgVideo1');
-            var bgVideo2 = document.getElementById('bgVideo2');
-
-            // Video playlist: [embedUrl, startSec, durationMs, isYouTube]
-            var playlist = [
-                ['https://www.youtube-nocookie.com/embed/uSwd2NAgF-E', 86, 5000, true],
-                ['https://player.vimeo.com/video/1015174528', 120, 4000, false],
-                ['https://player.vimeo.com/video/688364895', 980, 23000, false],
-                ['https://player.vimeo.com/video/689078465', 846, 4000, false],
-                ['https://player.vimeo.com/video/689078465', 1023, 9000, false]
+            var vids = [
+                document.getElementById('bgVideo1'),
+                document.getElementById('bgVideo2')
             ];
 
-            var currentIndex = 0;
-            var activeSlot = 1; // alternates between 1 and 2
-            var timer = null;
-            var preloadTimer = null;
+            // Local video clips: path, duration in seconds
+            var playlist = [
+                { src: './videos/clip1_yt_final.mp4',  dur: 5  },
+                { src: './videos/clip2_final.mp4',      dur: 4  },
+                { src: './videos/clip3_v688.mp4',       dur: 23 },
+                { src: './videos/clip4_final.mp4',      dur: 4  },
+                { src: './videos/clip5_final.mp4',      dur: 9  }
+            ];
 
-            function buildSrc(index) {
-                var v = playlist[index];
-                if (v[3]) {
-                    // YouTube: start/end params + enablejsapi for pause control
-                    var endSec = v[1] + Math.round(v[2] / 1000);
-                    return v[0] + '?start=' + v[1] + '&end=' + endSec + '&autoplay=1&mute=1&loop=0&playsinline=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1';
-                } else {
-                    // Vimeo: api=1 for seek, no background=1 (may interfere with postMessage)
-                    return v[0] + '?autopause=0&autoplay=1&muted=1&loop=0&api=1';
-                }
+            var FADE_MS = 500;
+            var active  = 0;   // which vids[] slot is currently visible
+            var curIdx  = 0;   // which playlist entry is in the active slot
+            var timer   = null;
+
+            function tryPlay(vid) {
+                var p = vid.play();
+                if (p) p.catch(function() {});
             }
 
-            function getActiveIframe() {
-                return activeSlot === 1 ? bgVideo1 : bgVideo2;
-            }
-
-            function getInactiveIframe() {
-                return activeSlot === 1 ? bgVideo2 : bgVideo1;
-            }
-
-            function seekVimeo(iframe, seconds) {
-                try {
-                    iframe.contentWindow.postMessage({
-                        method: 'setCurrentTime',
-                        value: seconds
-                    }, '*');
-                } catch (e) {}
-            }
-
-            function pauseVideo(iframe, isYouTube) {
-                if (isYouTube) {
-                    // YouTube IFrame API: pauseVideo command
-                    try {
-                        iframe.contentWindow.postMessage({
-                            event: 'command',
-                            func: 'pauseVideo'
-                        }, '*');
-                    } catch (e) {}
-                } else {
-                    // Vimeo: use postMessage pause
-                    try {
-                        iframe.contentWindow.postMessage({
-                            method: 'pause'
-                        }, '*');
-                    } catch (e) {}
-                }
-            }
-
-            function loadVideo(index, iframe) {
-                var startTime = playlist[index][1];
-                var isVimeo = !playlist[index][3];
-
-                iframe.src = buildSrc(index);
-
-                if (isVimeo) {
-                    iframe.onload = function() {
-                        setTimeout(function() { seekVimeo(iframe, startTime); }, 800);
-                        iframe.onload = null;
-                    };
-                }
-            }
-
-            function switchVideo() {
-                var active = getActiveIframe();
-                var inactive = getInactiveIframe();
-                inactive.classList.add('active');
-                active.classList.remove('active');
-                activeSlot = activeSlot === 1 ? 2 : 1;
-            }
-
-            function advance() {
-                var nextIndex = (currentIndex + 1) % playlist.length;
-                var activeIframe = getActiveIframe();
-                var currentIsYouTube = playlist[currentIndex][3];
-
-                // FIRST: pause the current video (correct API per platform)
-                pauseVideo(activeIframe, currentIsYouTube);
-
-                // SECOND: swap the iframe visibility (instant - no CSS transition)
-                switchVideo();
-
-                // THIRD: load next video into the now-active iframe (which was previously inactive)
-                loadVideo(nextIndex, getActiveIframe());
-
-                currentIndex = nextIndex;
-
-                if (timer) clearTimeout(timer);
-                timer = setTimeout(advance, playlist[currentIndex][2]);
-            }
-
-            // Hide video when navigating away
-            var navLinks = document.querySelectorAll('.nav-link[data-filter]');
-            navLinks.forEach(function(link) {
-                link.addEventListener('click', function() {
-                    videoBg.style.display = 'none';
+            /* Schedule the crossfade FADE_MS before the clip ends */
+            function scheduleNext(vid) {
+                function go() {
+                    var dur = vid.duration;
+                    if (!dur || !isFinite(dur) || dur < 0.5) return;
                     if (timer) clearTimeout(timer);
-                });
-            });
+                    timer = setTimeout(doAdvance, Math.max(50, Math.round(dur * 1000) - FADE_MS));
+                }
+                if (vid.readyState >= 1) {
+                    go();
+                } else {
+                    vid.addEventListener('loadedmetadata', function h() {
+                        vid.removeEventListener('loadedmetadata', h);
+                        go();
+                    });
+                }
+            }
 
-            // Keyboard navigation
+            function doAdvance() {
+                switchTo((curIdx + 1) % playlist.length);
+            }
+
+            function switchTo(newIdx) {
+                var newSlot = 1 - active;
+                var oldVid  = vids[active];
+                var newVid  = vids[newSlot];
+
+                // Load if not already loaded for this clip
+                if (newVid.dataset.idx !== String(newIdx)) {
+                    newVid.src = playlist[newIdx].src;
+                    newVid.dataset.idx = newIdx;
+                    newVid.load();
+                }
+                newVid.currentTime = 0;
+                tryPlay(newVid);
+
+                // Crossfade: bring new in, let old fade out
+                newVid.classList.add('active');
+                setTimeout(function() {
+                    oldVid.classList.remove('active');
+                    oldVid.pause();
+                    // Preload the clip after next
+                    var preIdx = (newIdx + 1) % playlist.length;
+                    if (oldVid.dataset.idx !== String(preIdx)) {
+                        oldVid.src = playlist[preIdx].src;
+                        oldVid.dataset.idx = preIdx;
+                        oldVid.load();
+                    }
+                }, FADE_MS);
+
+                active = newSlot;
+                curIdx = newIdx;
+                scheduleNext(newVid);
+            }
+
+            // Stop timer when video section is hidden (main.js calls this on nav)
+            var observer = new MutationObserver(function() {
+                if (videoBg.style.display === 'none' && timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+            });
+            observer.observe(videoBg, { attributes: true, attributeFilter: ['style'] });
+
+            // Keyboard navigation (arrow keys cycle through clips)
             document.addEventListener('keydown', function(e) {
                 if (videoBg.style.display === 'none') return;
-                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                if (e.key === 'ArrowRight') {
                     if (timer) clearTimeout(timer);
-                    if (e.key === 'ArrowRight') {
-                        currentIndex = (currentIndex + 1) % playlist.length;
-                    } else {
-                        currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-                    }
-                    // Load the current video into the newly active iframe
-                    loadVideo(currentIndex, getActiveIframe());
-                    switchVideo();
-                    timer = setTimeout(advance, playlist[currentIndex][2]);
+                    switchTo((curIdx + 1) % playlist.length);
+                } else if (e.key === 'ArrowLeft') {
+                    if (timer) clearTimeout(timer);
+                    switchTo((curIdx - 1 + playlist.length) % playlist.length);
                 }
             });
 
-            // Initialize with first two videos preloaded
-            if (bgVideo1 && bgVideo2) {
-                loadVideo(0, bgVideo1);
-                loadVideo(1, bgVideo2);
-                bgVideo1.classList.add('active');
-                bgVideo2.classList.remove('active');
-                activeSlot = 1;
-                currentIndex = 1;
-                timer = setTimeout(advance, playlist[1][2]);
-            }
+            // Boot: load clip 0 into slot 0, preload clip 1 into slot 1
+            vids[0].src = playlist[0].src;
+            vids[0].dataset.idx = '0';
+            vids[0].load();
+            tryPlay(vids[0]);
+            vids[0].classList.add('active');
+            scheduleNext(vids[0]);
+
+            vids[1].src = playlist[1].src;
+            vids[1].dataset.idx = '1';
+            vids[1].load();
         })();
     </script>
 
