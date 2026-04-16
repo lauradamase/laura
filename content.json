@@ -125,6 +125,13 @@
     },
     {
       "title": "VOIR SUR VIMEO",
+      "category": "magazines",
+      "description": "FRANCE 2 13h15, le dimanche I Le feuilleton des Français S10 EP7 ",
+      "image": "images/Tiffany.png",
+      "link": "https://vimeo.com/manage/videos/1014892951"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
       "category": "documentaires",
       "description": "Spicee Investigation - Gangs of Manaus",
       "image": "images/gangsofmanaus.jpg",
@@ -133,9 +140,9 @@
     {
       "title": "VOIR SUR VIMEO",
       "category": "magazines",
-      "description": "FRANCE 2 13h15, le dimanche I Le feuilleton des Français S10 EP7 ",
-      "image": "images/Tiffany.png",
-      "link": "https://vimeo.com/manage/videos/1014892951"
+      "description": "FRANCE 2 20h30 l'été - La Corse à la voile",
+      "image": "images/voilier.png",
+      "link": "https://vimeo.com/manage/videos/1014898125"
     }
   ]
 }
