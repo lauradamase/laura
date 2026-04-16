@@ -176,21 +176,48 @@
         .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
         .field-hint { font-size: 0.7rem; color: var(--text-light); margin-top: 0.2rem; }
 
-        /* ── IMAGE UPLOAD ── */
-        .image-uploader { display: flex; align-items: center; gap: 1rem; margin-top: 0.4rem; }
-        .image-preview {
-            width: 120px; height: 80px; object-fit: cover; border-radius: 6px;
-            background: var(--bg); border: 1.5px solid var(--border); flex-shrink: 0;
-        }
-        .image-upload-area {
-            flex: 1; border: 2px dashed var(--border); border-radius: 6px;
-            padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s;
-            font-size: 0.78rem; color: var(--text-light); line-height: 1.6;
-        }
-        .image-upload-area:hover { border-color: var(--accent); color: var(--accent); }
-        .image-upload-area.uploading { border-color: var(--accent); color: var(--accent); }
+        /* ── IMAGE DROP ZONE ── */
         .image-file-input { display: none; }
-        .upload-spinner { display: none; font-size: 0.75rem; color: var(--accent); margin-top: 0.3rem; }
+
+        .drop-zone {
+            position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px;
+            overflow: hidden; cursor: pointer; background: var(--bg);
+            border: 2px dashed var(--border); transition: border-color 0.2s;
+        }
+        .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); }
+        .drop-zone.has-image { border-style: solid; border-color: rgba(0,0,0,0.08); }
+
+        .drop-zone-bg {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; transition: opacity 0.3s;
+        }
+        .drop-zone-overlay {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 0.4rem; transition: opacity 0.25s;
+            background: rgba(0,0,0,0.45); color: white;
+        }
+        .drop-zone.has-image .drop-zone-overlay { opacity: 0; }
+        .drop-zone.has-image:hover .drop-zone-overlay,
+        .drop-zone.drag-over .drop-zone-overlay,
+        .drop-zone.uploading .drop-zone-overlay { opacity: 1; }
+        .drop-zone.uploading .drop-zone-overlay { background: rgba(128,0,32,0.6); }
+
+        .drop-icon { font-size: 1.6rem; line-height: 1; transition: transform 0.2s; }
+        .drop-zone:hover .drop-icon { transform: scale(1.15); }
+        .drop-zone.uploading .drop-icon { animation: pulse 0.8s ease-in-out infinite alternate; }
+        @keyframes pulse { to { opacity: 0.4; } }
+        .drop-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-align: center; line-height: 1.4; }
+
+        /* portrait */
+        .portrait-drop-zone { aspect-ratio: 2/3; max-width: 160px; }
+
+        /* upload progress bar */
+        .drop-progress {
+            position: absolute; bottom: 0; left: 0; height: 3px;
+            background: white; width: 0%; transition: width 0.3s ease;
+            border-radius: 0 2px 0 0;
+        }
 
         /* ── ABOUT / SIMPLE FORMS ── */
         .card {
@@ -198,11 +225,6 @@
             box-shadow: var(--shadow); padding: 1.75rem;
         }
         .card + .card { margin-top: 1.25rem; }
-        .about-image-row { display: flex; align-items: flex-start; gap: 1.5rem; }
-        .portrait-preview {
-            width: 120px; height: 160px; object-fit: cover; border-radius: 6px;
-            background: var(--bg); border: 1.5px solid var(--border); flex-shrink: 0;
-        }
 
         /* ── SOCIAL LINKS ── */
         .social-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
@@ -328,18 +350,26 @@
     <div class="tab-content" id="tab-apropos">
         <div class="section-header"><span class="section-title">Page À Propos</span></div>
         <div class="card">
-            <div class="about-image-row">
-                <img id="portraitPreview" src="" alt="Portrait" class="portrait-preview" onerror="this.style.visibility='hidden'">
-                <div style="flex:1">
-                    <div class="field">
-                        <label>Photo de profil</label>
-                        <div class="image-upload-area" onclick="document.getElementById('portraitFile').click()">
-                            Cliquer pour changer la photo<br>
-                            <small>JPG ou PNG, max 5 Mo</small>
+            <div class="field">
+                <label>Photo de profil</label>
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;margin-top:0.4rem">
+                    <div class="drop-zone portrait-drop-zone has-image" id="portraitZone"
+                         onclick="document.getElementById('portraitFile').click()"
+                         ondragover="handleDragOver(event,'portraitZone')"
+                         ondragleave="handleDragLeave(event,'portraitZone')"
+                         ondrop="handlePortraitDrop(event)">
+                        <img id="portraitPreview" class="drop-zone-bg" src="" alt="">
+                        <div class="drop-zone-overlay">
+                            <span class="drop-icon" id="portraitIcon">📷</span>
+                            <span class="drop-label" id="portraitLabel">Changer la photo</span>
                         </div>
-                        <input type="file" id="portraitFile" class="image-file-input" accept="image/*" onchange="uploadPortrait(this)">
+                        <div class="drop-progress" id="portraitProgress"></div>
                     </div>
+                    <p style="font-size:0.78rem;color:var(--text-light);line-height:1.7;margin-top:0.5rem">
+                        Cliquer sur la photo<br>ou glisser-déposer<br>une image (JPG / PNG)
+                    </p>
                 </div>
+                <input type="file" id="portraitFile" class="image-file-input" accept="image/*" onchange="uploadPortrait(this)">
             </div>
             <div class="field" style="margin-top:1.5rem">
                 <label>Biographie</label>
@@ -593,17 +623,20 @@ function buildItemCard(item, index) {
             </div>
             <div class="field" style="margin-top:1rem">
                 <label>Image de couverture</label>
-                <div class="image-uploader">
-                    <img id="thumb-${index}" src="${item.image||''}" alt="" class="image-preview" onerror="this.style.opacity=0.2">
-                    <div>
-                        <div class="image-upload-area" onclick="document.getElementById('file-${index}').click()">
-                            Cliquer pour changer l'image<br><small>JPG / PNG / JPEG</small>
-                        </div>
-                        <input type="file" id="file-${index}" class="image-file-input" accept="image/*"
-                               onchange="uploadItemImage(this, ${index})">
-                        <div class="upload-spinner" id="spin-${index}">⏳ Upload en cours…</div>
+                <div class="drop-zone ${item.image ? 'has-image' : ''}" id="dz-${index}"
+                     onclick="document.getElementById('file-${index}').click()"
+                     ondragover="handleDragOver(event,'dz-${index}')"
+                     ondragleave="handleDragLeave(event,'dz-${index}')"
+                     ondrop="handleItemDrop(event,${index})">
+                    <img id="thumb-${index}" class="drop-zone-bg" src="${item.image||''}" alt="">
+                    <div class="drop-zone-overlay">
+                        <span class="drop-icon" id="dz-icon-${index}">📷</span>
+                        <span class="drop-label" id="dz-label-${index}">${item.image ? 'Changer l\'image' : 'Cliquer ou glisser<br>une image ici'}</span>
                     </div>
+                    <div class="drop-progress" id="dz-progress-${index}"></div>
                 </div>
+                <input type="file" id="file-${index}" class="image-file-input" accept="image/*"
+                       onchange="uploadItemImage(this, ${index})">
             </div>
         </div>
     `;
@@ -660,54 +693,133 @@ function confirmDelete(index) {
 }
 function closeModal() { document.getElementById('confirmModal').classList.remove('open'); }
 
+/* ── DRAG & DROP HELPERS ── */
+function handleDragOver(event, zoneId) {
+    event.preventDefault();
+    document.getElementById(zoneId).classList.add('drag-over');
+}
+function handleDragLeave(event, zoneId) {
+    document.getElementById(zoneId).classList.remove('drag-over');
+}
+function handleItemDrop(event, index) {
+    event.preventDefault();
+    document.getElementById(`dz-${index}`).classList.remove('drag-over');
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) uploadItemImage({ files: [file] }, index);
+}
+function handlePortraitDrop(event) {
+    event.preventDefault();
+    document.getElementById('portraitZone').classList.remove('drag-over');
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) uploadPortrait({ files: [file] });
+}
+
 /* ── IMAGE UPLOAD ── */
 async function uploadItemImage(input, index) {
     const file = input.files[0];
     if (!file) return;
-    const spin = document.getElementById(`spin-${index}`);
-    spin.style.display = 'block';
+
+    const zone     = document.getElementById(`dz-${index}`);
+    const thumb    = document.getElementById(`thumb-${index}`);
+    const icon     = document.getElementById(`dz-icon-${index}`);
+    const label    = document.getElementById(`dz-label-${index}`);
+    const progress = document.getElementById(`dz-progress-${index}`);
+
+    // ── INSTANT local preview ──
+    const blobUrl = URL.createObjectURL(file);
+    thumb.src = blobUrl;
+    zone.classList.add('has-image', 'uploading');
+    icon.textContent  = '⏳';
+    label.textContent = 'Upload en cours…';
+    progress.style.width = '30%';
+
     try {
         const path = `images/${file.name}`;
+
+        progress.style.width = '60%';
         await uploadFileToGitHub(path, file);
+        progress.style.width = '100%';
+
         data.portfolio[index].image = path;
-        document.getElementById(`thumb-${index}`).src = path;
-        document.getElementById(`thumb-${index}`).style.opacity = 1;
-        document.getElementById(`item-${index}`).querySelector('.item-thumb').src = path;
+        // Update card header thumbnail with the blob preview
+        const headerThumb = document.getElementById(`item-${index}`)?.querySelector('.item-thumb');
+        if (headerThumb) headerThumb.src = blobUrl;
+
         onDataChange();
+
+        // ── Success state ──
+        zone.classList.remove('uploading');
+        icon.textContent  = '✓';
+        label.textContent = 'Image enregistrée';
+        setTimeout(() => {
+            icon.textContent  = '📷';
+            label.textContent = 'Changer l\'image';
+            progress.style.width = '0%';
+        }, 2000);
+
         showToast('Image uploadée !', 'success');
     } catch (e) {
+        zone.classList.remove('uploading');
+        icon.textContent  = '⚠️';
+        label.textContent = 'Erreur — réessayer';
+        progress.style.width = '0%';
         showToast('Erreur upload : ' + e.message, 'error');
-    } finally {
-        spin.style.display = 'none';
     }
 }
 
 async function uploadPortrait(input) {
     const file = input.files[0];
     if (!file) return;
-    setLoading(true);
+
+    const zone     = document.getElementById('portraitZone');
+    const preview  = document.getElementById('portraitPreview');
+    const icon     = document.getElementById('portraitIcon');
+    const label    = document.getElementById('portraitLabel');
+    const progress = document.getElementById('portraitProgress');
+
+    // ── INSTANT local preview ──
+    const blobUrl = URL.createObjectURL(file);
+    preview.src = blobUrl;
+    zone.classList.add('has-image', 'uploading');
+    icon.textContent  = '⏳';
+    label.textContent = 'Upload en cours…';
+    progress.style.width = '40%';
+
     try {
         const path = `images/${file.name}`;
+        progress.style.width = '70%';
         await uploadFileToGitHub(path, file);
+        progress.style.width = '100%';
+
         data.apropos.image = path;
-        document.getElementById('portraitPreview').src = path;
-        document.getElementById('portraitPreview').style.visibility = 'visible';
         onDataChange();
+
+        zone.classList.remove('uploading');
+        icon.textContent  = '✓';
+        label.textContent = 'Photo enregistrée';
+        setTimeout(() => {
+            icon.textContent  = '📷';
+            label.textContent = 'Changer la photo';
+            progress.style.width = '0%';
+        }, 2000);
+
         showToast('Photo uploadée !', 'success');
     } catch (e) {
+        zone.classList.remove('uploading');
+        icon.textContent  = '⚠️';
+        label.textContent = 'Erreur — réessayer';
+        progress.style.width = '0%';
         showToast('Erreur upload : ' + e.message, 'error');
-    } finally {
-        setLoading(false);
     }
 }
 
 async function uploadFileToGitHub(path, file) {
     const base64 = await readFileAsBase64(file);
-    // Check if file exists (need SHA to overwrite)
+    // Need existing SHA if overwriting
     let sha;
     try {
-        const existing = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`);
-        if (existing.ok) { const j = await existing.json(); sha = j.sha; }
+        const r = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`);
+        if (r.ok) { const j = await r.json(); sha = j.sha; }
     } catch (_) {}
 
     const body = { message: `Upload image: ${path}`, content: base64, branch: BRANCH };
@@ -717,13 +829,20 @@ async function uploadFileToGitHub(path, file) {
         method: 'PUT',
         body: JSON.stringify(body),
     });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.message); }
+    if (!res.ok) { const err = await res.json(); throw new Error(err.message); }
 }
 
 /* ── À PROPOS ── */
 function renderApropos() {
     const ap = data.apropos || {};
-    document.getElementById('portraitPreview').src = ap.image || '';
+    const preview = document.getElementById('portraitPreview');
+    const zone    = document.getElementById('portraitZone');
+    if (ap.image) {
+        preview.src = ap.image;
+        zone.classList.add('has-image');
+    } else {
+        zone.classList.remove('has-image');
+    }
     document.getElementById('bioText').value = ap.bio || '';
 }
 function collectApropos() {
