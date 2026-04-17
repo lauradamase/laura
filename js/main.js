@@ -188,7 +188,7 @@
 
     function getVimeoVideoId(url) {
         if (!url) return null;
-        var match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+        var match = url.match(/vimeo\.com\/(?:manage\/videos\/|video\/)?(\d+)/);
         return match ? match[1] : null;
     }
 
