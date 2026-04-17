@@ -175,6 +175,11 @@
         .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
         .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
         .field-hint { font-size: 0.7rem; color: var(--text-light); margin-top: 0.2rem; }
+        .platform-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; padding: 0.2rem 0.5rem; border-radius: 4px; margin-top: 0.3rem; }
+        .platform-badge.youtube  { background: #ff000022; color: #c00; }
+        .platform-badge.vimeo    { background: #1ab7ea22; color: #0b7fa8; }
+        .platform-badge.francetv { background: #0051a522; color: #0051a5; }
+        .platform-badge.other    { background: #88888822; color: #555; }
 
         /* ── IMAGE DROP ZONE ── */
         .image-file-input { display: none; }
@@ -614,6 +619,7 @@ function buildItemCard(item, index) {
                 <div class="field">
                     <label>Lien de la vidéo</label>
                     <input type="url" id="link-${index}" value="${item.link||''}" placeholder="https://…" oninput="updateItem(${index})">
+                    <div id="platform-badge-${index}">${getPlatformBadgeHtml(item.link||'')}</div>
                 </div>
             </div>
             <div class="field" style="margin-top:1rem">
@@ -652,8 +658,12 @@ function updateItem(index) {
     const item = data.portfolio[index];
     item.category    = document.getElementById(`cat-${index}`).value;
     item.description = document.getElementById(`desc-${index}`).value;
-    item.link        = document.getElementById(`link-${index}`).value;
+    const linkInput  = document.getElementById(`link-${index}`);
+    item.link        = normalizeLinkUrl(linkInput.value);
+    if (item.link !== linkInput.value) linkInput.value = item.link;
     item.title       = getTitleFromLink(item.link);
+    const badge      = document.getElementById(`platform-badge-${index}`);
+    if (badge) badge.innerHTML = getPlatformBadgeHtml(item.link);
     // Update header preview
     const card = document.getElementById(`item-${index}`);
     card.querySelector('.item-info-cat').textContent = (data.categories||[]).find(c=>c.id===item.category)?.label || item.category;
@@ -987,6 +997,25 @@ function onDataChange() {
     dirty = true;
     document.getElementById('publishBtn').disabled = false;
     setStatus('Modifications non publiées', 'changed');
+}
+
+function normalizeLinkUrl(url) {
+    if (!url) return url;
+    // Convert Vimeo manage URLs to clean embeddable URLs
+    const vimeoManage = url.match(/vimeo\.com\/manage\/videos\/(\d+)/);
+    if (vimeoManage) return 'https://vimeo.com/' + vimeoManage[1];
+    return url;
+}
+
+function getPlatformBadgeHtml(url) {
+    if (!url) return '';
+    if (url.includes('youtube.com') || url.includes('youtu.be'))
+        return '<span class="platform-badge youtube">▶ YouTube</span>';
+    if (url.includes('vimeo.com'))
+        return '<span class="platform-badge vimeo">▶ Vimeo</span>';
+    if (url.includes('france.tv'))
+        return '<span class="platform-badge francetv">▶ France.TV</span>';
+    return '<span class="platform-badge other">🔗 Lien externe</span>';
 }
 
 function getTitleFromLink(url) {
