@@ -177,14 +177,19 @@
         if (!url) return null;
         var patterns = [
             /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/,
-            /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-            /([a-zA-Z0-9_-]{11})/
+            /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/
         ];
         for (var i = 0; i < patterns.length; i++) {
             var match = url.match(patterns[i]);
             if (match) return match[1];
         }
         return null;
+    }
+
+    function getVimeoVideoId(url) {
+        if (!url) return null;
+        var match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+        return match ? match[1] : null;
     }
 
     /**
@@ -197,8 +202,8 @@
 
         if (!modal || !modalPlayer) return;
 
-        function openModal(videoId) {
-            modalPlayer.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        function openModal(embedUrl) {
+            modalPlayer.innerHTML = '<iframe src="' + embedUrl + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
             modal.classList.add('active');
             modal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
@@ -239,12 +244,16 @@
             var link = item.getAttribute('data-link');
             if (!link) return;
 
-            var videoId = getYouTubeVideoId(link);
-            if (videoId) {
+            var youtubeId = getYouTubeVideoId(link);
+            var vimeoId = getVimeoVideoId(link);
+            if (youtubeId) {
                 e.preventDefault();
-                openModal(videoId);
+                openModal('https://www.youtube-nocookie.com/embed/' + youtubeId + '?autoplay=1');
+            } else if (vimeoId) {
+                e.preventDefault();
+                openModal('https://player.vimeo.com/video/' + vimeoId + '?autoplay=1');
             }
-            // Non-YouTube links will follow naturally (no preventDefault)
+            // Other links follow naturally (no preventDefault)
         });
     }
 
