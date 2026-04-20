@@ -14,7 +14,7 @@
     "show": true,
     "showFirstName": true,
     "showLastName": true,
-    "showSubtitle": false
+    "showSubtitle": true
   },
   "social": [
     {
