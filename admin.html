@@ -399,13 +399,13 @@
 
     <!-- SITE INFO -->
     <div class="tab-content" id="tab-site">
-        <div class="section-header"><span class="section-title">Informations générales</span></div>
+        <div class="section-header"><span class="section-title">Nom dans la barre latérale</span></div>
         <div class="card">
             <div class="field-row">
                 <div class="field">
                     <div class="field-toggle-header">
                         <label>Prénom</label>
-                        <label class="toggle" title="Afficher / masquer sur le site">
+                        <label class="toggle" title="Afficher / masquer">
                             <input type="checkbox" id="showFirstName" onchange="onDataChange()">
                             <span class="toggle-slider"></span>
                         </label>
@@ -415,7 +415,7 @@
                 <div class="field">
                     <div class="field-toggle-header">
                         <label>Nom</label>
-                        <label class="toggle" title="Afficher / masquer sur le site">
+                        <label class="toggle" title="Afficher / masquer">
                             <input type="checkbox" id="showLastName" onchange="onDataChange()">
                             <span class="toggle-slider"></span>
                         </label>
@@ -425,13 +425,55 @@
             </div>
             <div class="field" style="margin-top:1rem">
                 <div class="field-toggle-header">
-                    <label>Sous-titre (affiché sous le nom)</label>
-                    <label class="toggle" title="Afficher / masquer sur le site">
+                    <label>Sous-titre</label>
+                    <label class="toggle" title="Afficher / masquer">
                         <input type="checkbox" id="showSubtitle" onchange="onDataChange()">
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
                 <input type="text" id="siteSubtitle" oninput="onDataChange()">
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top:2rem">
+            <span class="section-title">Nom sur la vidéo (page d'accueil)</span>
+            <label class="toggle" title="Afficher / masquer le bloc entier sur la vidéo">
+                <input type="checkbox" id="landingShow" onchange="onDataChange()">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="card">
+            <div class="field-row">
+                <div class="field">
+                    <div class="field-toggle-header">
+                        <label>Prénom</label>
+                        <label class="toggle" title="Afficher / masquer">
+                            <input type="checkbox" id="landingShowFirstName" onchange="onDataChange()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <input type="text" id="landingFirstName" oninput="onDataChange()">
+                </div>
+                <div class="field">
+                    <div class="field-toggle-header">
+                        <label>Nom</label>
+                        <label class="toggle" title="Afficher / masquer">
+                            <input type="checkbox" id="landingShowLastName" onchange="onDataChange()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <input type="text" id="landingLastName" oninput="onDataChange()">
+                </div>
+            </div>
+            <div class="field" style="margin-top:1rem">
+                <div class="field-toggle-header">
+                    <label>Sous-titre</label>
+                    <label class="toggle" title="Afficher / masquer">
+                        <input type="checkbox" id="landingShowSubtitle" onchange="onDataChange()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <input type="text" id="landingSubtitle" oninput="onDataChange()">
             </div>
         </div>
     </div>
@@ -894,12 +936,21 @@ function collectApropos() {
 /* ── SITE INFO ── */
 function renderSite() {
     const s = data.site || {};
-    document.getElementById('siteFirstName').value       = s.firstName || '';
-    document.getElementById('siteLastName').value        = s.lastName  || '';
-    document.getElementById('siteSubtitle').value        = s.subtitle  || '';
-    document.getElementById('showFirstName').checked     = s.showFirstName !== false;
-    document.getElementById('showLastName').checked      = s.showLastName  !== false;
-    document.getElementById('showSubtitle').checked      = s.showSubtitle  !== false;
+    document.getElementById('siteFirstName').value   = s.firstName || '';
+    document.getElementById('siteLastName').value    = s.lastName  || '';
+    document.getElementById('siteSubtitle').value    = s.subtitle  || '';
+    document.getElementById('showFirstName').checked = s.showFirstName !== false;
+    document.getElementById('showLastName').checked  = s.showLastName  !== false;
+    document.getElementById('showSubtitle').checked  = s.showSubtitle  !== false;
+
+    const l = data.landing || {};
+    document.getElementById('landingFirstName').value        = l.firstName || '';
+    document.getElementById('landingLastName').value         = l.lastName  || '';
+    document.getElementById('landingSubtitle').value         = l.subtitle  || '';
+    document.getElementById('landingShow').checked           = l.show           !== false;
+    document.getElementById('landingShowFirstName').checked  = l.showFirstName  !== false;
+    document.getElementById('landingShowLastName').checked   = l.showLastName   !== false;
+    document.getElementById('landingShowSubtitle').checked   = l.showSubtitle   !== false;
 }
 function collectSite() {
     data.site = {
@@ -909,6 +960,15 @@ function collectSite() {
         showFirstName: document.getElementById('showFirstName').checked,
         showLastName:  document.getElementById('showLastName').checked,
         showSubtitle:  document.getElementById('showSubtitle').checked,
+    };
+    data.landing = {
+        firstName:     document.getElementById('landingFirstName').value.trim(),
+        lastName:      document.getElementById('landingLastName').value.trim(),
+        subtitle:      document.getElementById('landingSubtitle').value.trim(),
+        show:          document.getElementById('landingShow').checked,
+        showFirstName: document.getElementById('landingShowFirstName').checked,
+        showLastName:  document.getElementById('landingShowLastName').checked,
+        showSubtitle:  document.getElementById('landingShowSubtitle').checked,
     };
 }
 

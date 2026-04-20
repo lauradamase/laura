@@ -7,6 +7,15 @@
     "showLastName": true,
     "showSubtitle": true
   },
+  "landing": {
+    "firstName": "Laura",
+    "lastName": "Damase",
+    "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRICE",
+    "show": true,
+    "showFirstName": true,
+    "showLastName": true,
+    "showSubtitle": true
+  },
   "social": [
     {
       "platform": "instagram",
