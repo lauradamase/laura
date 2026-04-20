@@ -231,12 +231,25 @@
         }
         .card + .card { margin-top: 1.25rem; }
 
+        /* ── TOGGLE SWITCH ── */
+        .field-toggle-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; }
+        .field-toggle-header label:first-child { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); }
+        .toggle { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+        .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+        .toggle-slider { width: 38px; height: 22px; background: #ccc; border-radius: 22px; transition: background 0.2s; position: relative; display: block; flex-shrink: 0; }
+        .toggle-slider::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .toggle input:checked + .toggle-slider { background: var(--accent); }
+        .toggle input:checked + .toggle-slider::after { transform: translateX(16px); }
+        .toggle-off input:not(:checked) + .toggle-slider { background: #ccc; }
+
         /* ── SOCIAL LINKS ── */
-        .social-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+        .social-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
         .social-item:last-child { border-bottom: none; }
-        .social-platform { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); width: 100px; flex-shrink: 0; }
+        .social-platform-select { flex-shrink: 0; width: 130px; padding: 0.55rem 0.75rem; border: 1.5px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 0.82rem; font-weight: 600; outline: none; background: var(--white); color: var(--text); transition: border-color 0.2s; cursor: pointer; }
+        .social-platform-select:focus { border-color: var(--accent); }
         .social-url { flex: 1; padding: 0.55rem 0.85rem; border: 1.5px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
         .social-url:focus { border-color: var(--accent); }
+        .social-add-row { padding-top: 0.9rem; }
 
         /* ── MENUS ── */
         .menu-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); }
@@ -390,16 +403,34 @@
         <div class="card">
             <div class="field-row">
                 <div class="field">
-                    <label>Prénom</label>
+                    <div class="field-toggle-header">
+                        <label>Prénom</label>
+                        <label class="toggle" title="Afficher / masquer sur le site">
+                            <input type="checkbox" id="showFirstName" onchange="onDataChange()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                     <input type="text" id="siteFirstName" oninput="onDataChange()">
                 </div>
                 <div class="field">
-                    <label>Nom</label>
+                    <div class="field-toggle-header">
+                        <label>Nom</label>
+                        <label class="toggle" title="Afficher / masquer sur le site">
+                            <input type="checkbox" id="showLastName" onchange="onDataChange()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                     <input type="text" id="siteLastName" oninput="onDataChange()">
                 </div>
             </div>
             <div class="field" style="margin-top:1rem">
-                <label>Sous-titre (affiché sous le nom)</label>
+                <div class="field-toggle-header">
+                    <label>Sous-titre (affiché sous le nom)</label>
+                    <label class="toggle" title="Afficher / masquer sur le site">
+                        <input type="checkbox" id="showSubtitle" onchange="onDataChange()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
                 <input type="text" id="siteSubtitle" oninput="onDataChange()">
             </div>
         </div>
@@ -863,31 +894,82 @@ function collectApropos() {
 /* ── SITE INFO ── */
 function renderSite() {
     const s = data.site || {};
-    document.getElementById('siteFirstName').value = s.firstName || '';
-    document.getElementById('siteLastName').value  = s.lastName  || '';
-    document.getElementById('siteSubtitle').value  = s.subtitle  || '';
+    document.getElementById('siteFirstName').value       = s.firstName || '';
+    document.getElementById('siteLastName').value        = s.lastName  || '';
+    document.getElementById('siteSubtitle').value        = s.subtitle  || '';
+    document.getElementById('showFirstName').checked     = s.showFirstName !== false;
+    document.getElementById('showLastName').checked      = s.showLastName  !== false;
+    document.getElementById('showSubtitle').checked      = s.showSubtitle  !== false;
 }
 function collectSite() {
     data.site = {
-        firstName: document.getElementById('siteFirstName').value.trim(),
-        lastName:  document.getElementById('siteLastName').value.trim(),
-        subtitle:  document.getElementById('siteSubtitle').value.trim(),
+        firstName:     document.getElementById('siteFirstName').value.trim(),
+        lastName:      document.getElementById('siteLastName').value.trim(),
+        subtitle:      document.getElementById('siteSubtitle').value.trim(),
+        showFirstName: document.getElementById('showFirstName').checked,
+        showLastName:  document.getElementById('showLastName').checked,
+        showSubtitle:  document.getElementById('showSubtitle').checked,
     };
 }
 
 /* ── SOCIAL ── */
+const SOCIAL_PLATFORMS = [
+    { value: 'instagram',  label: 'Instagram' },
+    { value: 'linkedin',   label: 'LinkedIn' },
+    { value: 'x-twitter',  label: 'X (Twitter)' },
+    { value: 'facebook',   label: 'Facebook' },
+    { value: 'youtube',    label: 'YouTube' },
+    { value: 'tiktok',     label: 'TikTok' },
+    { value: 'vimeo',      label: 'Vimeo' },
+    { value: 'email',      label: 'Email' },
+    { value: 'snapchat',   label: 'Snapchat' },
+    { value: 'pinterest',  label: 'Pinterest' },
+    { value: 'whatsapp',   label: 'WhatsApp' },
+    { value: 'website',    label: 'Site web' },
+];
+
+function socialPlatformOptions(selected) {
+    return SOCIAL_PLATFORMS.map(p =>
+        `<option value="${p.value}"${selected === p.value ? ' selected' : ''}>${p.label}</option>`
+    ).join('');
+}
+
 function renderSocial() {
     const list = document.getElementById('socialList');
-    list.innerHTML = (data.social || []).map((s, i) => `
+    list.innerHTML = (data.social || []).map((s, i) => {
+        const isEmail = s.platform === 'email';
+        const placeholder = isEmail ? 'adresse@email.com' : 'https://…';
+        return `
         <div class="social-item">
-            <span class="social-platform">${s.platform}</span>
-            <input class="social-url" type="url" value="${s.url||''}" placeholder="https://…"
+            <select class="social-platform-select"
+                    onchange="data.social[${i}].platform=this.value; renderSocial(); onDataChange()">
+                ${socialPlatformOptions(s.platform)}
+            </select>
+            <input class="social-url" type="text" value="${escAttr(s.url||'')}" placeholder="${placeholder}"
                    oninput="data.social[${i}].url=this.value; onDataChange()">
-        </div>
-    `).join('');
+            <button class="btn-icon danger" onclick="removeSocial(${i})" title="Supprimer">✕</button>
+        </div>`;
+    }).join('') + `
+        <div class="social-add-row">
+            <button class="btn-add" onclick="addSocial()">+ Ajouter un réseau social</button>
+        </div>`;
+}
+function addSocial() {
+    data.social = data.social || [];
+    data.social.push({ platform: 'instagram', url: '' });
+    onDataChange();
+    renderSocial();
+}
+function removeSocial(i) {
+    data.social.splice(i, 1);
+    onDataChange();
+    renderSocial();
+}
+function escAttr(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 }
 function collectSocial() {
-    /* already updated live via oninput above */
+    /* already updated live via oninput / onchange above */
 }
 
 /* ── MENUS ── */

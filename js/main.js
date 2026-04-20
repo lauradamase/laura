@@ -86,15 +86,28 @@
     function renderSiteInfo(site) {
         if (!site) return;
 
-        if (logoFirst && site.firstName) {
-            logoFirst.textContent = site.firstName;
+        var allFirst = document.querySelectorAll('.logo-first');
+        var allLast  = document.querySelectorAll('.logo-last');
+        var allSub   = document.querySelectorAll('.subtitle');
+
+        if (site.firstName) {
+            allFirst.forEach(function(el) { el.textContent = site.firstName; });
         }
-        if (logoLast && site.lastName) {
-            logoLast.textContent = site.lastName;
+        if (site.lastName) {
+            allLast.forEach(function(el) { el.textContent = site.lastName; });
         }
-        if (subtitle && site.subtitle) {
-            subtitle.textContent = site.subtitle;
+        if (site.subtitle) {
+            allSub.forEach(function(el) { el.textContent = site.subtitle; });
         }
+
+        var show = site.showFirstName !== false;
+        allFirst.forEach(function(el) { el.style.display = show ? '' : 'none'; });
+
+        show = site.showLastName !== false;
+        allLast.forEach(function(el) { el.style.display = show ? '' : 'none'; });
+
+        show = site.showSubtitle !== false;
+        allSub.forEach(function(el) { el.style.display = show ? '' : 'none'; });
 
         // Update page title
         if (site.firstName && site.lastName && site.subtitle) {
@@ -117,14 +130,24 @@
             'facebook': 'fab fa-facebook-f',
             'youtube': 'fab fa-youtube',
             'tiktok': 'fab fa-tiktok',
-            'vimeo': 'fab fa-vimeo-v'
+            'vimeo': 'fab fa-vimeo-v',
+            'email': 'fas fa-envelope',
+            'website': 'fas fa-globe',
+            'snapchat': 'fab fa-snapchat',
+            'pinterest': 'fab fa-pinterest',
+            'whatsapp': 'fab fa-whatsapp'
         };
 
         socialIcons.innerHTML = social.map(function(item) {
             var iconClass = iconMap[item.platform] || 'fas fa-link';
             var label = item.platform.charAt(0).toUpperCase() + item.platform.slice(1);
+            var href = item.url || '#';
+            if (item.platform === 'email' && href && href.indexOf('mailto:') !== 0 && href.indexOf('@') !== -1) {
+                href = 'mailto:' + href;
+            }
+            var target = item.platform === 'email' ? '' : ' target="_blank" rel="noopener noreferrer"';
 
-            return '<a href="' + item.url + '" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="' + label + '">' +
+            return '<a href="' + href + '"' + target + ' class="social-link" aria-label="' + label + '">' +
                 '<i class="' + iconClass + '"></i>' +
             '</a>';
         }).join('');

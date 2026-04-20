@@ -2,7 +2,10 @@
   "site": {
     "firstName": "Laura",
     "lastName": "Damase",
-    "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRICE"
+    "subtitle": "RÉALISATRICE & CHEFFE OPÉRATRICE",
+    "showFirstName": true,
+    "showLastName": true,
+    "showSubtitle": true
   },
   "social": [
     {
