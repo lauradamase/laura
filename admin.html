@@ -353,6 +353,7 @@
         <button class="tab-btn" data-tab="site">Informations du site</button>
         <button class="tab-btn" data-tab="social">Réseaux sociaux</button>
         <button class="tab-btn" data-tab="menus">Menus</button>
+        <button class="tab-btn" data-tab="share">Partage</button>
     </div>
 
     <!-- PORTFOLIO -->
@@ -482,6 +483,45 @@
     <div class="tab-content" id="tab-social">
         <div class="section-header"><span class="section-title">Liens réseaux sociaux</span></div>
         <div class="card" id="socialList"></div>
+    </div>
+
+    <!-- PARTAGE -->
+    <div class="tab-content" id="tab-share">
+        <div class="section-header"><span class="section-title">Aperçu du lien (WhatsApp, iMessage, etc.)</span></div>
+        <div class="card">
+            <div class="field">
+                <label>Titre</label>
+                <input type="text" id="shareTitle" oninput="onDataChange()" placeholder="Laura Damase | Réalisatrice…">
+                <span class="field-hint">Affiché en gras sous l'image dans l'aperçu du lien.</span>
+            </div>
+            <div class="field" style="margin-top:1rem">
+                <label>Description</label>
+                <textarea id="shareDescription" rows="3" oninput="onDataChange()" placeholder="Portfolio de…"></textarea>
+                <span class="field-hint">Texte affiché sous le titre dans l'aperçu du lien.</span>
+            </div>
+            <div class="field" style="margin-top:1rem">
+                <label>Image de partage</label>
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;margin-top:0.4rem">
+                    <div class="drop-zone portrait-drop-zone has-image" id="shareImageZone"
+                         onclick="document.getElementById('shareImageFile').click()"
+                         ondragover="handleDragOver(event,'shareImageZone')"
+                         ondragleave="handleDragLeave(event,'shareImageZone')"
+                         ondrop="handleShareImageDrop(event)">
+                        <img id="shareImagePreview" class="drop-zone-bg" src="" alt="">
+                        <div class="drop-zone-overlay">
+                            <span class="drop-icon" id="shareImageIcon">📷</span>
+                            <span class="drop-label" id="shareImageLabel">Changer la photo</span>
+                        </div>
+                        <div class="drop-progress" id="shareImageProgress"></div>
+                    </div>
+                    <p style="font-size:0.78rem;color:var(--text-light);line-height:1.7;margin-top:0.5rem">
+                        Cliquer ou glisser-déposer<br>une image (JPG / PNG).<br>
+                        Idéalement <strong>1200×630 px</strong>.
+                    </p>
+                </div>
+                <input type="file" id="shareImageFile" class="image-file-input" accept="image/*" onchange="uploadShareImage(this)">
+            </div>
+        </div>
     </div>
 
     <!-- MENUS -->
@@ -621,6 +661,10 @@ async function doPublish() {
         }
         const updated = await res.json();
         fileSHA = updated.content.sha;
+
+        // Also update og: meta tags in index.html
+        await updateIndexOGTags(data.sharePreview || {});
+
         dirty = false;
         document.getElementById('publishBtn').disabled = true;
         setStatus('Publié ✓', 'saved');
@@ -633,6 +677,43 @@ async function doPublish() {
     }
 }
 
+async function updateIndexOGTags(sp) {
+    const SITE_BASE = 'https://lauradamase.github.io/laura/';
+    const file = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/index.html`);
+    if (!file.ok) return;
+    const j = await file.json();
+    let html = b64DecodeUtf8(j.content.replace(/\n/g, ''));
+
+    function buildImageUrl(img) {
+        if (!img) return '';
+        if (img.startsWith('http')) return img;
+        const encoded = img.split('/').map(s => encodeURIComponent(s)).join('/');
+        return SITE_BASE + encoded;
+    }
+
+    const title       = escAttr(sp.title       || '');
+    const description = escAttr(sp.description || '');
+    const imageUrl    = buildImageUrl(sp.image || '');
+
+    html = html.replace(/(<meta\s+property="og:title"\s+content=")[^"]*(")/,    `$1${title}$2`);
+    html = html.replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/,  `$1${description}$2`);
+    html = html.replace(/(<meta\s+name="description"\s+content=")[^"]*(")/,     `$1${description}$2`);
+    if (imageUrl) {
+        html = html.replace(/(<meta\s+property="og:image"\s+content=")[^"]*(")/,  `$1${imageUrl}$2`);
+    }
+
+    const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/index.html`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            message: 'Mise à jour des métadonnées de partage via admin',
+            content: b64EncodeUtf8(html),
+            sha: j.sha,
+            branch: BRANCH,
+        }),
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error('index.html: ' + (e.message || 'Erreur')); }
+}
+
 /* ── RENDER ALL ── */
 function renderAll() {
     renderPortfolio();
@@ -640,6 +721,7 @@ function renderAll() {
     renderSite();
     renderSocial();
     renderMenus();
+    renderSharePreview();
 }
 
 /* ── COLLECT ALL (before publish) ── */
@@ -647,6 +729,7 @@ function collectAll() {
     collectApropos();
     collectSite();
     collectSocial();
+    collectSharePreview();
     // portfolio is updated live via item controls
 }
 
@@ -1030,6 +1113,73 @@ function escAttr(s) {
 }
 function collectSocial() {
     /* already updated live via oninput / onchange above */
+}
+
+/* ── SHARE PREVIEW ── */
+function renderSharePreview() {
+    const sp = data.sharePreview || {};
+    document.getElementById('shareTitle').value       = sp.title       || '';
+    document.getElementById('shareDescription').value = sp.description || '';
+    const preview = document.getElementById('shareImagePreview');
+    const zone    = document.getElementById('shareImageZone');
+    if (sp.image) {
+        preview.src = sp.image;
+        zone.classList.add('has-image');
+    } else {
+        zone.classList.remove('has-image');
+    }
+}
+function collectSharePreview() {
+    data.sharePreview = {
+        title:       document.getElementById('shareTitle').value.trim(),
+        description: document.getElementById('shareDescription').value.trim(),
+        image:       (data.sharePreview || {}).image || '',
+    };
+}
+function handleShareImageDrop(e) {
+    e.preventDefault();
+    document.getElementById('shareImageZone').classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) uploadShareImage({ files: [file] });
+}
+async function uploadShareImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const zone     = document.getElementById('shareImageZone');
+    const preview  = document.getElementById('shareImagePreview');
+    const icon     = document.getElementById('shareImageIcon');
+    const label    = document.getElementById('shareImageLabel');
+    const progress = document.getElementById('shareImageProgress');
+    const blobUrl  = URL.createObjectURL(file);
+    preview.src = blobUrl;
+    zone.classList.add('has-image', 'uploading');
+    icon.textContent  = '⏳';
+    label.textContent = 'Upload en cours…';
+    progress.style.width = '40%';
+    try {
+        const path = `images/${file.name}`;
+        progress.style.width = '70%';
+        await uploadFileToGitHub(path, file);
+        progress.style.width = '100%';
+        data.sharePreview = data.sharePreview || {};
+        data.sharePreview.image = path;
+        onDataChange();
+        zone.classList.remove('uploading');
+        icon.textContent  = '✓';
+        label.textContent = 'Image enregistrée';
+        setTimeout(() => {
+            icon.textContent  = '📷';
+            label.textContent = 'Changer la photo';
+            progress.style.width = '0%';
+        }, 2000);
+        showToast('Image uploadée !', 'success');
+    } catch (e) {
+        zone.classList.remove('uploading');
+        icon.textContent  = '⚠️';
+        label.textContent = 'Erreur — réessayer';
+        progress.style.width = '0%';
+        showToast('Erreur upload : ' + e.message, 'error');
+    }
 }
 
 /* ── MENUS ── */

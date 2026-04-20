@@ -16,6 +16,11 @@
     "showLastName": true,
     "showSubtitle": true
   },
+  "sharePreview": {
+    "title": "Laura Damase | Réalisatrice & Cheffe Opératrice",
+    "description": "Portfolio de documentaires et reportages pour France Télévisions par Laura Damase.",
+    "image": "images/Portrait Laura.jpg"
+  },
   "social": [
     {
       "platform": "instagram",
