@@ -21,11 +21,11 @@
   "categories": [
     {
       "id": "documentaires",
-      "label": "DOCUMENTAIRES"
+      "label": "DOCUMENTAIRE"
     },
     {
       "id": "portraits",
-      "label": "PORTRAITS"
+      "label": "PORTRAIT"
     },
     {
       "id": "magazines",
@@ -33,15 +33,15 @@
     },
     {
       "id": "reportages",
-      "label": "REPORTAGES"
+      "label": "INVESTIGATION"
     },
     {
       "id": "clips",
-      "label": "CLIPS"
+      "label": "CLIP"
     },
     {
       "id": "captations",
-      "label": "CAPTATIONS"
+      "label": "CAPTATION"
     },
     {
       "id": "menu_1776677180494",
