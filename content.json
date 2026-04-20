@@ -15,7 +15,7 @@
     },
     {
       "platform": "x-twitter",
-      "url": "https://x.com/arualesamad"
+      "url": ""
     }
   ],
   "categories": [
@@ -62,6 +62,20 @@
     },
     {
       "title": "VOIR SUR VIMEO",
+      "category": "documentaires",
+      "description": "FRANCE Ô Grand format I Aux portes de la Colombie",
+      "image": "images/colombie.png",
+      "link": "https://vimeo.com/manage/videos/689097062"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
+      "category": "documentaires",
+      "description": "REVOLUTION ROLLER GIRLS Teaser I DOC 52' FRANCE 3",
+      "image": "images/rollergirls.png",
+      "link": "https://vimeo.com/manage/videos/1014807794"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
       "category": "portraits",
       "description": "France 2 - 20h30 le vendredi\nYazid Ichemrahen, l'étoile des pâtissiers",
       "image": "images/yazid.jpg",
@@ -75,25 +89,32 @@
       "link": "https://vimeo.com/1015174528"
     },
     {
+      "title": "VOIR SUR VIMEO",
+      "category": "portraits",
+      "description": "ARTE Invitation au voyage I Machado de Assis, génie métis d’un Brésil raciste",
+      "image": "images/machadodeassis.png",
+      "link": "https://vimeo.com/688366335"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
+      "category": "magazines",
+      "description": "FRANCE 2 13h15, le dimanche I Le feuilleton des Français S10 EP7 ",
+      "image": "images/Tiffany.png",
+      "link": "https://vimeo.com/manage/videos/1014892951"
+    },
+    {
+      "title": "VOIR SUR VIMEO",
+      "category": "magazines",
+      "description": "FRANCE 2 20h30 l'été - La Corse à la voile",
+      "image": "images/voilier.png",
+      "link": "https://vimeo.com/manage/videos/1014898125"
+    },
+    {
       "title": "VOIR SUR YOUTUBE",
       "category": "clips",
       "description": "Kayode - Meu Lugar",
       "image": "images/kayodemeulugar.jpg",
       "link": "https://www.youtube.com/watch?v=rDhFoPIUCEQ"
-    },
-    {
-      "title": "VOIR SUR YOUTUBE",
-      "category": "captations",
-      "description": "MALADIE - Frieda (Live à la Boule Noire)",
-      "image": "images/MaladieFrieda.jpeg",
-      "link": "https://youtu.be/5A8VI76fNbI?si=WqFoCdM8hioctCKb"
-    },
-    {
-      "title": "VOIR SUR YOUTUBE",
-      "category": "captations",
-      "description": "Potentialité - Frieda (Live à la Boule Noire)",
-      "image": "images/potencialitefrieda.jpg",
-      "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
     },
     {
       "title": "VOIR SUR YOUTUBE",
@@ -117,32 +138,18 @@
       "link": "https://www.youtube.com/watch?v=-8Y2fWqBq8k"
     },
     {
-      "title": "VOIR SUR VIMEO",
-      "category": "reportages",
-      "description": "Spicee Investigation - Gangs of Manaus",
-      "image": "images/gangsofmanaus.jpg",
-      "link": "https://vimeo.com/manage/videos/691425052"
+      "title": "VOIR SUR YOUTUBE",
+      "category": "captations",
+      "description": "MALADIE - Frieda (Live à la Boule Noire)",
+      "image": "images/MaladieFrieda.jpeg",
+      "link": "https://youtu.be/5A8VI76fNbI?si=WqFoCdM8hioctCKb"
     },
     {
-      "title": "VOIR SUR VIMEO",
-      "category": "magazines",
-      "description": "FRANCE 2 13h15, le dimanche I Le feuilleton des Français S10 EP7 ",
-      "image": "images/Tiffany.png",
-      "link": "https://vimeo.com/manage/videos/1014892951"
-    },
-    {
-      "title": "VOIR SUR VIMEO",
-      "category": "magazines",
-      "description": "FRANCE 2 20h30 l'été - La Corse à la voile",
-      "image": "images/voilier.png",
-      "link": "https://vimeo.com/manage/videos/1014898125"
-    },
-    {
-      "title": "VOIR SUR VIMEO",
-      "category": "documentaires",
-      "description": "FRANCE Ô Grand format I Aux portes de la Colombie",
-      "image": "images/colombie.png",
-      "link": "https://vimeo.com/manage/videos/689097062"
+      "title": "VOIR SUR YOUTUBE",
+      "category": "captations",
+      "description": "Potentialité - Frieda (Live à la Boule Noire)",
+      "image": "images/potencialitefrieda.jpg",
+      "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
     },
     {
       "title": "VOIR SUR YOUTUBE",
@@ -153,17 +160,10 @@
     },
     {
       "title": "VOIR SUR VIMEO",
-      "category": "documentaires",
-      "description": "REVOLUTION ROLLER GIRLS Teaser I DOC 52' FRANCE 3",
-      "image": "images/rollergirls.png",
-      "link": "https://vimeo.com/manage/videos/1014807794"
-    },
-    {
-      "title": "VOIR SUR VIMEO",
-      "category": "documentaires",
-      "description": "ARTE Invitation au voyage I Machado de Assis, génie métis d’un Brésil raciste",
-      "image": "images/machadodeassis.png",
-      "link": "https://vimeo.com/manage/videos/688366335"
+      "category": "reportages",
+      "description": "Spicee Investigation - Gangs of Manaus",
+      "image": "images/gangsofmanaus.jpg",
+      "link": "https://vimeo.com/manage/videos/691425052"
     }
   ]
 }
