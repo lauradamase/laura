@@ -57,10 +57,6 @@
       "label": "REPORTAGE"
     },
     {
-      "id": "reportages",
-      "label": "INVESTIGATION"
-    },
-    {
       "id": "clips",
       "label": "CLIP"
     },
@@ -177,6 +173,13 @@
       "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
     },
     {
+      "title": "VOIR LE PROJET",
+      "category": "magazines",
+      "description": "FRANCE 2 - 13h15 le samedi\nBondy, capitale du foot ",
+      "image": "images/bondy.png",
+      "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-du-samedi-10-decembre-2022_5495055.html"
+    },
+    {
       "title": "VOIR SUR YOUTUBE",
       "category": "magazines",
       "description": "FRANCE 24 Reporters - Dans la forêt amazonienne, les Indiens Yanomami victimes de la ruée vers l’or",
@@ -189,13 +192,6 @@
       "description": "Spicee Investigation - Gangs of Manaus",
       "image": "images/gangsofmanaus.jpg",
       "link": "https://vimeo.com/691425052"
-    },
-    {
-      "title": "VOIR LE PROJET",
-      "category": "magazines",
-      "description": "FRANCE 2 - 13h15 le samedi\nBondy, capitale du foot ",
-      "image": "images/bondy.png",
-      "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-du-samedi-10-decembre-2022_5495055.html"
     }
   ]
 }
