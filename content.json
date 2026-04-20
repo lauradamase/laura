@@ -118,9 +118,9 @@
     {
       "title": "VOIR SUR VIMEO",
       "category": "magazines",
-      "description": "FRANCE 2 13h15, le dimanche I Le feuilleton des Français S10 EP7 ",
+      "description": "FRANCE 2 13h15, le dimanche\nLe feuilleton des Français S10 EP7 ",
       "image": "images/Tiffany.png",
-      "link": "https://vimeo.com/manage/videos/1014892951"
+      "link": "https://vimeo.com/1014892951"
     },
     {
       "title": "VOIR SUR VIMEO",
@@ -188,7 +188,7 @@
     {
       "title": "VOIR LE PROJET",
       "category": "magazines",
-      "description": "France 2 - 13h15 le samedi\nBondy, capitale du foot ",
+      "description": "FRANCE 2 - 13h15 le samedi\nBondy, capitale du foot ",
       "image": "images/bondy.png",
       "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-du-samedi-10-decembre-2022_5495055.html"
     }
