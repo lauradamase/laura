@@ -678,7 +678,7 @@ async function doPublish() {
 }
 
 async function updateIndexOGTags(sp) {
-    const SITE_BASE = 'https://lauradamase.github.io/laura/';
+    const SITE_BASE = 'https://www.lauradamase.com/';
     const file = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/index.html`);
     if (!file.ok) return;
     const j = await file.json();
