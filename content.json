@@ -49,12 +49,12 @@
       "label": "DOCUMENTAIRE"
     },
     {
-      "id": "portraits",
-      "label": "PORTRAIT"
-    },
-    {
       "id": "magazines",
       "label": "REPORTAGE"
+    },
+    {
+      "id": "portraits",
+      "label": "PORTRAIT"
     },
     {
       "id": "clips",
