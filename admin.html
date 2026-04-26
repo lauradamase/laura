@@ -6,7 +6,8 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Admin — Laura Damase</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Arizonia&family=Bodoni+Moda:wght@400;700&family=Caveat:wght@400;700&family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;500;700&family=Cormorant+SC:wght@400;700&family=Crimson+Pro:wght@400;500;700&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=Dancing+Script:wght@400;700&family=EB+Garamond:wght@400;500;700&family=Great+Vibes&family=IBM+Plex+Sans:wght@400;500;700&family=IBM+Plex+Serif:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Italianno&family=Karla:wght@400;500;700&family=Lato:wght@400;700&family=Lora:wght@400;500;700&family=Manrope:wght@400;500;700&family=Marck+Script&family=Merriweather:wght@400;700&family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@400;500;700&family=Open+Sans:wght@400;500;700&family=Pacifico&family=Parisienne&family=Pinyon+Script&family=Playfair+Display:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Sacramento&family=Source+Sans+3:wght@400;500;700&family=Source+Serif+4:wght@400;500;700&family=Spectral:wght@400;500;700&family=Tangerine:wght@400;700&family=Work+Sans:wght@400;500;700&family=Yellowtail&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -374,6 +375,380 @@
         .crop-size-info {
             color: rgba(255,255,255,0.45); font-size: 0.72rem; min-width: 110px; text-align: center;
         }
+
+        /* ── THEME TAB ────────────────────────────────────────── */
+        #tab-theme .theme-layout {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        @media (max-width: 1000px) {
+            #tab-theme .theme-layout { grid-template-columns: 1fr; }
+        }
+        #tab-theme .theme-controls h3 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            font-weight: 600;
+            margin: 1.4rem 0 0.7rem;
+        }
+        #tab-theme .theme-controls h3:first-child { margin-top: 0; }
+        #tab-theme .tfield {
+            display: grid;
+            grid-template-columns: 1fr 110px 50px;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        #tab-theme .tfield label {
+            font-size: 0.78rem;
+            color: var(--text);
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        #tab-theme .tfield label small {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.65rem;
+            margin-top: 2px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+        #tab-theme .tfield input[type="text"] {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.72rem;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+        }
+        #tab-theme .tfield input[type="color"] {
+            width: 50px;
+            height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        #tab-theme .tfield-font { grid-template-columns: 1fr 1fr; }
+        #tab-theme .tfield-font select {
+            font-family: inherit;
+            font-size: 0.8rem;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+        }
+        #tab-theme .tfield.active {
+            background: rgba(128, 0, 32, 0.06);
+            border-radius: 6px;
+            padding: 6px 8px;
+            margin: -6px -8px 2px -8px;
+            box-shadow: 0 0 0 2px var(--accent) inset;
+        }
+
+        #tab-theme .picker {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 18px;
+        }
+        #tab-theme .picker h4 {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        #tab-theme .picker .swatches {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        #tab-theme .picker .swatches button {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,.15);
+            cursor: pointer;
+            padding: 0;
+            transition: transform .1s, box-shadow .1s;
+        }
+        #tab-theme .picker .swatches button:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,.2);
+            z-index: 1;
+        }
+        #tab-theme .picker .gradient-strip {
+            height: 22px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: linear-gradient(to right,
+              #ff0000 0%, #ff8000 8%, #ffff00 17%, #80ff00 25%,
+              #00ff00 33%, #00ff80 42%, #00ffff 50%, #0080ff 58%,
+              #0000ff 67%, #8000ff 75%, #ff00ff 83%, #ff0080 92%, #ff0000 100%);
+            cursor: crosshair;
+            margin-bottom: 6px;
+        }
+        #tab-theme .picker .lightness-strip {
+            height: 18px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            cursor: crosshair;
+            margin-bottom: 8px;
+        }
+        #tab-theme .picker-target {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-top: 4px;
+            text-align: center;
+        }
+        #tab-theme .picker-target b {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        #tab-theme .theme-preview-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        #tab-theme .theme-preview-toolbar h3 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        #tab-theme .theme-preview-toolbar .device-toggle { display: flex; gap: 6px; }
+        #tab-theme .theme-preview-toolbar button {
+            font-family: inherit;
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        #tab-theme .theme-preview-toolbar button.active {
+            background: var(--text);
+            color: white;
+            border-color: var(--text);
+        }
+
+        #tab-theme .theme-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        #tab-theme .theme-actions button {
+            font-family: inherit;
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        #tab-theme .theme-actions button:hover { background: #f0f0f0; }
+        #tab-theme .theme-actions button.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        #tab-theme .theme-actions button.primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+        #tab-theme .theme-actions button:disabled {
+            opacity: 0.5; cursor: not-allowed;
+        }
+
+        /* ── MOCK SITE ─────────────────────────────────────────── */
+        #tab-theme .mock {
+            --color-background: #F5F5F5;
+            --color-background-alt: #FAFAFA;
+            --color-text-primary: #1A1A1A;
+            --color-text-secondary: #4A4A4A;
+            --color-accent: #800020;
+            --color-accent-hover: #5a0016;
+            --color-white: #FFFFFF;
+            --color-border: rgba(26,26,26,.1);
+            --color-overlay: rgba(26,26,26,.4);
+            --font-primary: 'Montserrat', sans-serif;
+            --font-logo: 'Great Vibes', cursive;
+
+            background: var(--color-background);
+            color: var(--color-text-primary);
+            font-family: var(--font-primary);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0,0,0,.08);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 540px;
+            transition: background .25s, color .25s;
+        }
+        #tab-theme .mock.mode-mobile {
+            grid-template-columns: 1fr;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+        #tab-theme .mock-sidebar {
+            background: var(--color-white);
+            border-right: 1px solid var(--color-border);
+            padding: 28px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        #tab-theme .mock.mode-mobile .mock-sidebar { display: none; }
+        #tab-theme .mock-logo {
+            font-family: var(--font-logo);
+            font-size: 32px;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+        #tab-theme .mock-tag {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+        }
+        #tab-theme .mock-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        #tab-theme .mock-nav a {
+            font-size: 13px;
+            padding: 6px 0;
+            color: var(--color-text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+        #tab-theme .mock-nav a.active {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+        #tab-theme .mock-social { margin-top: auto; display: flex; gap: 10px; }
+        #tab-theme .mock-social span {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+            font-size: 12px;
+        }
+        #tab-theme .mock-main {
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        #tab-theme .mock-hero {
+            background: linear-gradient(135deg, var(--color-background-alt), var(--color-background));
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+        }
+        #tab-theme .mock-hero h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--color-text-primary);
+        }
+        #tab-theme .mock-hero p {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+        #tab-theme .mock-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        #tab-theme .mock.mode-mobile .mock-grid { grid-template-columns: 1fr 1fr; }
+        #tab-theme .mock-card {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            position: relative;
+        }
+        #tab-theme .mock-card-thumb {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
+        }
+        #tab-theme .mock-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--color-overlay);
+            opacity: 0;
+            transition: opacity .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #tab-theme .mock-card:hover .mock-card-overlay { opacity: 1; }
+        #tab-theme .mock-card-overlay::after {
+            content: '▶';
+            color: var(--color-white);
+            font-size: 24px;
+        }
+        #tab-theme .mock-card-title {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 8px 10px;
+            color: var(--color-white);
+            background: linear-gradient(to top, rgba(0,0,0,.6), transparent);
+            font-size: 11px;
+            font-weight: 500;
+        }
+        #tab-theme .mock-actions { display: flex; gap: 10px; }
+        #tab-theme .mock-btn {
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        #tab-theme .mock-btn.primary {
+            background: var(--color-accent);
+            color: var(--color-white);
+            border-color: var(--color-accent);
+        }
+        #tab-theme .mock-btn.ghost {
+            background: transparent;
+            color: var(--color-accent);
+            border-color: var(--color-border);
+        }
+        #tab-theme .mock-quote {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            padding: 14px;
+            border-left: 3px solid var(--color-accent);
+            background: var(--color-background-alt);
+            border-radius: 4px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -423,6 +798,7 @@
         <button class="tab-btn" data-tab="social">Réseaux sociaux</button>
         <button class="tab-btn" data-tab="menus">Menus</button>
         <button class="tab-btn" data-tab="share">Partage</button>
+        <button class="tab-btn" data-tab="theme">Thème</button>
     </div>
 
     <!-- PORTFOLIO -->
@@ -604,6 +980,159 @@
             💡 <strong>À Propos</strong> est verrouillé — c'est la page de présentation.<br>
             Supprimer un menu ne supprime pas les projets associés, mais ils n'apparaîtront plus dans la navigation.
         </p>
+    </div>
+
+    <!-- THÈME -->
+    <div class="tab-content" id="tab-theme">
+        <div class="section-header">
+            <span class="section-title">Personnalisation des couleurs et polices</span>
+        </div>
+        <div class="theme-actions">
+            <button onclick="themeReset()">Réinitialiser</button>
+            <button onclick="themeOpenPreview()">Aperçu page complète ↗</button>
+            <button class="primary" id="themeDeployBtn" onclick="themeDeploy()">Déployer sur le site</button>
+        </div>
+        <div class="theme-layout">
+            <div class="theme-controls">
+                <div class="picker">
+                    <h4>Palette rapide — clique sur une couleur</h4>
+                    <div class="swatches" id="themeSwatches"></div>
+                    <h4>Teinte (faire glisser)</h4>
+                    <div class="gradient-strip" id="themeHueStrip"></div>
+                    <h4>Luminosité</h4>
+                    <div class="lightness-strip" id="themeLightStrip"></div>
+                    <p class="picker-target">Cible : <b id="themePickerTarget">aucune — clique d'abord sur un champ</b></p>
+                </div>
+
+                <h3>Couleurs principales</h3>
+                <div class="tfield"><label>Background<small>--color-background</small></label><input type="text" id="c-bg-text" data-pair="c-bg"><input type="color" id="c-bg" data-var="--color-background"></div>
+                <div class="tfield"><label>Background secondaire<small>--color-background-alt</small></label><input type="text" id="c-bg-alt-text" data-pair="c-bg-alt"><input type="color" id="c-bg-alt" data-var="--color-background-alt"></div>
+                <div class="tfield"><label>Surface (cards)<small>--color-white</small></label><input type="text" id="c-white-text" data-pair="c-white"><input type="color" id="c-white" data-var="--color-white"></div>
+
+                <h3>Texte</h3>
+                <div class="tfield"><label>Texte principal<small>--color-text-primary</small></label><input type="text" id="c-text-text" data-pair="c-text"><input type="color" id="c-text" data-var="--color-text-primary"></div>
+                <div class="tfield"><label>Texte secondaire<small>--color-text-secondary</small></label><input type="text" id="c-text2-text" data-pair="c-text2"><input type="color" id="c-text2" data-var="--color-text-secondary"></div>
+
+                <h3>Accent</h3>
+                <div class="tfield"><label>Couleur accent<small>--color-accent</small></label><input type="text" id="c-accent-text" data-pair="c-accent"><input type="color" id="c-accent" data-var="--color-accent"></div>
+                <div class="tfield"><label>Accent (hover)<small>--color-accent-hover</small></label><input type="text" id="c-accent-h-text" data-pair="c-accent-h"><input type="color" id="c-accent-h" data-var="--color-accent-hover"></div>
+
+                <h3>Bordures &amp; overlay</h3>
+                <div class="tfield"><label>Bordure<small>--color-border (rgba)</small></label><input type="text" id="c-border-text" data-pair="c-border"><input type="color" id="c-border" data-var="--color-border"></div>
+                <div class="tfield"><label>Overlay vidéo<small>--color-overlay (rgba)</small></label><input type="text" id="c-overlay-text" data-pair="c-overlay"><input type="color" id="c-overlay" data-var="--color-overlay"></div>
+
+                <h3>Polices</h3>
+                <div class="tfield tfield-font">
+                    <label>Texte<small>--font-primary</small></label>
+                    <select id="font-primary" data-var="--font-primary">
+                        <optgroup label="Sans-serif modernes">
+                            <option value="'Montserrat', sans-serif">Montserrat</option>
+                            <option value="'Inter', sans-serif">Inter</option>
+                            <option value="'Roboto', sans-serif">Roboto</option>
+                            <option value="'Open Sans', sans-serif">Open Sans</option>
+                            <option value="'Lato', sans-serif">Lato</option>
+                            <option value="'Poppins', sans-serif">Poppins</option>
+                            <option value="'Raleway', sans-serif">Raleway</option>
+                            <option value="'Nunito', sans-serif">Nunito</option>
+                            <option value="'Work Sans', sans-serif">Work Sans</option>
+                            <option value="'DM Sans', sans-serif">DM Sans</option>
+                            <option value="'Manrope', sans-serif">Manrope</option>
+                            <option value="'Karla', sans-serif">Karla</option>
+                            <option value="'IBM Plex Sans', sans-serif">IBM Plex Sans</option>
+                            <option value="'Source Sans 3', sans-serif">Source Sans 3</option>
+                        </optgroup>
+                        <optgroup label="Serifs élégantes">
+                            <option value="'Lora', serif">Lora</option>
+                            <option value="'Playfair Display', serif">Playfair Display</option>
+                            <option value="'Merriweather', serif">Merriweather</option>
+                            <option value="'EB Garamond', serif">EB Garamond</option>
+                            <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                            <option value="'Crimson Pro', serif">Crimson Pro</option>
+                            <option value="'DM Serif Display', serif">DM Serif Display</option>
+                            <option value="'Spectral', serif">Spectral</option>
+                            <option value="'Source Serif 4', serif">Source Serif 4</option>
+                            <option value="'IBM Plex Serif', serif">IBM Plex Serif</option>
+                            <option value="'Bodoni Moda', serif">Bodoni Moda</option>
+                        </optgroup>
+                        <optgroup label="Système">
+                            <option value="system-ui, sans-serif">System UI</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tfield tfield-font">
+                    <label>Logo<small>--font-logo</small></label>
+                    <select id="font-logo" data-var="--font-logo">
+                        <optgroup label="Calligraphies / scripts">
+                            <option value="'Great Vibes', cursive">Great Vibes</option>
+                            <option value="'Dancing Script', cursive">Dancing Script</option>
+                            <option value="'Pacifico', cursive">Pacifico</option>
+                            <option value="'Sacramento', cursive">Sacramento</option>
+                            <option value="'Allura', cursive">Allura</option>
+                            <option value="'Parisienne', cursive">Parisienne</option>
+                            <option value="'Italianno', cursive">Italianno</option>
+                            <option value="'Tangerine', cursive">Tangerine</option>
+                            <option value="'Pinyon Script', cursive">Pinyon Script</option>
+                            <option value="'Marck Script', cursive">Marck Script</option>
+                            <option value="'Caveat', cursive">Caveat</option>
+                            <option value="'Yellowtail', cursive">Yellowtail</option>
+                            <option value="'Arizonia', cursive">Arizonia</option>
+                        </optgroup>
+                        <optgroup label="Serifs élégantes (logo)">
+                            <option value="'Playfair Display', serif">Playfair Display</option>
+                            <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                            <option value="'Cormorant SC', serif">Cormorant SC (small caps)</option>
+                            <option value="'Cinzel', serif">Cinzel</option>
+                            <option value="'EB Garamond', serif">EB Garamond</option>
+                            <option value="'DM Serif Display', serif">DM Serif Display</option>
+                            <option value="'Bodoni Moda', serif">Bodoni Moda</option>
+                        </optgroup>
+                        <optgroup label="Sans-serif (clean)">
+                            <option value="'Montserrat', sans-serif">Montserrat</option>
+                            <option value="'Raleway', sans-serif">Raleway</option>
+                            <option value="'Poppins', sans-serif">Poppins</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <div class="theme-preview">
+                <div class="theme-preview-toolbar">
+                    <h3>Aperçu instantané</h3>
+                    <div class="device-toggle">
+                        <button id="theme-btn-desktop" class="active" onclick="themeSetMode('desktop')">Desktop</button>
+                        <button id="theme-btn-mobile" onclick="themeSetMode('mobile')">Mobile</button>
+                    </div>
+                </div>
+                <div class="mock" id="themeMock">
+                    <aside class="mock-sidebar">
+                        <div class="mock-logo">Laura Damase</div>
+                        <div class="mock-tag">Réalisatrice · Cheffe op.</div>
+                        <nav class="mock-nav">
+                            <a class="active" href="#">Portfolio</a>
+                            <a href="#">À propos</a>
+                            <a href="#">Contact</a>
+                        </nav>
+                        <div class="mock-social"><span>in</span><span>iG</span><span>vi</span></div>
+                    </aside>
+                    <main class="mock-main">
+                        <div class="mock-hero">
+                            <h2>Documentaire — Histoires Vécues</h2>
+                            <p>Une sélection de reportages signés Laura Damase pour France Télévisions.</p>
+                        </div>
+                        <div class="mock-grid">
+                            <div class="mock-card"><div class="mock-card-thumb"></div><div class="mock-card-overlay"></div><div class="mock-card-title">Marche des Vivants</div></div>
+                            <div class="mock-card"><div class="mock-card-thumb"></div><div class="mock-card-overlay"></div><div class="mock-card-title">Caen, ville reconstruite</div></div>
+                            <div class="mock-card"><div class="mock-card-thumb"></div><div class="mock-card-overlay"></div><div class="mock-card-title">Échos de la Loire</div></div>
+                        </div>
+                        <div class="mock-actions">
+                            <button class="mock-btn primary">Voir tout</button>
+                            <button class="mock-btn ghost">Contact</button>
+                        </div>
+                        <blockquote class="mock-quote">« Une caméra, c'est avant tout un regard. Le mien essaie de rester proche, lent, attentif. »</blockquote>
+                    </main>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1650,6 +2179,327 @@ async function _compressCanvas(canvas, maxBytes) {
     }
     return await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.2));
 }
+
+/* ── THEME EDITOR ───────────────────────────────────────────── */
+const THEME_DEFAULT = {
+    '--color-background':       '#F5F5F5',
+    '--color-background-alt':   '#FAFAFA',
+    '--color-text-primary':     '#1A1A1A',
+    '--color-text-secondary':   '#4A4A4A',
+    '--color-accent':           '#800020',
+    '--color-accent-hover':     '#5a0016',
+    '--color-white':            '#FFFFFF',
+    '--color-border':           'rgba(26, 26, 26, 0.1)',
+    '--color-overlay':          'rgba(26, 26, 26, 0.4)',
+    '--font-primary':           "'Montserrat', sans-serif",
+    '--font-logo':              "'Great Vibes', cursive",
+};
+const THEME_RGBA_VARS = new Set(['--color-border', '--color-overlay']);
+const THEME_STORAGE_KEY = 'laura-theme-draft';
+const THEME_VAR_ORDER = [
+    '--color-background', '--color-background-alt', '--color-text-primary',
+    '--color-text-secondary', '--color-accent', '--color-accent-hover',
+    '--color-white', '--color-border', '--color-overlay',
+    '--font-primary', '--font-logo',
+];
+const THEME_PALETTE = [
+    '#000000','#1a1a1a','#333333','#4a4a4a','#666666','#999999','#cccccc','#ffffff',
+    '#7f1d1d','#991b1b','#dc2626','#ef4444','#f87171','#fca5a5','#fecaca','#fef2f2',
+    '#7c2d12','#9a3412','#c2410c','#ea580c','#f97316','#fb923c','#fdba74','#fed7aa',
+    '#713f12','#854d0e','#a16207','#ca8a04','#eab308','#facc15','#fde047','#fef08a',
+    '#14532d','#166534','#15803d','#16a34a','#22c55e','#4ade80','#86efac','#bbf7d0',
+    '#0c4a6e','#075985','#0369a1','#0ea5e9','#38bdf8','#7dd3fc','#bae6fd','#e0f2fe',
+    '#312e81','#3730a3','#4338ca','#6366f1','#818cf8','#a5b4fc','#c7d2fe','#e0e7ff',
+    '#581c87','#6b21a8','#86198f','#a21caf','#c026d3','#d946ef','#e879f9','#f0abfc',
+    '#831843','#9d174d','#be185d','#db2777','#ec4899','#f472b6','#f9a8d4','#fbcfe8',
+    '#800020','#5a0016','#a52a2a','#d2691e','#cd853f','#f5deb3','#fff8dc','#faf0e6',
+];
+
+let theme = themeLoad();
+let themeActiveField = null;
+let themeHue = 0;
+let themeLight = 50;
+let themeBooted = false;
+
+function themeLoad() {
+    try {
+        const raw = localStorage.getItem(THEME_STORAGE_KEY);
+        if (raw) return { ...THEME_DEFAULT, ...JSON.parse(raw) };
+    } catch (e) { /* ignore */ }
+    return { ...THEME_DEFAULT };
+}
+
+function themeSave() {
+    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(theme));
+}
+
+function themeApplyToMock() {
+    const mock = document.getElementById('themeMock');
+    if (!mock) return;
+    for (const [k, v] of Object.entries(theme)) {
+        mock.style.setProperty(k, v);
+    }
+}
+
+function themeRgbaToHex(rgba) {
+    const m = rgba.match(/\d+(\.\d+)?/g);
+    if (!m || m.length < 3) return '#000000';
+    const [r, g, b] = m.map(Number);
+    return '#' + [r, g, b].map(n => n.toString(16).padStart(2, '0')).join('');
+}
+function themeHexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+function themeAlphaOf(rgba, fallback) {
+    const m = rgba.match(/\d+(\.\d+)?/g);
+    return m && m.length >= 4 ? Number(m[3]) : fallback;
+}
+
+function themeSyncFields() {
+    document.querySelectorAll('#tab-theme input[data-var]').forEach(input => {
+        const v = theme[input.dataset.var];
+        input.value = THEME_RGBA_VARS.has(input.dataset.var) ? themeRgbaToHex(v) : v;
+        const text = document.getElementById(input.id + '-text');
+        if (text) text.value = v;
+    });
+    document.querySelectorAll('#tab-theme select[data-var]').forEach(sel => {
+        const v = theme[sel.dataset.var];
+        if (!Array.from(sel.options).some(o => o.value === v)) {
+            const opt = document.createElement('option');
+            opt.value = v;
+            opt.textContent = v + ' (custom)';
+            sel.appendChild(opt);
+        }
+        sel.value = v;
+    });
+}
+
+function themeBindFields() {
+    document.querySelectorAll('#tab-theme input[type="color"][data-var]').forEach(input => {
+        input.addEventListener('input', () => {
+            const cssVar = input.dataset.var;
+            let value = input.value;
+            if (THEME_RGBA_VARS.has(cssVar)) {
+                const alpha = themeAlphaOf(theme[cssVar], cssVar === '--color-overlay' ? 0.4 : 0.1);
+                value = themeHexToRgba(value, alpha);
+            }
+            theme[cssVar] = value;
+            const text = document.getElementById(input.id + '-text');
+            if (text) text.value = value;
+            themeApplyToMock();
+            themeSave();
+        });
+    });
+    document.querySelectorAll('#tab-theme input[data-pair]').forEach(input => {
+        input.addEventListener('input', () => {
+            const colorInput = document.getElementById(input.dataset.pair);
+            const cssVar = colorInput.dataset.var;
+            theme[cssVar] = input.value;
+            if (!THEME_RGBA_VARS.has(cssVar) && /^#[0-9a-f]{6}$/i.test(input.value)) {
+                colorInput.value = input.value;
+            } else if (THEME_RGBA_VARS.has(cssVar)) {
+                colorInput.value = themeRgbaToHex(input.value);
+            }
+            themeApplyToMock();
+            themeSave();
+        });
+    });
+    document.querySelectorAll('#tab-theme select[data-var]').forEach(sel => {
+        sel.addEventListener('change', () => {
+            theme[sel.dataset.var] = sel.value;
+            themeApplyToMock();
+            themeSave();
+        });
+    });
+}
+
+function themeReset() {
+    if (!confirm('Restaurer le thème original (burgundy / Montserrat) ?')) return;
+    theme = { ...THEME_DEFAULT };
+    themeSyncFields();
+    themeApplyToMock();
+    themeSave();
+    showToast('Thème par défaut restauré.', 'success');
+}
+
+function themeSetMode(mode) {
+    const mock = document.getElementById('themeMock');
+    mock.classList.toggle('mode-mobile', mode === 'mobile');
+    document.getElementById('theme-btn-desktop').classList.toggle('active', mode === 'desktop');
+    document.getElementById('theme-btn-mobile').classList.toggle('active', mode === 'mobile');
+}
+
+function themeOpenPreview() {
+    themeSave();
+    window.open('/preview.html', '_blank');
+}
+
+function themeSetActive(varName) {
+    themeActiveField = varName;
+    document.querySelectorAll('#tab-theme .tfield').forEach(f => f.classList.remove('active'));
+    if (varName) {
+        const input = document.querySelector(`#tab-theme input[data-var="${varName}"], #tab-theme select[data-var="${varName}"]`);
+        if (input) input.closest('.tfield').classList.add('active');
+    }
+    document.getElementById('themePickerTarget').textContent =
+        varName ? '— ' + varName + ' —' : "aucune — clique d'abord sur un champ";
+}
+
+function themeSetColorOnActive(hex) {
+    if (!themeActiveField) themeSetActive('--color-accent');
+    let value = hex;
+    if (THEME_RGBA_VARS.has(themeActiveField)) {
+        const alpha = themeAlphaOf(theme[themeActiveField], themeActiveField === '--color-overlay' ? 0.4 : 0.1);
+        value = themeHexToRgba(hex, alpha);
+    }
+    theme[themeActiveField] = value;
+    themeSyncFields();
+    themeApplyToMock();
+    themeSave();
+}
+
+function themeBuildSwatches() {
+    const grid = document.getElementById('themeSwatches');
+    grid.innerHTML = '';
+    THEME_PALETTE.forEach(c => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.style.background = c;
+        b.title = c;
+        b.addEventListener('click', () => themeSetColorOnActive(c));
+        grid.appendChild(b);
+    });
+}
+
+function themeHslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => {
+        const v = l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+        return Math.round(255 * v).toString(16).padStart(2, '0');
+    };
+    return '#' + f(0) + f(8) + f(4);
+}
+
+function themeBindStrips() {
+    const hue = document.getElementById('themeHueStrip');
+    const light = document.getElementById('themeLightStrip');
+
+    function paintLight() {
+        light.style.background = `linear-gradient(to right,
+            ${themeHslToHex(themeHue, 100, 5)},
+            ${themeHslToHex(themeHue, 100, 25)},
+            ${themeHslToHex(themeHue, 100, 50)},
+            ${themeHslToHex(themeHue, 100, 75)},
+            ${themeHslToHex(themeHue, 100, 95)})`;
+    }
+    function pickHue(e) {
+        const rect = hue.getBoundingClientRect();
+        const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+        const ratio = Math.max(0, Math.min(1, x / rect.width));
+        themeHue = ratio * 360;
+        paintLight();
+        themeSetColorOnActive(themeHslToHex(themeHue, 80, themeLight));
+    }
+    function pickLight(e) {
+        const rect = light.getBoundingClientRect();
+        const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+        const ratio = Math.max(0, Math.min(1, x / rect.width));
+        themeLight = 5 + ratio * 90;
+        themeSetColorOnActive(themeHslToHex(themeHue, 80, themeLight));
+    }
+    hue.addEventListener('pointerdown', e => { hue.setPointerCapture(e.pointerId); pickHue(e); });
+    hue.addEventListener('pointermove', e => { if (hue.hasPointerCapture(e.pointerId)) pickHue(e); });
+    light.addEventListener('pointerdown', e => { light.setPointerCapture(e.pointerId); pickLight(e); });
+    light.addEventListener('pointermove', e => { if (light.hasPointerCapture(e.pointerId)) pickLight(e); });
+    paintLight();
+}
+
+function themeBindActiveTracking() {
+    document.querySelectorAll('#tab-theme input[data-var], #tab-theme input[data-pair], #tab-theme select[data-var]').forEach(el => {
+        const grab = () => {
+            const varName = el.dataset.var || document.getElementById(el.dataset.pair).dataset.var;
+            themeSetActive(varName);
+        };
+        el.addEventListener('focus', grab);
+        el.addEventListener('click', grab);
+    });
+}
+
+function themeBoot() {
+    if (themeBooted) return;
+    themeBooted = true;
+    themeSyncFields();
+    themeBindFields();
+    themeApplyToMock();
+    themeBuildSwatches();
+    themeBindStrips();
+    themeBindActiveTracking();
+    themeSetActive('--color-accent');
+}
+
+/* Build the new :root block from the current theme. */
+function themeBuildRootCSS() {
+    return `:root {\n` + THEME_VAR_ORDER.map(k => {
+        const label = ({
+            '--color-background':       '/* Backgrounds */\n    ',
+            '--color-text-primary':     '\n    /* Text */\n    ',
+            '--color-accent':           '\n    /* Accent */\n    ',
+            '--color-white':            '\n    /* Surface */\n    ',
+            '--color-border':           '\n    /* Borders & overlay */\n    ',
+            '--font-primary':           '\n    /* Fonts */\n    ',
+        })[k] || '    ';
+        return label + `${k}: ${theme[k]};`;
+    }).join('\n') + '\n}';
+}
+
+async function themeDeploy() {
+    if (!confirm('Déployer ce thème sur le site (commit dans css/style.css) ?')) return;
+    const btn = document.getElementById('themeDeployBtn');
+    btn.disabled = true;
+    btn.textContent = 'Déploiement…';
+    try {
+        const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/css/style.css`);
+        if (!res.ok) throw new Error('Lecture style.css: ' + res.status);
+        const j = await res.json();
+        let css = b64DecodeUtf8(j.content.replace(/\n/g, ''));
+
+        const newRoot = themeBuildRootCSS();
+        const re = /:root\s*\{[\s\S]*?\}/;
+        if (!re.test(css)) throw new Error("Bloc :root introuvable dans css/style.css");
+        css = css.replace(re, newRoot);
+
+        const put = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/css/style.css`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                message: 'Mise à jour du thème via admin',
+                content: b64EncodeUtf8(css),
+                sha: j.sha,
+                branch: BRANCH,
+            }),
+        });
+        if (!put.ok) {
+            const e = await put.json();
+            throw new Error(e.message || 'Erreur de publication');
+        }
+        showToast('Thème déployé ! Cloudflare reconstruit le site (~1 min).', 'success');
+    } catch (e) {
+        showToast('Échec du déploiement : ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Déployer sur le site';
+    }
+}
+
+/* Boot the theme tab the first time it becomes visible. */
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('.tab-btn[data-tab="theme"]');
+    if (btn) btn.addEventListener('click', themeBoot);
+});
 </script>
 </body>
 </html>
