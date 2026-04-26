@@ -18,8 +18,8 @@
   },
   "sharePreview": {
     "title": "Laura Damase | Réalisatrice & Cheffe Opératrice",
-    "description": "Portfolio de documentaires et reportages pour France Télévisions par Laura Damase.",
-    "image": "https://www.lauradamase.com/images/og-preview.jpg"
+    "description": "Portfolio de documentaires et reportages de Laura Damase.",
+    "image": "images/envols2.jpg"
   },
   "social": [
     {
@@ -49,16 +49,12 @@
       "label": "DOCUMENTAIRE"
     },
     {
+      "id": "magazines",
+      "label": "REPORTAGE"
+    },
+    {
       "id": "portraits",
       "label": "PORTRAIT"
-    },
-    {
-      "id": "magazines",
-      "label": "MAGAZINES"
-    },
-    {
-      "id": "reportages",
-      "label": "INVESTIGATION"
     },
     {
       "id": "clips",
@@ -74,7 +70,7 @@
     }
   ],
   "apropos": {
-    "image": "images/Portrait Laura.jpg",
+    "image": "images/envols2.jpeg",
     "bio": "Je suis réalisatrice et cheffe opératrice.\nMa double formation en audiovisuel et en journalisme nourrit une pratique ancrée dans le réel. Après plus de dix ans de tournages de reportages et documentaires, je développe une narration à la croisée du documentaire et de la création.\n\n\nJ’ai d’abord travaillé six années au Brésil, où j’ai réalisé, filmé et monté pour différents formats télévisés (France 2, France 3, France 5, France Ô, Arte, Canal+, France 24 et TF1). J'ai documenté la beauté, la singularité de ce pays et de ses voisins. La violence aussi, héritée d’histoires colonisées. Un choc de réalité dans un pays-continent aux identités multiples et à la réalité complexe.\n\n\nAujourd’hui, basée à Paris, je travaille pour des médias grand public comme France 2. Je développe également des projets artistiques autour des arts de la scène - notamment avec le Centre National de la Danse, La Boule Noire et le Grand Palais. Mon travail est guidé par une quête d’authenticité : je cherche à rendre visibles des récits marginalisés, en évitant les stéréotypes d’un regard euro-centré.\n\n\nInspirée par des figures comme Agnès Varda, Chris Marker et Alain Gomis, je privilégie l’écoute et la rencontre pour construire des récits au plus près de celle.ux qui les vivent. J’explore les questions d’identité, d’héritage et de spiritualité, en veillant à ne pas figer les récits. Mon approche relie l’intime au politique, dans une écriture où la création se mêle au réel."
   },
   "portfolio": [
@@ -177,25 +173,25 @@
       "link": "https://www.youtube.com/watch?v=OrXnviLXPdI"
     },
     {
+      "title": "VOIR LE PROJET",
+      "category": "magazines",
+      "description": "FRANCE 2 - 13h15 le samedi\nBondy, capitale du foot ",
+      "image": "images/bondy.png",
+      "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-du-samedi-10-decembre-2022_5495055.html"
+    },
+    {
       "title": "VOIR SUR YOUTUBE",
-      "category": "reportages",
+      "category": "magazines",
       "description": "FRANCE 24 Reporters - Dans la forêt amazonienne, les Indiens Yanomami victimes de la ruée vers l’or",
       "image": "images/yanomami.png",
       "link": "https://www.youtube.com/watch?v=tJVgdHhbs2Q&t=3s"
     },
     {
       "title": "VOIR SUR VIMEO",
-      "category": "reportages",
+      "category": "magazines",
       "description": "Spicee Investigation - Gangs of Manaus",
       "image": "images/gangsofmanaus.jpg",
-      "link": "https://vimeo.com/manage/videos/691425052"
-    },
-    {
-      "title": "VOIR LE PROJET",
-      "category": "magazines",
-      "description": "FRANCE 2 - 13h15 le samedi\nBondy, capitale du foot ",
-      "image": "images/bondy.png",
-      "link": "https://www.franceinfo.fr/replay-magazine/france-2/13h15/13h15-du-samedi-10-decembre-2022_5495055.html"
+      "link": "https://vimeo.com/691425052"
     }
   ]
 }

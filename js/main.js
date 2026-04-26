@@ -296,8 +296,10 @@
             } else if (vimeoId) {
                 e.preventDefault();
                 openModal('https://player.vimeo.com/video/' + vimeoId + '?autoplay=1');
+            } else {
+                e.preventDefault();
+                window.open(link, '_blank', 'noopener,noreferrer');
             }
-            // Other links follow naturally (no preventDefault)
         });
     }
 
