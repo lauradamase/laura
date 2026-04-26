@@ -141,6 +141,101 @@
     color: var(--ui-text);
   }
 
+  .field.active {
+    background: rgba(128, 0, 32, .05);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin: -6px -8px 6px -8px;
+    box-shadow: 0 0 0 2px var(--ui-accent) inset;
+  }
+
+  /* ── Custom color picker ──────────────────────────────────── */
+  .picker {
+    background: var(--ui-panel);
+    border: 1px solid var(--ui-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+  }
+  .picker h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ui-text-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .picker .swatches {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+  .picker .swatches button {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,.15);
+    cursor: pointer;
+    padding: 0;
+    transition: transform .1s, box-shadow .1s;
+  }
+  .picker .swatches button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    z-index: 1;
+  }
+  .picker .swatches button.checker {
+    background-image:
+      linear-gradient(45deg, #ccc 25%, transparent 25%),
+      linear-gradient(-45deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%),
+      linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    background-color: white;
+  }
+
+  .picker .gradient-strip {
+    height: 22px;
+    border-radius: 4px;
+    border: 1px solid var(--ui-border);
+    background: linear-gradient(to right,
+      #ff0000 0%,
+      #ff8000 8%,
+      #ffff00 17%,
+      #80ff00 25%,
+      #00ff00 33%,
+      #00ff80 42%,
+      #00ffff 50%,
+      #0080ff 58%,
+      #0000ff 67%,
+      #8000ff 75%,
+      #ff00ff 83%,
+      #ff0080 92%,
+      #ff0000 100%);
+    cursor: crosshair;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .picker .lightness-strip {
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid var(--ui-border);
+    cursor: crosshair;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .picker-target {
+    font-size: 11px;
+    color: var(--ui-text-muted);
+    margin-top: 4px;
+    text-align: center;
+  }
+  .picker-target b {
+    color: var(--ui-accent);
+    font-weight: 600;
+  }
+
   .preview {
     background: var(--ui-bg);
   }
@@ -401,6 +496,16 @@
 
 <div class="layout">
   <section class="controls">
+    <div class="picker">
+      <h3>Palette rapide — clique sur une couleur</h3>
+      <div class="swatches" id="swatches"></div>
+      <h3>Teinte (faire glisser)</h3>
+      <div class="gradient-strip" id="hueStrip"></div>
+      <h3>Luminosité</h3>
+      <div class="lightness-strip" id="lightStrip"></div>
+      <p class="picker-target">Cible : <b id="pickerTarget">aucune — clique d'abord sur un champ</b></p>
+    </div>
+
     <h2>Couleurs principales</h2>
     <div class="field"><label for="c-bg">Background<small>--color-background</small></label><input type="text" id="c-bg-text" data-pair="c-bg"><input type="color" id="c-bg" data-var="--color-background"></div>
     <div class="field"><label for="c-bg-alt">Background secondaire<small>--color-background-alt</small></label><input type="text" id="c-bg-alt-text" data-pair="c-bg-alt"><input type="color" id="c-bg-alt" data-var="--color-background-alt"></div>
@@ -648,10 +753,134 @@
     setTimeout(() => el.classList.remove('visible'), 2200);
   }
 
+  // ── Custom picker ─────────────────────────────────────────
+  // Curated palette — 56 swatches: greys/blacks, classic, warm, cool,
+  // pastel, plus a transparent slot.
+  const PALETTE = [
+    '#000000','#1a1a1a','#333333','#4a4a4a','#666666','#999999','#cccccc','#ffffff',
+    '#7f1d1d','#991b1b','#dc2626','#ef4444','#f87171','#fca5a5','#fecaca','#fef2f2',
+    '#7c2d12','#9a3412','#c2410c','#ea580c','#f97316','#fb923c','#fdba74','#fed7aa',
+    '#713f12','#854d0e','#a16207','#ca8a04','#eab308','#facc15','#fde047','#fef08a',
+    '#14532d','#166534','#15803d','#16a34a','#22c55e','#4ade80','#86efac','#bbf7d0',
+    '#0c4a6e','#075985','#0369a1','#0ea5e9','#38bdf8','#7dd3fc','#bae6fd','#e0f2fe',
+    '#312e81','#3730a3','#4338ca','#6366f1','#818cf8','#a5b4fc','#c7d2fe','#e0e7ff',
+    '#581c87','#6b21a8','#86198f','#a21caf','#c026d3','#d946ef','#e879f9','#f0abfc',
+    '#831843','#9d174d','#be185d','#db2777','#ec4899','#f472b6','#f9a8d4','#fbcfe8',
+    '#800020','#5a0016','#a52a2a','#d2691e','#cd853f','#f5deb3','#fff8dc','#faf0e6',
+  ];
+
+  let activeField = null; // CSS variable name currently being edited
+
+  function setActive(varName) {
+    activeField = varName;
+    document.querySelectorAll('.field').forEach(f => f.classList.remove('active'));
+    if (varName) {
+      const input = document.querySelector(`input[data-var="${varName}"], select[data-var="${varName}"]`);
+      if (input) input.closest('.field').classList.add('active');
+    }
+    document.getElementById('pickerTarget').textContent = varName ? '— ' + varName + ' —' : 'aucune — clique d\'abord sur un champ';
+  }
+
+  function setColorOnActive(hex) {
+    if (!activeField) {
+      // Auto-pick first field if user clicks a swatch with nothing focused.
+      setActive('--color-accent');
+    }
+    let value = hex;
+    if (RGBA_VARS.has(activeField)) {
+      const alpha = alphaOf(theme[activeField], activeField === '--color-overlay' ? 0.4 : 0.1);
+      value = hexToRgba(hex, alpha);
+    }
+    theme[activeField] = value;
+    syncFields();
+    applyTheme();
+    saveTheme();
+  }
+
+  function buildSwatches() {
+    const grid = document.getElementById('swatches');
+    PALETTE.forEach(c => {
+      const b = document.createElement('button');
+      b.style.background = c;
+      b.title = c;
+      b.addEventListener('click', () => setColorOnActive(c));
+      grid.appendChild(b);
+    });
+  }
+
+  function hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => {
+      const v = l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+      return Math.round(255 * v).toString(16).padStart(2, '0');
+    };
+    return '#' + f(0) + f(8) + f(4);
+  }
+
+  // Hue strip — click anywhere to set hue, keeping current saturation
+  // and a default lightness of 50%.
+  let currentHue = 0;
+  let currentLight = 50;
+  function bindStrips() {
+    const hue = document.getElementById('hueStrip');
+    const light = document.getElementById('lightStrip');
+
+    function paintLightStrip() {
+      light.style.background = `linear-gradient(to right,
+        ${hslToHex(currentHue, 100, 5)},
+        ${hslToHex(currentHue, 100, 25)},
+        ${hslToHex(currentHue, 100, 50)},
+        ${hslToHex(currentHue, 100, 75)},
+        ${hslToHex(currentHue, 100, 95)})`;
+    }
+
+    function pickHue(e) {
+      const rect = hue.getBoundingClientRect();
+      const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+      const ratio = Math.max(0, Math.min(1, x / rect.width));
+      currentHue = ratio * 360;
+      paintLightStrip();
+      setColorOnActive(hslToHex(currentHue, 80, currentLight));
+    }
+    function pickLight(e) {
+      const rect = light.getBoundingClientRect();
+      const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+      const ratio = Math.max(0, Math.min(1, x / rect.width));
+      currentLight = 5 + ratio * 90;
+      setColorOnActive(hslToHex(currentHue, 80, currentLight));
+    }
+
+    hue.addEventListener('pointerdown', e => { hue.setPointerCapture(e.pointerId); pickHue(e); });
+    hue.addEventListener('pointermove', e => { if (hue.hasPointerCapture(e.pointerId)) pickHue(e); });
+    light.addEventListener('pointerdown', e => { light.setPointerCapture(e.pointerId); pickLight(e); });
+    light.addEventListener('pointermove', e => { if (light.hasPointerCapture(e.pointerId)) pickLight(e); });
+
+    paintLightStrip();
+  }
+
+  function bindActiveTracking() {
+    document.querySelectorAll('input[data-var], input[data-pair], select[data-var]').forEach(el => {
+      el.addEventListener('focus', () => {
+        const varName = el.dataset.var || document.getElementById(el.dataset.pair).dataset.var;
+        setActive(varName);
+      });
+      el.addEventListener('click', () => {
+        const varName = el.dataset.var || document.getElementById(el.dataset.pair).dataset.var;
+        setActive(varName);
+      });
+    });
+  }
+
   // ── boot ──
   syncFields();
   bindFields();
   applyTheme();
+  buildSwatches();
+  bindStrips();
+  bindActiveTracking();
+  setActive('--color-accent'); // start with accent selected — most-changed field
 </script>
 </body>
 </html>
