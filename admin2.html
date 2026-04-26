@@ -7,7 +7,7 @@
 <title>Admin 2 — Thème — Laura Damase</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;700&family=Lora:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Arizonia&family=Bodoni+Moda:wght@400;700&family=Caveat:wght@400;700&family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;500;700&family=Cormorant+SC:wght@400;700&family=Crimson+Pro:wght@400;500;700&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=Dancing+Script:wght@400;700&family=EB+Garamond:wght@400;500;700&family=Great+Vibes&family=IBM+Plex+Sans:wght@400;500;700&family=IBM+Plex+Serif:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Italianno&family=Karla:wght@400;500;700&family=Lato:wght@400;700&family=Lora:wght@400;500;700&family=Manrope:wght@400;500;700&family=Marck+Script&family=Merriweather:wght@400;700&family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@400;500;700&family=Open+Sans:wght@400;500;700&family=Pacifico&family=Parisienne&family=Pinyon+Script&family=Playfair+Display:wght@400;500;700&family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Sacramento&family=Source+Sans+3:wght@400;500;700&family=Source+Serif+4:wght@400;500;700&family=Spectral:wght@400;500;700&family=Tangerine:wght@400;700&family=Work+Sans:wght@400;500;700&family=Yellowtail&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -527,21 +527,72 @@
     <div class="field field-font">
       <label for="font-primary">Texte<small>--font-primary</small></label>
       <select id="font-primary" data-var="--font-primary">
-        <option value="'Montserrat', sans-serif">Montserrat</option>
-        <option value="'Inter', sans-serif">Inter</option>
-        <option value="'Roboto', sans-serif">Roboto</option>
-        <option value="'Lora', serif">Lora (serif)</option>
-        <option value="'Playfair Display', serif">Playfair Display (serif)</option>
-        <option value="system-ui, sans-serif">System UI</option>
+        <optgroup label="Sans-serif modernes">
+          <option value="'Montserrat', sans-serif">Montserrat</option>
+          <option value="'Inter', sans-serif">Inter</option>
+          <option value="'Roboto', sans-serif">Roboto</option>
+          <option value="'Open Sans', sans-serif">Open Sans</option>
+          <option value="'Lato', sans-serif">Lato</option>
+          <option value="'Poppins', sans-serif">Poppins</option>
+          <option value="'Raleway', sans-serif">Raleway</option>
+          <option value="'Nunito', sans-serif">Nunito</option>
+          <option value="'Work Sans', sans-serif">Work Sans</option>
+          <option value="'DM Sans', sans-serif">DM Sans</option>
+          <option value="'Manrope', sans-serif">Manrope</option>
+          <option value="'Karla', sans-serif">Karla</option>
+          <option value="'IBM Plex Sans', sans-serif">IBM Plex Sans</option>
+          <option value="'Source Sans 3', sans-serif">Source Sans 3</option>
+        </optgroup>
+        <optgroup label="Serifs élégantes">
+          <option value="'Lora', serif">Lora</option>
+          <option value="'Playfair Display', serif">Playfair Display</option>
+          <option value="'Merriweather', serif">Merriweather</option>
+          <option value="'EB Garamond', serif">EB Garamond</option>
+          <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+          <option value="'Crimson Pro', serif">Crimson Pro</option>
+          <option value="'DM Serif Display', serif">DM Serif Display</option>
+          <option value="'Spectral', serif">Spectral</option>
+          <option value="'Source Serif 4', serif">Source Serif 4</option>
+          <option value="'IBM Plex Serif', serif">IBM Plex Serif</option>
+          <option value="'Bodoni Moda', serif">Bodoni Moda</option>
+        </optgroup>
+        <optgroup label="Système">
+          <option value="system-ui, sans-serif">System UI</option>
+        </optgroup>
       </select>
     </div>
     <div class="field field-font">
       <label for="font-logo">Logo<small>--font-logo</small></label>
       <select id="font-logo" data-var="--font-logo">
-        <option value="'Great Vibes', cursive">Great Vibes</option>
-        <option value="'Playfair Display', serif">Playfair Display</option>
-        <option value="'Lora', serif">Lora</option>
-        <option value="'Montserrat', sans-serif">Montserrat (clean)</option>
+        <optgroup label="Calligraphies / scripts">
+          <option value="'Great Vibes', cursive">Great Vibes</option>
+          <option value="'Dancing Script', cursive">Dancing Script</option>
+          <option value="'Pacifico', cursive">Pacifico</option>
+          <option value="'Sacramento', cursive">Sacramento</option>
+          <option value="'Allura', cursive">Allura</option>
+          <option value="'Parisienne', cursive">Parisienne</option>
+          <option value="'Italianno', cursive">Italianno</option>
+          <option value="'Tangerine', cursive">Tangerine</option>
+          <option value="'Pinyon Script', cursive">Pinyon Script</option>
+          <option value="'Marck Script', cursive">Marck Script</option>
+          <option value="'Caveat', cursive">Caveat</option>
+          <option value="'Yellowtail', cursive">Yellowtail</option>
+          <option value="'Arizonia', cursive">Arizonia</option>
+        </optgroup>
+        <optgroup label="Serifs élégantes (logo)">
+          <option value="'Playfair Display', serif">Playfair Display</option>
+          <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+          <option value="'Cormorant SC', serif">Cormorant SC (small caps)</option>
+          <option value="'Cinzel', serif">Cinzel</option>
+          <option value="'EB Garamond', serif">EB Garamond</option>
+          <option value="'DM Serif Display', serif">DM Serif Display</option>
+          <option value="'Bodoni Moda', serif">Bodoni Moda</option>
+        </optgroup>
+        <optgroup label="Sans-serif (clean)">
+          <option value="'Montserrat', sans-serif">Montserrat</option>
+          <option value="'Raleway', sans-serif">Raleway</option>
+          <option value="'Poppins', sans-serif">Poppins</option>
+        </optgroup>
       </select>
     </div>
   </section>
