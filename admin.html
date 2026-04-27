@@ -990,7 +990,6 @@
         <div class="theme-actions">
             <button onclick="themeReset()">Réinitialiser</button>
             <button onclick="themeOpenPreview()">Aperçu page complète ↗</button>
-            <button class="primary" id="themeDeployBtn" onclick="themeDeploy()">Déployer sur le site</button>
         </div>
         <div class="theme-layout">
             <div class="theme-controls">
@@ -1259,30 +1258,37 @@ async function loadData() {
 }
 
 async function doPublish() {
-    if (!dirty) return;
+    if (!dirty && !themeDirty) return;
     setLoading(true);
     setStatus('Publication…', '');
     try {
-        collectAll();
-        const json = JSON.stringify(data, null, 2);
-        const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                message: 'Mise à jour du contenu via admin',
-                content: b64EncodeUtf8(json),
-                sha: fileSHA,
-                branch: BRANCH,
-            }),
-        });
-        if (!res.ok) {
-            const e = await res.json();
-            throw new Error(e.message || 'Erreur inconnue');
-        }
-        const updated = await res.json();
-        fileSHA = updated.content.sha;
+        if (dirty) {
+            collectAll();
+            const json = JSON.stringify(data, null, 2);
+            const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    message: 'Mise à jour du contenu via admin',
+                    content: b64EncodeUtf8(json),
+                    sha: fileSHA,
+                    branch: BRANCH,
+                }),
+            });
+            if (!res.ok) {
+                const e = await res.json();
+                throw new Error(e.message || 'Erreur inconnue');
+            }
+            const updated = await res.json();
+            fileSHA = updated.content.sha;
 
-        // Also update og: meta tags in index.html
-        await updateIndexOGTags(data.sharePreview || {});
+            // Also update og: meta tags in index.html
+            await updateIndexOGTags(data.sharePreview || {});
+        }
+
+        if (themeDirty) {
+            await themePushCSS();
+            themeDirty = false;
+        }
 
         dirty = false;
         document.getElementById('publishBtn').disabled = true;
@@ -2220,6 +2226,12 @@ let themeActiveField = null;
 let themeHue = 0;
 let themeLight = 50;
 let themeBooted = false;
+let themeDirty = false;
+
+function themeMarkDirty() {
+    themeDirty = true;
+    onDataChange();
+}
 
 function themeLoad() {
     try {
@@ -2291,6 +2303,7 @@ function themeBindFields() {
             if (text) text.value = value;
             themeApplyToMock();
             themeSave();
+            themeMarkDirty();
         });
     });
     document.querySelectorAll('#tab-theme input[data-pair]').forEach(input => {
@@ -2305,6 +2318,7 @@ function themeBindFields() {
             }
             themeApplyToMock();
             themeSave();
+            themeMarkDirty();
         });
     });
     document.querySelectorAll('#tab-theme select[data-var]').forEach(sel => {
@@ -2312,6 +2326,7 @@ function themeBindFields() {
             theme[sel.dataset.var] = sel.value;
             themeApplyToMock();
             themeSave();
+            themeMarkDirty();
         });
     });
 }
@@ -2322,7 +2337,8 @@ function themeReset() {
     themeSyncFields();
     themeApplyToMock();
     themeSave();
-    showToast('Thème par défaut restauré.', 'success');
+    themeMarkDirty();
+    showToast('Thème par défaut restauré. Cliquez sur Publier pour déployer.', 'success');
 }
 
 function themeSetMode(mode) {
@@ -2359,6 +2375,7 @@ function themeSetColorOnActive(hex) {
     themeSyncFields();
     themeApplyToMock();
     themeSave();
+    themeMarkDirty();
 }
 
 function themeBuildSwatches() {
@@ -2457,41 +2474,29 @@ function themeBuildRootCSS() {
     }).join('\n') + '\n}';
 }
 
-async function themeDeploy() {
-    if (!confirm('Déployer ce thème sur le site (commit dans css/style.css) ?')) return;
-    const btn = document.getElementById('themeDeployBtn');
-    btn.disabled = true;
-    btn.textContent = 'Déploiement…';
-    try {
-        const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/css/style.css`);
-        if (!res.ok) throw new Error('Lecture style.css: ' + res.status);
-        const j = await res.json();
-        let css = b64DecodeUtf8(j.content.replace(/\n/g, ''));
+async function themePushCSS() {
+    const res = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/css/style.css`);
+    if (!res.ok) throw new Error('Lecture style.css: ' + res.status);
+    const j = await res.json();
+    let css = b64DecodeUtf8(j.content.replace(/\n/g, ''));
 
-        const newRoot = themeBuildRootCSS();
-        const re = /:root\s*\{[\s\S]*?\}/;
-        if (!re.test(css)) throw new Error("Bloc :root introuvable dans css/style.css");
-        css = css.replace(re, newRoot);
+    const newRoot = themeBuildRootCSS();
+    const re = /:root\s*\{[\s\S]*?\}/;
+    if (!re.test(css)) throw new Error("Bloc :root introuvable dans css/style.css");
+    css = css.replace(re, newRoot);
 
-        const put = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/css/style.css`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                message: 'Mise à jour du thème via admin',
-                content: b64EncodeUtf8(css),
-                sha: j.sha,
-                branch: BRANCH,
-            }),
-        });
-        if (!put.ok) {
-            const e = await put.json();
-            throw new Error(e.message || 'Erreur de publication');
-        }
-        showToast('Thème déployé ! Cloudflare reconstruit le site (~1 min).', 'success');
-    } catch (e) {
-        showToast('Échec du déploiement : ' + e.message, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Déployer sur le site';
+    const put = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/css/style.css`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            message: 'Mise à jour du thème via admin',
+            content: b64EncodeUtf8(css),
+            sha: j.sha,
+            branch: BRANCH,
+        }),
+    });
+    if (!put.ok) {
+        const e = await put.json();
+        throw new Error('css/style.css: ' + (e.message || 'Erreur'));
     }
 }
 
