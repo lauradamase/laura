@@ -597,7 +597,7 @@
             box-shadow: 0 4px 30px rgba(0,0,0,.08);
             overflow: hidden;
             display: grid;
-            grid-template-columns: 220px 1fr;
+            grid-template-columns: 240px 1fr;
             min-height: 540px;
             transition: background .25s, color .25s;
         }
@@ -609,36 +609,81 @@
         #tab-theme .mock-sidebar {
             background: var(--color-white);
             border-right: 1px solid var(--color-border);
-            padding: 28px 22px;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 22px;
         }
         #tab-theme .mock.mode-mobile .mock-sidebar { display: none; }
         #tab-theme .mock-logo {
-            font-family: var(--font-logo);
-            font-size: 32px;
-            color: var(--color-accent);
+            display: flex;
+            flex-direction: column;
             line-height: 1;
+            text-decoration: none;
+            position: relative;
         }
-        #tab-theme .mock-tag {
+        #tab-theme .mock-logo-first {
+            font-family: var(--font-primary);
             font-size: 11px;
-            letter-spacing: 1.5px;
+            font-weight: 300;
+            letter-spacing: 0.35em;
             text-transform: uppercase;
             color: var(--color-text-secondary);
+        }
+        #tab-theme .mock-logo-last {
+            font-family: var(--font-primary);
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            color: var(--color-text-primary);
+            line-height: 1;
+            margin-top: -2px;
+            position: relative;
+            padding-bottom: 9px;
+        }
+        #tab-theme .mock-logo-last::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--color-accent);
+        }
+        #tab-theme .mock-tag {
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+        }
+        #tab-theme .mock-tag::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 1px;
+            background: var(--color-accent);
+            margin-right: 8px;
+            vertical-align: middle;
         }
         #tab-theme .mock-nav {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 14px;
             margin-top: 6px;
         }
         #tab-theme .mock-nav a {
-            font-size: 13px;
-            padding: 6px 0;
+            font-family: var(--font-primary);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding-bottom: 4px;
             color: var(--color-text-primary);
             text-decoration: none;
             border-bottom: 1px solid transparent;
+            align-self: flex-start;
         }
         #tab-theme .mock-nav a.active {
             color: var(--color-accent);
@@ -1104,12 +1149,18 @@
                 </div>
                 <div class="mock" id="themeMock">
                     <aside class="mock-sidebar">
-                        <div class="mock-logo">Laura Damase</div>
-                        <div class="mock-tag">Réalisatrice · Cheffe op.</div>
+                        <a class="mock-logo" href="#">
+                            <span class="mock-logo-first">Laura</span>
+                            <span class="mock-logo-last">Damase</span>
+                        </a>
+                        <div class="mock-tag">Réalisatrice &amp; Cheffe Opératrice</div>
                         <nav class="mock-nav">
-                            <a class="active" href="#">Portfolio</a>
+                            <a class="active" href="#">Documentaire</a>
+                            <a href="#">Reportage</a>
+                            <a href="#">Portrait</a>
+                            <a href="#">Clip</a>
+                            <a href="#">Captation</a>
                             <a href="#">À propos</a>
-                            <a href="#">Contact</a>
                         </nav>
                         <div class="mock-social"><span>in</span><span>iG</span><span>vi</span></div>
                     </aside>
