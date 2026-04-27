@@ -9,12 +9,12 @@
 :root {
     /* Colors */
     --color-background: #F5F5F5;
-    --color-background-alt: #FAFAFA;
+    --color-background-alt: #ffffff;
     --color-text-primary: #1A1A1A;
     --color-text-secondary: #4A4A4A;
     --color-accent: #800020; /* Deep Burgundy */
     --color-accent-hover: #5a0016;
-    --color-white: #e0f2fe;
+    --color-white: #d2e0e9;
     --color-border: rgba(26, 26, 26, 0.1);
     --color-overlay: rgba(26, 26, 26, 0.4);
 
