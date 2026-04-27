@@ -379,12 +379,17 @@
         /* ── THEME TAB ────────────────────────────────────────── */
         #tab-theme .theme-layout {
             display: grid;
-            grid-template-columns: 360px 1fr;
-            gap: 24px;
+            grid-template-columns: 290px 270px 1fr;
+            gap: 18px;
             align-items: flex-start;
         }
-        @media (max-width: 1000px) {
+        @media (max-width: 1280px) {
+            #tab-theme .theme-layout { grid-template-columns: 280px 1fr; }
+            #tab-theme .theme-picker-pane { grid-row: 2; grid-column: 1 / -1; }
+        }
+        @media (max-width: 800px) {
             #tab-theme .theme-layout { grid-template-columns: 1fr; }
+            #tab-theme .theme-picker-pane { grid-row: auto; grid-column: auto; }
         }
         #tab-theme .theme-controls h3 {
             font-size: 0.72rem;
@@ -392,29 +397,36 @@
             letter-spacing: 0.08em;
             color: var(--text-light);
             font-weight: 600;
-            margin: 1.4rem 0 0.7rem;
+            margin: 1.2rem 0 0.5rem;
         }
         #tab-theme .theme-controls h3:first-child { margin-top: 0; }
         #tab-theme .tfield {
             display: grid;
-            grid-template-columns: 1fr 110px 50px;
-            gap: 8px;
+            grid-template-columns: 1fr 86px 40px;
+            gap: 6px;
             align-items: center;
-            margin-bottom: 8px;
+            padding: 6px 8px;
+            margin: 0 -8px 2px -8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background .15s;
         }
+        #tab-theme .tfield:hover { background: rgba(128, 0, 32, 0.04); }
         #tab-theme .tfield label {
             font-size: 0.78rem;
             color: var(--text);
             font-weight: 500;
             text-transform: none;
             letter-spacing: 0;
+            cursor: pointer;
         }
         #tab-theme .tfield label small {
             display: block;
             color: var(--text-light);
             font-size: 0.65rem;
             margin-top: 2px;
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-weight: 400;
+            font-family: inherit;
         }
         #tab-theme .tfield input[type="text"] {
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -434,7 +446,7 @@
             cursor: pointer;
             padding: 0;
         }
-        #tab-theme .tfield-font { grid-template-columns: 1fr 1fr; }
+        #tab-theme .tfield-font { grid-template-columns: 1fr; }
         #tab-theme .tfield-font select {
             font-family: inherit;
             font-size: 0.8rem;
@@ -452,12 +464,21 @@
             box-shadow: 0 0 0 2px var(--accent) inset;
         }
 
+        #tab-theme .theme-picker-pane {
+            position: sticky;
+            top: 12px;
+        }
         #tab-theme .picker {
             background: white;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 18px;
+            padding: 14px;
+        }
+        #tab-theme .picker-hint {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin: -2px 0 8px;
+            line-height: 1.4;
         }
         #tab-theme .picker h4 {
             font-size: 0.65rem;
@@ -1038,36 +1059,25 @@
         </div>
         <div class="theme-layout">
             <div class="theme-controls">
-                <div class="picker">
-                    <h4>Palette rapide — clique sur une couleur</h4>
-                    <div class="swatches" id="themeSwatches"></div>
-                    <h4>Teinte (faire glisser)</h4>
-                    <div class="gradient-strip" id="themeHueStrip"></div>
-                    <h4>Luminosité</h4>
-                    <div class="lightness-strip" id="themeLightStrip"></div>
-                    <p class="picker-target">Cible : <b id="themePickerTarget">aucune — clique d'abord sur un champ</b></p>
-                </div>
+                <h3>Fonds</h3>
+                <div class="tfield"><label>Fond de la page<small>derrière le contenu principal</small></label><input type="text" id="c-bg-text" data-pair="c-bg"><input type="color" id="c-bg" data-var="--color-background"></div>
+                <div class="tfield"><label>Fond des vignettes<small>cadre des miniatures du portfolio</small></label><input type="text" id="c-bg-alt-text" data-pair="c-bg-alt"><input type="color" id="c-bg-alt" data-var="--color-background-alt"></div>
+                <div class="tfield"><label>Sidebar, cartes &amp; footer<small>fond du menu de gauche et des blocs</small></label><input type="text" id="c-white-text" data-pair="c-white"><input type="color" id="c-white" data-var="--color-white"></div>
 
-                <h3>Couleurs principales</h3>
-                <div class="tfield"><label>Background<small>--color-background</small></label><input type="text" id="c-bg-text" data-pair="c-bg"><input type="color" id="c-bg" data-var="--color-background"></div>
-                <div class="tfield"><label>Background secondaire<small>--color-background-alt</small></label><input type="text" id="c-bg-alt-text" data-pair="c-bg-alt"><input type="color" id="c-bg-alt" data-var="--color-background-alt"></div>
-                <div class="tfield"><label>Surface (cards)<small>--color-white</small></label><input type="text" id="c-white-text" data-pair="c-white"><input type="color" id="c-white" data-var="--color-white"></div>
+                <h3>Textes</h3>
+                <div class="tfield"><label>Texte principal<small>nom DAMASE, titres, paragraphes</small></label><input type="text" id="c-text-text" data-pair="c-text"><input type="color" id="c-text" data-var="--color-text-primary"></div>
+                <div class="tfield"><label>Texte discret<small>« Laura », sous-titre, menu inactif</small></label><input type="text" id="c-text2-text" data-pair="c-text2"><input type="color" id="c-text2" data-var="--color-text-secondary"></div>
 
-                <h3>Texte</h3>
-                <div class="tfield"><label>Texte principal<small>--color-text-primary</small></label><input type="text" id="c-text-text" data-pair="c-text"><input type="color" id="c-text" data-var="--color-text-primary"></div>
-                <div class="tfield"><label>Texte secondaire<small>--color-text-secondary</small></label><input type="text" id="c-text2-text" data-pair="c-text2"><input type="color" id="c-text2" data-var="--color-text-secondary"></div>
+                <h3>Couleur d'accent</h3>
+                <div class="tfield"><label>Accent<small>menu actif, soulignés, boutons</small></label><input type="text" id="c-accent-text" data-pair="c-accent"><input type="color" id="c-accent" data-var="--color-accent"></div>
+                <div class="tfield"><label>Accent au survol<small>quand on passe la souris</small></label><input type="text" id="c-accent-h-text" data-pair="c-accent-h"><input type="color" id="c-accent-h" data-var="--color-accent-hover"></div>
 
-                <h3>Accent</h3>
-                <div class="tfield"><label>Couleur accent<small>--color-accent</small></label><input type="text" id="c-accent-text" data-pair="c-accent"><input type="color" id="c-accent" data-var="--color-accent"></div>
-                <div class="tfield"><label>Accent (hover)<small>--color-accent-hover</small></label><input type="text" id="c-accent-h-text" data-pair="c-accent-h"><input type="color" id="c-accent-h" data-var="--color-accent-hover"></div>
+                <h3>Détails</h3>
+                <div class="tfield"><label>Bordures fines<small>séparateurs entre sections</small></label><input type="text" id="c-border-text" data-pair="c-border"><input type="color" id="c-border" data-var="--color-border"></div>
 
-                <h3>Bordures &amp; overlay</h3>
-                <div class="tfield"><label>Bordure<small>--color-border (rgba)</small></label><input type="text" id="c-border-text" data-pair="c-border"><input type="color" id="c-border" data-var="--color-border"></div>
-                <div class="tfield"><label>Overlay vidéo<small>--color-overlay (rgba)</small></label><input type="text" id="c-overlay-text" data-pair="c-overlay"><input type="color" id="c-overlay" data-var="--color-overlay"></div>
-
-                <h3>Polices</h3>
+                <h3>Police</h3>
                 <div class="tfield tfield-font">
-                    <label>Texte<small>--font-primary</small></label>
+                    <label>Police du site<small>tout le texte (logo, menu, paragraphes)</small></label>
                     <select id="font-primary" data-var="--font-primary">
                         <optgroup label="Sans-serif modernes">
                             <option value="'Montserrat', sans-serif">Montserrat</option>
@@ -1103,39 +1113,18 @@
                         </optgroup>
                     </select>
                 </div>
-                <div class="tfield tfield-font">
-                    <label>Logo<small>--font-logo</small></label>
-                    <select id="font-logo" data-var="--font-logo">
-                        <optgroup label="Calligraphies / scripts">
-                            <option value="'Great Vibes', cursive">Great Vibes</option>
-                            <option value="'Dancing Script', cursive">Dancing Script</option>
-                            <option value="'Pacifico', cursive">Pacifico</option>
-                            <option value="'Sacramento', cursive">Sacramento</option>
-                            <option value="'Allura', cursive">Allura</option>
-                            <option value="'Parisienne', cursive">Parisienne</option>
-                            <option value="'Italianno', cursive">Italianno</option>
-                            <option value="'Tangerine', cursive">Tangerine</option>
-                            <option value="'Pinyon Script', cursive">Pinyon Script</option>
-                            <option value="'Marck Script', cursive">Marck Script</option>
-                            <option value="'Caveat', cursive">Caveat</option>
-                            <option value="'Yellowtail', cursive">Yellowtail</option>
-                            <option value="'Arizonia', cursive">Arizonia</option>
-                        </optgroup>
-                        <optgroup label="Serifs élégantes (logo)">
-                            <option value="'Playfair Display', serif">Playfair Display</option>
-                            <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
-                            <option value="'Cormorant SC', serif">Cormorant SC (small caps)</option>
-                            <option value="'Cinzel', serif">Cinzel</option>
-                            <option value="'EB Garamond', serif">EB Garamond</option>
-                            <option value="'DM Serif Display', serif">DM Serif Display</option>
-                            <option value="'Bodoni Moda', serif">Bodoni Moda</option>
-                        </optgroup>
-                        <optgroup label="Sans-serif (clean)">
-                            <option value="'Montserrat', sans-serif">Montserrat</option>
-                            <option value="'Raleway', sans-serif">Raleway</option>
-                            <option value="'Poppins', sans-serif">Poppins</option>
-                        </optgroup>
-                    </select>
+            </div>
+
+            <div class="theme-picker-pane">
+                <div class="picker">
+                    <h4>Palette rapide</h4>
+                    <p class="picker-hint">Sélectionne d'abord un champ à gauche, puis clique sur une couleur.</p>
+                    <div class="swatches" id="themeSwatches"></div>
+                    <h4>Teinte (faire glisser)</h4>
+                    <div class="gradient-strip" id="themeHueStrip"></div>
+                    <h4>Luminosité</h4>
+                    <div class="lightness-strip" id="themeLightStrip"></div>
+                    <p class="picker-target">Cible : <b id="themePickerTarget">aucune — clique d'abord sur un champ</b></p>
                 </div>
             </div>
 
@@ -2247,17 +2236,16 @@ const THEME_DEFAULT = {
     '--color-accent-hover':     '#5a0016',
     '--color-white':            '#FFFFFF',
     '--color-border':           'rgba(26, 26, 26, 0.1)',
-    '--color-overlay':          'rgba(26, 26, 26, 0.4)',
     '--font-primary':           "'Montserrat', sans-serif",
-    '--font-logo':              "'Great Vibes', cursive",
 };
-const THEME_RGBA_VARS = new Set(['--color-border', '--color-overlay']);
+const THEME_RGBA_VARS = new Set(['--color-border']);
 const THEME_STORAGE_KEY = 'laura-theme-draft';
 const THEME_VAR_ORDER = [
-    '--color-background', '--color-background-alt', '--color-text-primary',
-    '--color-text-secondary', '--color-accent', '--color-accent-hover',
-    '--color-white', '--color-border', '--color-overlay',
-    '--font-primary', '--font-logo',
+    '--color-background', '--color-background-alt', '--color-white',
+    '--color-text-primary', '--color-text-secondary',
+    '--color-accent', '--color-accent-hover',
+    '--color-border',
+    '--font-primary',
 ];
 const THEME_PALETTE = [
     '#000000','#1a1a1a','#333333','#4a4a4a','#666666','#999999','#cccccc','#ffffff',
@@ -2495,6 +2483,15 @@ function themeBindActiveTracking() {
         };
         el.addEventListener('focus', grab);
         el.addEventListener('click', grab);
+    });
+    document.querySelectorAll('#tab-theme .tfield').forEach(field => {
+        field.addEventListener('click', e => {
+            if (e.target.closest('input, select')) return;
+            const probe = field.querySelector('input[data-var], select[data-var], input[data-pair]');
+            if (!probe) return;
+            const varName = probe.dataset.var || document.getElementById(probe.dataset.pair).dataset.var;
+            themeSetActive(varName);
+        });
     });
 }
 
