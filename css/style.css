@@ -14,12 +14,12 @@
     --color-text-secondary: #4A4A4A;
     --color-accent: #800020; /* Deep Burgundy */
     --color-accent-hover: #5a0016;
-    --color-white: #FFFFFF;
+    --color-white: #e0f2fe;
     --color-border: rgba(26, 26, 26, 0.1);
     --color-overlay: rgba(26, 26, 26, 0.4);
 
     /* Typography */
-    --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-primary: 'Montserrat', sans-serif;
     --font-logo: 'Great Vibes', cursive;
 
     /* Spacing */
